@@ -408,7 +408,82 @@ For example, the y-values of the ICCs at $\theta = 2$ are higher for each item t
 
 - In a regression logic we can also say, that the difference/distance between a person and an item on the continuum can be used as a predictor to predict the probability that a person will solve the item
 
-### Implications and properties of this formula
+#### Wright Map
+
+*s. [@wilson2023, p.142] -\> aber bisschen redundant zu oben?*
+
+- *both on the same scale (s. Wright-map -\> p.26 and figure 1.10 in @wilson2023*
+
+- *In a regression logic we can also say, that the difference/distance between a person and an item on the continuum can be used as a predictor to predict the probability that a person will solve the item*
+
+### Assumptions and Properties of the Rasch Model
+
+#### Unidimensionality
+
+So far, we have always assumed that there is exactly one parameter on the individual’s side that influences the probability that an item will be answered with a 1.
+We can see this in the formula as well, since there is only one parameter, which has the individual-specific index $n$.
+So far, we have always assumed that there is exactly one parameter on the individual’s side that influences the probability that an item will be answered with a 1.
+We can see this in the formula as well, since there is only one parameter with the person-specific index $n$.
+This implies that only the construct we refer to as $\theta$ (in our example, “environmental concerns”) influences the respondents’ answers to the items.
+This assumption is called *unidimensionality assumption*.
+
+#### Local independence
+
+Another assumption, which is also closely related to the assumption of unidimensionality, is *local independence*, or sometimes also called *conditional independence*.
+Local independence assumes, that the responses a person gives to the various items are independent of one another, conditional on the value of $\theta_n$.
+This means that the only source of relationships between the item responses of a person can be the person-specific construct $\theta_n$.
+This goes back to the assumption of unidimensionality, since we assume that there is only one person-specific construct that influences a person's responses to the items.
+We can illustrate this using the ECo scale as an example.
+We assume that the probability of a person agreeing with items designed to measure environmental concern depends solely on the level of that person’s environmental concern.
+Accordingly, it makes sense that the responses a person gives to different items on the scale are correlated.
+For example, a person with high levels of environmental concern will agree with most items, while a person with low levels of environmental concern will disagree with most items.
+Consequently, a person’s responses are correlated because they are all based on the same level of environmental concern.
+However, if you account for this source of commonality among a person’s item responses, then that person’s responses to the items should be independent—that is, random.
+
+> Mathematically, this can be expressed as follows [@lord1980, p. 19]:
+>
+> $$P(Y_{ni} = 1| \theta_n) = P(Y_{ni} = 1|\theta, Y_{nj}, Y_{nk}, ...) \quad (i \neq j, k. ...)$$
+>
+> This means that the probability that person $n$ answers item $i$ with a 1, given $\theta$, is the same as the probability that person $n$ answers item $i$ with a 1, given $\theta$ and given person $n$’s answers to items $j$, $k$, and all other items that are not $i$.
+> Put simply, this means that the information about what the person said on the other items does not influence the answer to item $i$.
+>
+> Another possible way to write this is [@lord1980, p. 19]:
+>
+> $$P(Y_{ni} = 1, Y_{nj} = 1, Y_{nk} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n) \cdot P(Y_{nj} = 1|\theta_n) \cdot P(Y_{nk} = 1|\theta_n)$$
+>
+> This expression states that the probability that a person answers all three items $i$, $j$, and $k$ with 1, given $\theta_n$, is equal to the product of the individual probabilities of answering an item with 1
+
+If the assumption of local independence is violated, this means that, in addition to the construct \$\\theta\$ that we wish to measure, there are one or more other sources of systematic variance that influence individuals' response behavior.
+These could be, for example, other latent constructs that also affect the response process.
+For instance, in addition to environmental concerns, the need for cognitive closure might also influence item responses.
+However, since we assume only a unidimensional structure, this additional construct is not represented in our model (Please note, that there are also multidimensional IRT models, however, this topic is beyond the scope of this tutorial).
+It is however important to note that local stochastic independence should not be considered equivalent to the assumption of unidimensionality [@deayala2022, p. 22].
+There may also be other sources of systematic variance.
+For example, item order effects.
+For instance, the response to a previous item could influence how one responds to a subsequent item.
+This, too, would violate the assumption of local stochastic independence.
+
+#### Sufficient statistic
+
+A distinctive feature of the Rasch model is that the total score—that is, the number of items to which a person answered 1—is a sufficient statistic for $\theta$.
+This means that if you know a person's total score, you also know $\theta$; in other words, the data does not provide any further information about $\theta$ beyond the total score, or, to put it another way, the total score contains all the information about $\theta$ that can be derived from the data [@lord1980, p.57].
+
+So, if you want to estimate a person’s $\theta$, it is sufficient to know how many items a person answered with a 1 (= total score), and it is irrelevant which specific items a person answered with a 1.
+This means that people who answered the same number of items with a 1 are estimated to have the same $\theta$.
+This can lead to the paradoxical effect that a person who, for example, answered three easy items with a 1 is assigned the same $\theta$ as a person who answered three difficult items with a 1.
+
+The same applies to item difficulty.
+The number of people who answered an item with a 1 is a sufficient statistic for item difficulty.
+Therefore, it is enough to know how many people answered an item with a 1, rather than which specific people answered it with a 1.
+
+::: {.callout-important appearance="simple"}
+## Be careful
+
+The property of a sufficient statistic holds only as long as the assumptions of the Rasch model hold.
+For other IRT models, the total score is not a sufficient statistic.
+:::
+
+
 
 - Local stochastic independence
 
