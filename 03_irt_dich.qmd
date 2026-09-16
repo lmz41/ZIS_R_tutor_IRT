@@ -45,9 +45,46 @@ editor:
 
 ## At a Glance
 
-# IRT Intro & 1PL (Rasch)
+## IRT Intro & 1PL (Rasch)
 
-## IRT motivation and difference to classical test theory
+### Motivation of IRT and difference to classical test theory
+
+Before we dive deeper into item response theory (IRT), it’s worth taking a step back and considering what the starting point is and why it makes sense to examine it from an IRT perspective.
+
+In the social sciences, we often face the problem that what we want to measure (e.g., attitudes, personality traits, etc.) cannot be directly observed or measured.
+Therefore, we attempt to operationalize these abstract concepts using tools such as questionnaires.
+This leads to a distinction between two levels.
+On the one hand, we have the latent level.
+This is the level that cannot be directly observed, where the constructs we are interested in are located.
+On the other hand, there is the manifest level.
+This is the observable level where our operationalizations are located—for example, the responses people have given on a questionnaire.
+It is important to note that these two levels are not equivalent and that there is a gap between them.
+This is a problem because we are usually interested in latent person and item characteristics, but we only have data with responses at the manifest level.
+Therefore, we need something that describes how the observed manifest level (e.g., item responses) is related to the unobservable latent construct that we actually want to measure.
+We call this “something” that describes these relationships a *statistical* or *psychometric* *model*.
+
+Put simply, a statistical model attempts to predict the observed data based on latent variables.
+For this, we can ask our selfs: "What variables influence the responses to an item?".
+Intuitively two influences may come to mind:
+
+1.  The characteristics of the person answering the item (this usually refers to the latent trait we want to measure)
+
+2.  The properties of the item being answered
+
+That seems reasonable.
+For example, one would expect that the more environmental concern a person has (a latent trait of the person), the more likely they are to agree with an item that advocates for stronger climate protection measures.
+On the other hand, the characteristics of the item also influence how respondents answer it.
+For example, how clearly the item is worded, or how difficult it is to agree with the item.
+
+IRT combines these two approaches by taking into account the influence of both persons (latent constructs) and items.
+This represents a fundamental difference from classical test theory (CTT) [@wilson2023 p. 139] and is a major advantage of IRT over CTT.
+This is evident in several ways.
+First, IRT always models a person’s response to a specific item.
+CTT, by contrast, models the total score and thus completely ignores the characteristics of individual items.
+In IRT, there are model parameters that refer to the person and are constant across all items, but there are also parameters that are item-specific.
+As a result, IRT explicitly addresses the various influencing factors (person + item)—unlike CTT—and represents a multilevel structure, since responses to different items from the same person can be grouped together, meaning that item responses are nested within persons.
+Therefore, IRT models can also be understood as generalized linear mixed models.
+So let's take a closer look at that next
 
 > Good references: @wilson2023
 
@@ -59,37 +96,7 @@ editor:
 
   - This something is a statistical or psychometric model
 
-- Secondly there is the question of what influences the measurement/response process of the persons
-
-  - Intuitively and histroically there are two influences
-
-    - Ability of the person
-
-      - the more pronounced a construct/trait is in a person the more items are solved
-
-    - Item:
-
-      - How well does the item captures the construct
-
-      - How hard is the item?
-
-    - Historically: there is also an item-focused approach and a score-based approach (CTT) -\> s.
-      p. 127 ff.
-      in @wilson2023
-
-*=\> IRT combines these two approaches by taking into account the influence of both persons (traits) and items*
-
-- Differences between CTT and IRT (here: Rasch model) -\> @wilson2023 p. 139
-
-  - IRT differentiates both at item level and instrument level, while CTT only considers the instrument level
-
-    - In CTT properties of the item don't matter, since CTT only considers the total score
-
-  - IRT has a person parameter which is constant across all items for one person and an item parameter which is specific for each item -\> leads to hirarchical data/multilevel model
-
-    - responses to items are nested in models (this is also why IRT models can be understood as Generalized linear mixed models -\> s. section later)
-
-  - IRT models the probabilities of the observed response patterns and not the sum of the responses as the CTT
+- 
 
 *In summary: We have observed people's responses to our items (manifest level). This response data is mostly categorical or dichotomous, due to the use of Likert scales. On the other hand, we are interested in individuals’ scores on constructs/traits that are not directly observable (latent level) and would also like to account for the influence of the items. To address this situation, we therefore need a model that can predict the observed responses while using the latent construct and the properties of the items for prediction (Wright map).*
 
@@ -139,9 +146,143 @@ editor:
 
 *After this we have established the formula for the 1PL/Rasch model (Note item difficulty instead of easiness to get* $\theta_p - \beta_i$)
 
-# The Rasch Model (1PL)
+## A working example: Environmental concern
 
-## Formula
+To illustrate the usefulness of IRT, we will apply what we’ve learned to a real-world example throughout this tutorial.
+To do so, we’ll use data from the paper by Gomm and Quoß @gomm2026 , who developed the *New environmental concern scale (ECo scale)* for assessing environmental concerns using IRT.
+
+The [data](https://doi.org/10.7910/DVN/ZMQRIH) from this paper has been made publicly available, so you can download it yourself and follow along with the code examples.
+
+The ECo scale consists of the following nine items:
+
+Instruction: *What do you think about the following statements and questions?*
+
+| Item | Item text |
+|------------------------------------|------------------------------------|
+| 1 | I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live. |
+| 2 | If we continue in the same way, we are heading towards an environmental disaster. |
+| 3 | We worry too much about the future of the environment and not enough about prices and jobs today. |
+| 4 | At present, the majority of the population in our country is still not acting in a very environmentally conscious way. |
+| 5 | In my opinion, environmentalists strongly overstate the significance of the environmental problem. |
+| 6 | Environmental protection measures should be enforced even if jobs are lost. |
+| 7 | How willing are you to pay much higher prices to protect the environment? |
+| 8 | How willing are you to pay much higher taxes to protect the environment? |
+| 9 | How willing would you be to accept cuts in your standard of living in order to protect the environment? |
+
+In the original scale, all items are answered on a five-point Likert scale (Response scale (statements): *Does not apply at all* (1) to *Fully applies* (5).
+Response scale (questions): *Very unwilling* (1) to *Very willing* (5)).
+Item 3 and Item 5 are reverse coded.
+
+Please note that for this tutorial, the data has been dichotomized.
+This means that responses from participants who somewhat agreed with an item (\> 3) were coded as 1.
+Responses from participants who somewhat disagreed with an item (\< 3) were coded as 0.
+The responses of participants who answered an item with a 3 were randomly coded as either a 1 or a 0 with a 50% probability.
+This dichotomization is necessary because the models covered in this tutorial only work with dichotomous response formats.
+However, in a future tutorial, we will also cover IRT models for polytomous response formats.
+
+```{r}
+library(dplyr) 
+library(tidyr) 
+library(mirt)
+
+# load data
+
+load("C:/Users/martinln/Documents/IRT_tutorials_alt/Example_data_irt/ECo scale Quoß/envatt_reduced.Rda")
+
+dat_quoß <- w7
+rm(w7)
+
+dat_eco <- dat_quoß %>% 
+  select(w7_q10x1, w7_q10x2, issp6,      # affective
+         w7_q10x5, w7_q10x6,  w7_q10x9,  # cognitive
+         issp2, issp3, issp4             # conative
+  ) %>% 
+  drop_na()
+
+names(dat_eco) <- c("Eco_aff_1", "Eco_aff_2", "Eco_aff_3",
+                    "Eco_cog_4", "Eco_cog_5", "Eco_cog_6",
+                    "Eco_con_7", "Eco_con_8", "Eco_con_9")
+
+# Item 3 and 5 are reverse coded and have to be inverted
+
+dat_eco <- dat_eco %>% 
+  mutate(Eco_aff_3_r = 6 - Eco_aff_3,
+         Eco_cog_5_r = 6 - Eco_cog_5)
+
+
+# View(dat_eco[, c("Eco_cog_5", "Eco_cog_5_r")]) # check if recoding was sucessfull
+
+
+# build data set with dichotomouse responses
+
+dat_eco_dicho <- dat_eco %>% 
+  mutate(across(
+    .cols = everything(),
+    .fns = function(x){
+      # ifelse(x < 3, 0, ifelse(x > 3, 1, rbinom(1, 1, 0.5)))
+      out <- ifelse(x < 3, 0, ifelse(x > 3, 1, NA))
+      idx <- which(x == 3)
+      out[idx] <- rbinom(length(idx), 1, 0.5)
+      out
+    },
+    .names = "{.col}_dicho"
+  ))
+```
+
+## The Rasch Model (1PL)
+
+Following this conceptual introduction, let's take a closer look at the first IRT model.
+
+The Rasch model is a statistical model that links the latent level to the manifest level by predicting the probability that a person will choose response 1 for a given item.
+The Rasch model always assumes dichotomous response formats, in which the responses are typically coded as 0 and 1.
+Generally speaking, 1 represents an success and 0 a failure.
+In our example with the ECo-Scale, a success can be interpreted as agreement with the item and a failure as disagreement with the item.
+In achievement testing, however, 1 could also mean “Correct” and 0 could mean “Incorrect.”
+
+### Formula
+
+The Rasch model is described by the following formula:
+
+$$P(Y_{ni} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)}$$
+
+Let's take a look at the individual components to better understand the formula:
+
+On the left side of the equation is the probability that a person $n$ will answer item $i$ with a 1 ($P(Y_{ni} = 1)$).
+Thus, $Y_{ni}$ denotes the response of person $n$ to item $i$ and can take the values 0 or 1.
+In the context of regression, this probability $P(Y_{ni} = 1)$ is therefore our dependent variable, which we want to predict.
+
+To make this prediction, we need predictors.
+The Rasch model assumes two predictors or parameters:
+
+- the persons ability/trait ($\theta_n$)
+
+- the difficulty of the item ($\beta_i$)
+
+The rest is the logistic function $f(x) = \frac{e^x}{1 + e^x}$, which we use as a link function $g()$ to predict a probability (see IRT as logistic regression).
+We then simply set $x = \theta_n - \beta_i$.
+
+### 1PL
+
+Before we take a closer look at what the model parameters actually mean, it is worth noting that the Rasch model is sometimes referred to as the 1PL model.
+The 1PL stands for One-Parameter Logistic Model.
+The "One" refers to the number of item-specific parameters.
+As we can see in the equation, there is only one parameter that has an index $i$ and can therefore vary for each item: the item difficulty $\beta_i$.
+Later on, however, we'll also learn about IRT models with more item-specific parameters.
+
+Strictly speaking, however, the Rasch model is a special case of a 1PL model.
+This is because the 1PL model is defined as follows:
+
+$$P(Y_{ni} = 1) = \frac{\exp(\alpha(\theta_n - \beta_i))}{1 + \exp(\alpha(\theta_n - \beta_i))}$$
+
+As we can see, this formula looks almost identical to the Rasch model, except that a new parameter $\alpha$, has been added.
+This is the discrimination parameter, which we will examine in more detail later.
+What we can see now, however, is that we only refer to a Rasch model when $\alpha = 1$.
+
+Even though this may seem like a minor difference—and is mathematically equivalent—there are different philosophical perspectives underlying it [@deayala2022, p. 20].
+Compared to the Rasch model, the 1PL model is designed to fit the data as closely as possible.
+This is because the 1PL model is more flexible than the Rasch model; the $\alpha$ parameter does not have to be 1, so the model can "try out" different $\alpha$ values to determine which $\alpha$ yields the best fit to the data.
+The Rasch model does not allow for this kind of flexibility, since alpha must equal 1 in this model.
+However, this restriction ensures a consistent scaling that allows for comparability across different Rasch models.
 
 - AV = probability of person $p$ two answer item $i$ with 1 ($P(Y_{pi} = 1)$)
 
@@ -165,25 +306,109 @@ editor:
     - <mark>Is this to technical for a beginner tutorial?
       Especially because the discrimination parameter is introduced in the 2PL part</mark>
 
-## Interpretation of model parameters & Visualisation (ICCs)
+### Interpretation of model parameters & Visualisation (ICCs)
 
-- theta-Parameter = latent Trait we want to measure
+Let’s take a closer look at the two model parameters.
 
-- beta-Parameter = item difficulty
+$\theta$ refers to the person parameter - that is, the latent construct we want to measure.
+Since the latent construct represents a continuum, the $\theta$ parameter requires the index $n$, because each person is located at a different point on the continuum.
+In our example, $\theta$ would be “environmental concerns,” and $\theta_n$ would be the level of environmental concerns of person $n$.
+
+$\beta$ is the item difficulty.
+The $\beta$ parameter has the index $i$ because items vary in difficulty.
+The term “difficulty” stems from the historical background of the IRT, which was developed primarily for achievement and ability applications.
+In the context of personality assessment or the measurement of attitudes, difficulty can be understood as how easy it is for individuals to agree with or disagree with an item.
+A more neutral term, which is therefore also frequently used to refer to item difficulty, is “item location”.
+
+The term “location” highlights an important property of IRT models.
+Specifically, $\theta$ and $\beta$ lie on the same continuum or scale.
+
+![](figures_irt_tutorial/Rasch-Kontinuum.png)
+
+In our example, the continuum represents environmental concerns.
+We can now compare individuals with one another and see, for example, that Person 1 ($\theta_1$) has the lowest level of environmental concerns compared to the other two individuals.
+Conversely, we can also compare the items with one another.
+For example, Item 1 ($\beta_1$) is a “easy” item, since it requires only a low level of environmental concerns to agree with it, while Item 8 is a “difficult” item, since one must have a fairly high level of environmental concerns to agree with it.
+This also makes intuitive sense when we look at what Item 1 and Item 8 of the ECo scale ask.
+Item 1 asks: "I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live." That's a statement most people can probably agree with.
+In contrast, Item 8 asks "Are you willing to pay much higher taxes to protect the environment?" Something that probably far fewer people are willing to do.
+Therefore Item 8 is more difficult to agree with and has a higher $\beta$ than item 1.
+
+However, since $\theta$ and $\beta$ are now on the same continuum, we can also compare $\theta$ with $\beta$.
+For example, we might expect Person 1 ($\theta_1$) to agree with Item 1 because Person 1 has higher environmental concerns than the location associated with Item 1.
+At the same time, one would expect Person 1 to be more likely to disagree with Item 8, since Person 1 has much lower environmental concerns than the point at which Item 8 is located.
+
+Using the formula from the Rasch model, we can actually calculate the probability of the responses precisely, rather than just estimating it visually: Let's say $\beta = -1.343$ and $\theta_1 = -0.5$, than we can just plug in the values in the Rasch formula to calculate the probability that Person $n = 1$ answers item $i = 1$ with 1 (= agree):
+
+$$P(Y_{11} = 1) = \frac{\exp(\theta_1 - \beta_1)}{1 + \exp(\theta_1 - \beta_1)} = \frac{\exp(-0.5- (-1.343))}{1 + \exp(-0.5 - (-1.343))} = 0.70$$
+
+This result indicates that the Rasch model estimates the probability that Person 1 will answer Item 1 with a 1 to be 70%.
+
+We can do this again with Item 8.
+Let's assume that $\beta_8 = 0.347$.
+Than we can calculate the probability that Person $n = 1$ answers item $i = 8$ with 1 (= agree):
+
+$$P(Y_{18} = 1) = \frac{\exp(\theta_1 - \beta_8)}{1 + \exp(\theta_1 - \beta_8)} = \frac{\exp(-0.5- 0.347)}{1 + \exp(-0.5 - 0.347)} = 0.30$$
+
+This result indicates that the Rasch model estimates the probability that Person 1 will answer Item 8 with a 1 to be 30%.
+
+Let's work through one last example.
+Let's assume $\beta_6 = -0.5$ for Item 6.
+Than we can calculate the probability that Person $n = 1$ answers item $i = 6$ with 1 (= agree):
+
+$$P(Y_{16} = 1) = \frac{\exp(\theta_1 - \beta_6)}{1 + \exp(\theta_1 - \beta_6)} = \frac{\exp(-0.5- (-0.5))}{1 + \exp(-0.5 - (-0.5))} = 0.50$$
+
+As we can see, the probability that Person 1 will solve Item 6 is exactly 50%.
+Here we can observe something interesting: namely, that if a person's ability matches the item's difficulty (i.e., $\beta_i = \theta_n$), then the probability of solving it is 50%.
+In fact this is the definition of item difficulty: The item difficulty is the point on the theta continuum at which the probability that the person will solve the item is exactly the same as the probability that the person will not solve it.
+
+This shows us that, ultimately, only the discrepancy between $\theta_n$ and $\beta_i$ is relevant to the probability that a person will agree with an item.
+The rest of the formula serves only to restrict the result to a range between 0 and 1, so that we can interpret the results as probabilities.
+
+This means, the higher the $\theta_n$ (e.g. the higher the environmental concerns of a person are) compared to the $\beta_i$ (e.g. amount of environmental concerns required to have a probability to agree with the item of 50%), the higher is the probability that a person will agree with an item.
+
+Conversely, the higher $\beta_i$ (e.g., the level of environmental concern required to achieve a 50% probability of agreement) compared to $\theta_n$ (e.g., the greater a person’s environmental concern), the lower the probability that a person will agree with an item.
+
+In other words, the greater the discrepancy between $\theta_n$ and $\beta_i$, the more the probability that a person will agree with the item deviates from 50%, and the more certain we are of our prediction.
+
+### Item Characteristic Curve
+
+We can also visualize these relationships.
+To do so, we can conduct a small thought experiment: Imagine we select an item for which we know the item difficulty.
+Now we calculate the probability that a person will answer with a 1—but no longer for a specific person, rather for every possible $\theta_n$ value.
+If we then create a plot where the x-axis represents $\theta$ and the y-axis represents the probability that the item will be answered with a 1, we can see for every possible person how high their probability is that they will agree with the item.
+Such a plot is called an *item characteristic curve* (ICC) or *item response function* (IRF).
+
+As an example, the ICC for Item 6 of the ECo scale is shown in the following:
+
+![](figures_irt_tutorial/Example_ICC_I6.png)
+
+In the case of the Rasch model, we have the distinctive feature that the item difficulty always lies at the inflection point of the ICC.
+In our example, item 6 has an item difficulty of $\beta_6 = -0.018$.
+If we go to the corresponding point on the x-axis in the figure and look at the height at which the blue line intersects the y-axis, we see that at the $\theta$ point of -0.018, the probability of solving the problem is 50%, and visually we can see here that the curve also changes the direction of its slope at this point (= definition of the inflection point), because left of the item difficulty, the slope of the probability increases steadily, and right of the item difficulty, the slope of the probability decreases steadily.
+
+We can now conduct our thought experiment not only for a single item, but also for all items on the scale, so that we can calculate an ICC curve for each item:
+
+![](figures_irt_tutorial/Example_ICC_ECo.png)
+
+When we consider multiple items or ICCs simultaneously, we see that the varying item difficulties result in a shift of the ICCs along the x-axis.
+This makes sense, since a more difficult item lies further to the right on the $\theta$ continuum.
+Accordingly, the point where the ICCs intersect a 50% probability—or their inflection point—must also lie further to the right.
+This shifts the entire curve to the right.
+
+It is important to note that, under the Rasch model, the ICCs are all parallel to one another, meaning there is no overlap between the curves.
+As a result, the probability that an item will be answered with a 1 is always lower for a more difficult item than for an easier item, for all values of $\theta$.
+We can see this because the ICCs further to the right (= more difficult items) are always lower than the ICCs to the left (= easier items), regardless of where on the $\theta$ scale the items are compared.
+
+Conversely, however, we can also see that individuals with higher $\theta$ scores are on all items more likely to answer the item with a 1 than individuals with lower $\theta$ scores.
+We can see this in the ICC plot as well.
+For example, the y-values of the ICCs at $\theta = 2$ are higher for each item than at $\theta = -2$.
 
 - both on the same scale (s. Wright-map -\> p.26 and figure 1.10 in @wilson2023
 
-  - the higher theta, the higher the solution probability
-
-  - the higher beta, the lower the solution probability
-
-  - if theta = beta the solution probability is at chance level (= item difficulty)
-
 - In a regression logic we can also say, that the difference/distance between a person and an item on the continuum can be used as a predictor to predict the probability that a person will solve the item
 
-- This can be visualized in the ICCs
-
-## Implications and properties of this formula
+### Implications and properties of this formula
 
 - Local stochastic independence
 
@@ -193,7 +418,7 @@ editor:
 
 - These properties are based on some assumptions which can be tested to check if the Rasch model holds
 
-## Identifiability
+### Identifiability
 
 - Issue with identifiability: very intuitve explained in @wilson2023 p. 145 *(auch wenn Wilson nicht explizit auf Identifizierbarkeit anspielt -\> [@deayala2022, p. 44] macht das dafür so)*
 
@@ -219,61 +444,7 @@ editor:
 
   - set expected value of person trait to 0 (person centering)
 
-## Model estimation
-
-- Intuitive explanation of maximum likelihood (s. [@deayala2022, p. 23 ff.])
-
-- JML, CML, MML -\> <mark>to technical for a beginner tutorial?`<`{=html}
-  `/mark>`{=html}
-
-  - JML ([@deayala2022, p. 42 ff.])
-
-    - ping-pong-principle
-
-      - first person-parameters are set to random values to be able to estimate item paramters
-
-      - based on the estimated item parameter then the person parameters are estimated
-
-      - since the item parameter were estimated given random person parameters, the item parameters are estimated again because we have now better person parameters
-
-      - since the person parameter were estimated given item parameters based on random person parameters, the person parameters are estimated again with the better item parameters
-
-      - This goes on until no further meaningful changes/improvements in the estimates are achieved
-
-    - Problem with JML: Consistency principle is violated
-
-      - Consistency principle: An estimator is consistent if it converges to the true value as the sample size increases -\> basically, the estimator should get more precise with increasing sample size
-
-      - in JML an increasing sample size however means that also the amount of (person) parameters one has to estimate, are increasing.
-        Thus the JML-estimator doesn't get more precise with increasing sample size
-
-  - CML
-
-    - CML only possible for Rasch-models, since it depends on the total score for $\theta$. So it's only possible to calculate, when the total score is a sufficient statistic for $\theta$.
-
-  - MML
-
-    - Advantage: estimation of item parameters is separated from person parameters
-
-      - Solves the problem with the consistency principle
-
-    - *Should we explain how this estimation works, because it is extremely technical and abstract for an beginner tutorial aimed at practitioner?*
-
-      - Gute Zusammenfassung wie das Funktioniert @hoffman2024 -\> Foliensatz 2 S. 17
-
-  - s\.
-    R-Code in BC2-Zusammenfassung für Vergleich der verschiedenen estimation procedures for the person parameters (use `str` + `F` and "Estimation of person parameters")
-
-## Modelfit
-
-- IRT using ML does not have agreed-upon measures of absolute global fit @hoffman2024
-
-- Nested models (on same items!) can still have relative fit compared via $-2\Delta\text{LL}$ (@hoffman2024; see also 2PL section)
-
-s\.
-<https://philippmasur.de/2022/05/13/how-to-run-irt-analyses-in-r/>
-
-## Test- and item-information
+### Test- and item-information
 
 - Information is basically a measure of measurement accuracy or precision
 
@@ -375,6 +546,14 @@ s\.
       &= \sum_{i=1}^I \frac{exp(\theta - \beta_i)}{1+exp(\theta-\beta_i)} \cdot \frac{1}{1+exp(\theta-\beta_i)}
       \end{align}$$
 
+  - This again is a interessting difference to the CTT
+
+    - In the CTT the contribution of an item to the test reliability always depends on what other items are included in the test [@lord1980, p. 22]
+
+      - Das liegt daran, dass die Reliabilität mit erklärter Varianz arbeitet. Die unique Varianz die ein Item aufklärt, ist aber immer abhängig von den anderen Items
+
+    - since we can see in the equation for the testinformation that the iteminformation of every item is added, each item contributes it's own part to the information
+
   - If we again plot each Testinformation for every $\theta$ value, we get the *Test Information Curve*
 
     - therefore. we can easily inspect visually which parts of the $\theta$ continuum our scale measures especially precise
@@ -384,13 +563,19 @@ s\.
   - For example s. [@deayala2022, p. 32 ff.]
   - see also Hoffman lectures Lecture 5a
 
-## Implementation in R
+- Nützlich für Testkonstruktion (s. [@lord1980, p. 23])
+
+  - auch noch auf Zusammenhang mit der Wright Map eingehen
+
+    - ähnliche Idee aber hier noch zweite Dimension durch Testinformation
+
+### Implementation in R
 
 - *compact and all together at the end or combined with the text and devided over the sections?*
 
-# 2PL
+## 2PL
 
-## Intuitive introduction in a regression/predictor logic
+### Intuitive introduction in a regression/predictor logic
 
 - Maybe the assumption, that only the trait and the item difficulty are influencing the response probability are a little bit harsh
 
@@ -403,7 +588,7 @@ s\.
   which has onls 1 Parameter (1PL).
   Therefore the new model is called (Birnbaum) two-parameter logistic model (2PL)
 
-## Model formula
+### Model formula
 
 - The formula looks pretty similar to the Rasch-model
 
@@ -431,7 +616,7 @@ s\.
 
 - But how can we interpret the alpha parameter in terms of its meaning?
 
-## Interpretation of the alpha parameter:
+### Interpretation of the alpha parameter:
 
 s\.
 also example in [@deayala2022, p. 20]
@@ -481,7 +666,14 @@ also example in [@deayala2022, p. 20]
 
     - Since we learned, that an item can discriminate the better the steeper the slope, the item discriminates the most around the item difficulty
 
-## Item- and Test-Information
+- The discrimination parameter of the IRT relates to the item-total correlation from the CTT, which is also sometimes called item discrimination (Trennschärfe) [@lord1980, p33]
+
+  $$\alpha_i \approx \frac{\rho_{ix}}{\sqrt{1-\rho_{ix}^2}} \quad ; \quad
+  \rho_{ix} \approx \frac{\alpha_i}{\sqrt{1-\alpha_i^2}}$$
+
+  - However, this mathematical relationship holds only if $\theta$ is restricted to a standard normal distribution and there is no guessing involved.
+
+### Item- and Test-Information
 
 - *Reference Rasch-Part, where the concept of information is introduced*
 
@@ -516,13 +708,13 @@ also example in [@deayala2022, p. 20]
 
   - $$I(\theta) = \sum_{i = 1}^II_i(\theta)$$
 
-## Difference to the Rasch-model
+### Difference to the Rasch-model
 
 - ICCs can cross now, because different slopes are possible since $\alpha$ is itemspecific
 
   - violation of the specific objectivity assumption of the Rasch-Model
 
-## Model comparison
+### Model comparison
 
 - which model is more appropriate?
 
@@ -548,142 +740,7 @@ also example in [@deayala2022, p. 20]
 
     - smaller values are better
 
-# PCM
-
-- The Rasch model as well as the 2PL model assume dichotomous response data
-
-- However often we have ordered polytomous response data
-
-  - e.g.
-    Likert scale data
-
-  - ordered means that higher responses reflect more of something and lower responses reflect less of something
-
-- Therefore, there are also models, which allow the analysis of ordered polytomous items
-
-  - One example is the Partial Credit Model, which is a generalisation of the Rasch model for the polytmous case
-
-## An intuitive introduction to the polytomous case
-
-- Let's imagine a math test, where every item is a different math problem (items)
-
-- If we just consider, if a person has solved the item/math problem, then we have dichotomous response data, since each item can only be scored as correct (1) or incorrect (2)
-
-  - Such data can be analysed with the classical Rasch model
-
-- However one could ask, if it's appropriate to score the responses in such a all-or-nothing manner
-
-  - For example, cosider the following math problem:
-
-  - $$(7/4) + 8 = ?$$
-
-  - We could make the assumption, that multiple steps or operations are necessary to come up with the solution
-
-    1.  E.g. first we have to devide 7 by 4
-
-    2.  than we have to add 8 to the result of the first step
-
-  - Only looking/scoring the end result could therefore be overly harsh, since we could learn more about the math ability of the persons, if we take the different operational steps into account
-
-    - E.g. a person which correctly calculates $7/4$ but than fails to add $8$ to the result, has maybe more math abilities, than a person, which fails to calculate even the first step ($7/4$)
-
-    - Furthermore, a person, which comes up with the correct endresult should be more able than the first person, because this person successfully completed step 2
-
-  - Therefore, if we use a polytomouse scoring scale instead of a dichotomous one, we could represent these different steps
-
-    - E.g. a person which didn't complete any step sucessfully gets 0
-
-    - a person, who correctly solves the first step, gets a 1
-
-    - a person, who sucessfully completes the first and the second step, gets a 2
-
-  - Fun Fact: This is why it's called *partial credit* model, because we give credit for partially correct responses
-
-- Importantly, the steps are ordered, therefore it is not possible, to have a score of 2 without solving step 1.
-
-  - you can think about it, in the term of the math problem.
-    One can only solve step 2 correctly, if one has solve step 1, because step 2 depends on the result in step 1
-
-  - Therefore, a higher score indicates a higher performance or proficiency
-
-- To sum up, by using polytomouse data, we can group persons into categories depending on their score
-
-  - e.g. all persons, who didn't solve any step are in category 0
-
-  - all persons, who did solve step 1 are in category 1
-
-  - all persons, who solved all the steps are in category 2
-
-*But how can we build a model that can deal with such data? One approach is the PCM*
-
-## PCM Introduction
-
-- To understand the logic of the PCM imagine a latent trait $\theta$ (e.g. Extraversion or math ability, etc.) we want to measure and we have items with a polytomouse response scale (e.g. seven-point Likert scale , etc.)
-
-- Thus, we have a continuous latent trait (x-axis) and different categories to which the persons respond to, depending where on $\theta$ they are
-
-  - e.g. persons at the low end of the $\theta$ continuum are low on extraversion or math ability an therefore choose the lowest response option on the likert scale (0)
-
-  - However, if $\theta$ increases, the persons get more extraverted or more able in math, and therefore the probability rises, that they choose response category 1, because it's seems more appropriate (in terms of personality assesment) or they are more able (in terms of math ability because they can solve more steps)
-
-- Since we have ordered categories, we can now form pairs from adjacent categories (e.g., Category 0 and Category 1, or Category 1 and Category 2).
-  For each of these pairs, we can now ask ourselves: at what point on the latent continuum, or at what value of theta, does it become more likely that a person will choose the (next) higher category?
-
-  - This point is called *transition location parameter*
-
-  - This should sound somewhat familiar to you and might remember you of the item difficulty parameter from the Rasch model
-
-  - This intuition is absolutely correct, because when we look at the category pairs, we again have a dichotomous data situation, and we can use the Rasch model to model the probability that the person will choose the higher-ranking response category.
-
-    - basically we split the polytomous scale in to dichotomous chunks or pairs
-
-    - if there are $X$ different categories, then there are $X-1$ adjacent pairs
-
-      - In the math example, we have $3$ categories (0,1,2), therefore there are $3-1 = 2$ adjacent pairs (0-1, 1-2)
-
-  - Viewed this way, the PCM is simply an ordinal extension of the Rasch model, in which we successively apply Rasch models to the different pairs from adjacent categories .
-
-## PCM formula
-
-- Generally speaking, a Rasch model can be used to calculate the probability that a person will choose event $b$ out of two different options $\{b, \overline{b}\}$. Both options are mutually exclusive and jointly exhaustive. That's why the complementary probability $1-p(X=b)$ is the same as the probability that the person chooses option $\overline{b}$ ($p(X = \overline{b})$)
-
-Let's now apply this to the category pairs from our polytomous scale:
-
-- We want to calculate the probability that a person $n$ on item $i$ chooses the response category $x$ instead off the next lower response category $x-1$.
-  And to model this probability we use the Rasch Model.
-
-- Formally this can be expressed by
-
-  $$p(X_{ni}=x \mid X_{ni} = x-1 \vee X_{ni} = x) = \frac{\text{exp}(\theta_n - \beta_{ix})}{1 + \text{exp}(\theta_n - \beta_{ix})}$$
-
-  - This can interpreted like a normal Rasch model and we can also plott the ICCs to inspect it visually.
-    However now it's called a Threshold Characteristic Curve (TCC)
-
-    - In the TCC we can see, that the $\beta_{ix}$ parameter is on the spot on the $\theta$ continuum, where the probability to choose category $x$ is 50%.
-
-    - Therefore the *transition location parameter* $\beta_{ix}$ marks the point on the $\theta$ continuum where a person with a certain $\theta$ switches from choosing the lower category $x-1$ to choosing the higher category $x$
-
-- We can then apply such a model to each of the pairs
-
-- But there remains a problem:
-
-  - By the described approach we end up with multiple Rasch models per item, since we consider the polytomous scale as a series of separate dichotomous pairs
-
-  - This can also be seen from the fact that the probability to choose the higher category $x$ is a conditional probability ($p(X_{ni}=x \mid X_{ni} = x-1 \vee X_{ni} = x)$), as indicated by the term on the right hand side of $\mid$.
-
-    - The $\vee$-symbol stands for the logical operator "or".
-      Therefore we are only calculating the probability to choose option $x$ given that the person has chosen option $x$ or option $x-1$.
-
-    - This ignores however fully, that the person could have also chosen the next higher category $x+1$
-
-  - To really be able to calculate the probability, that a person chose response category $x$ out of all possible response categories $X$, we have to account for that
-
-*Parametrisierung des PCM einführen*
-
-- To solve the problem, we must therefore also take into account the influence of the other category pairs.
-  We can do this by considering how many transition location parameter were exceeded before reaching the category pair in question.
-
-# Additional ressources
+## Additional ressources
 
 - *give some usefull links for further information at the end*
 - [How to run IRT analyses in R](https://philippmasur.de/2022/05/13/how-to-run-irt-analyses-in-r/) by Philipp Mansur -\> is doing somthing similar as we are aiming for
@@ -691,5 +748,3 @@ Let's now apply this to the category pairs from our polytomous scale:
 - [PSQF Lecture from Lesa Hoffman](https://www.lesahoffman.com/PSQF6249/index.html): Week 7 and 8
 
 ## Review {.appendix}
-
-Reviewed by Christian Bruch.
