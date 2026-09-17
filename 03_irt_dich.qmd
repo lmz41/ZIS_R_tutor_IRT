@@ -483,13 +483,85 @@ The property of a sufficient statistic holds only as long as the assumptions of 
 For other IRT models, the total score is not a sufficient statistic.
 :::
 
+#### Specific objectivity
+
+The property of specific objectivity means that, when comparing individuals in terms of their $\theta$ values, it does not matter which item is used.
+This means that a person who, for example, has higher levels of environmental concern will always be more likely to agree with an item that measures environmental concern than a person with lower levels of environmental concern, regardless of which item on the ECo scale is used as the basis for comparison.
+
+Conversely, the comparison of items is independent of which individuals answered the item.
+For example, a more difficult item always requires higher levels of environmental concerns than an easier item; or, to put it another way, a more difficult item is more difficult for all individuals than an easier item, regardless of the individual’s $\theta$ level.
+
+That should sound familiar to us, because we've already seen this very characteristic in the ICCs.
+We have already noted that, in the Rasch model, the ICCs all run parallel to one another and are shifted along the x-axis only according to their item difficulty (see @fig_ICCEco_Rasch).
+This parallelism satisfies the requirement for specific objectivity.
+Thus, we can see that the higher a person’s $\theta$ is, the higher the probability of answering the item with a 1 ($P(Y_{ni} = 1)$), regardless of which item we are considering.
+This is also evident in @fig_ICC_spec_obj_Rasch : Regardless of whether it is Item 1 or Item 2, the green person ($\theta = 2$) always has a higher probability of answering ($P(Y_{ni} = 1)$) (see the point of intersection with the y-axis) than the pink person ($\theta = -2$).
+
+![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_Rasch.png){#fig_ICC_spec_obj_Rasch}
+
+Conversely, we see that regardless of whether we consider the green person ($\theta = 2$) or the pink person ($\theta = -2$), both individuals have lower response probabilities on the more difficult Item 2 than on Item 1.
+This is evident from the fact that the red horizontal dashed line for Item 1 for each person always lies above the blue horizontal dashed line for Item 2.
+
+::: {.callout-important appearance="simple"}
+## Be careful
+
+The property of a specific objectivity holds only as long as the assumptions of the Rasch model hold.
+Specific objectivity does not apply to other IRT models.
+:::
+
+However, as soon as the ICCs are no longer parallel, specific objectivity no longer applies, since it may then be the case, for example, that a person with a lower $\theta$ has a higher probability of answering an item with a 1 than a person with a higher $\theta$, while the opposite is true for another item as can be seen in @fig_ICC_spec_obj_2PL .
+Here, the pink person ($\theta = -2$) is more likely to answer Item 2 with a 1 than Item 1.
+For the blue person ($\theta = 2$), it is exactly the opposite.
+So, here, for example, the probability of answering an item with a 1 is not always lower for a more difficult item (Item 2), as the pink person demonstrates.
+
+![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_2PL.png){#fig_ICC_spec_obj_2PL}
+
+> It can also be shown mathematically that specific objectivity holds under the Rasch model, as demonstrated, for example, in [@debekla2000, p. 30] and below.
+>
+> To illustrate this, let's imagine we want to compare two people, $n$ and $n^\prime$.
+> To do this, we can look at the difference in the probability that each person answers 1 to the item.
+> To calculate the probability that a person will answer the item with a 1, we can use the formula from the Rasch model:
+>
+> $$P(Y_{ni} = 1) - P(Y_{n^\prime i} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)} - \frac{\exp(\theta_{n^\prime} - \beta_i)}{1 + \exp(\theta_{n^\prime} - \beta_i)}$$
+>
+> However, if instead of calculating the probability that a person will answer the item with 1, we now want to calculate the log odds, then we can rewrite the formula for the Rasch model.
+> We have learned that we can also think of the Rasch model as a generalized linear model.
+> Therefore, if we apply the inverse of our link function to our dependent variable (the probability of answering an item with a 1), we obtain only the linear term ($\theta_n - \beta_i$) on the predictor side of the equation, and the dependent variable is transformed into the log odds.:
+>
+> $$\log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) = \theta_n - \beta_i$$
+>
+> If we now rewrite the comparison of the persons accordingly, we get:
+>
+> $$\begin{align}
+> \log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{n^\prime i} = 1)}{1 - P(Y_{n^\prime i} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n^\prime} - \beta_i)\\
+> &= \theta_n - \beta_i - \theta_{n^\prime} +  \beta_i\\
+> &= \theta_n - \theta_{n^\prime} +  \beta_i - \beta_i\\
+> &= \theta_n - \theta_{n^\prime}
+> \end{align}$$
+>
+> As you can see, in the end, only the comparison of $\theta$ remains, and the item parameters cancel out.
+> This means that when comparing two individuals, $n$ and $n^\prime$, it does not matter on which items the two individuals are compared.
+> This corresponds to the definition of specific objectivity.
+>
+> The same can be shown for the comparison of two items, $i$ and $i^\prime$:
+>
+> $$\begin{align}
+> \log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{ni^\prime} = 1)}{1 - P(Y_{ni^\prime} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n} - \beta_{i^\prime})\\
+> &= \theta_n - \beta_i - \theta_n +  \beta_{i^\prime}\\
+> &= \theta_n - \theta_n + \beta_{i^\prime} - \beta_i\\
+> &= \beta_{i^\prime} - \beta_i
+> \end{align}$$
+>
+> Here, too, we see that when comparing items, the person-specific parameters cancel each other out.
+> Therefore, when comparing two items, $i$ and $i^\prime$, it does not matter which individuals answered the two items.
+> This, too, is consistent with the definition of specific objectivity.
+
+Ultimately, specific objectivity is related to a form of fairness, since it requires that a comparison is based solely on the the latent construct ($\theta$) and does not depend on the items used to measure the construct [@debelak2022, p. 28].
+With regard to test development, it is also important that the comparison of different items not depend on who answers them.
+This, too, ensures a specific level of objectivity.With regard to test development, it is also important that the comparison of different items not depend on who answers them.
+This, too, ensures a specific level of objectivity (see [@rasch1961, p. 332] and [@wilson2023, p. 248].
 
 
-- Local stochastic independence
-
-- Specific objectivity (as one can intuitively see in the ICCs)
-
-- Total score as a sufficient statistic
 
 - These properties are based on some assumptions which can be tested to check if the Rasch model holds
 
