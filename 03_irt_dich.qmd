@@ -567,64 +567,143 @@ This, too, ensures a specific level of objectivity (see [@rasch1961, p. 332] and
 
 ### Identifiability
 
-- Issue with identifiability: very intuitve explained in @wilson2023 p. 145 *(auch wenn Wilson nicht explizit auf Identifizierbarkeit anspielt -\> [@deayala2022, p. 44] macht das dafür so)*
+Although the exact estimation procedures for fitting a Rasch model to the data are not covered in detail in this tutorial, it is important to note at this point that the Rasch model has an identifiability problem.
+This is due, on the one hand, to the fact that the scale on which we locate $\theta$ and $\beta$ is a latent scale, since we are, after all, modeling latent constructs.
+Since latent constructs are abstract and cannot be directly observed, they do not have a natural unit or metric.
+And second, it is solely the difference/distance between $\theta_n$ and $\beta_i$ that determines the probability that the item will be answered with a 1.
+However, this also means that, in theory, there are an infinite number of $\theta$ and $\beta$ combinations that can produce the same response probability.
+For example, the probability that a person will answer an item with a 1 is the same for a person with $\theta = 4$ and $\beta = 2$ ($\theta - \beta = 4 - 2 = 2$) as for a person with $\theta = 6$ and $\beta = 4$ ($\theta - \beta = 6 - 4 = 2$) or for any other $\theta$ and $\beta$ combination, which produces a difference of two.
+If the Rasch model now attempts to estimate $\theta$ and $\beta$ based on the data, the model cannot find a unique solution, since there are theoretically an infinite number of combinations that are equally likely for the data.
+This is also referred to as the identifiability problem; in other words, the model is said to be unidentifiable (see also [@deayala2022*, p. 44*] *)*.
 
-  - the only relevant factor, which influences the probability calculated by the Rasch-formular is the difference between $\theta_p$ and $\beta_i$
+To solve this problem, we must ensure that our latent continuum has a unique origin and metric.
+The unit of measurement in the Rasch model is set to 1, so we only need to specify the origin of the metric [@deayala2022*, p. 44*].
+There are various ways to do this, known as restrictions (since the possible solutions for the model are restricted in order to ensure a unique solution).
 
-  - As long as the difference stays the same, the resulting probability stays the same.
-    This means, that there are countless $\theta_p$ and $\beta_i$ combinations, which can produce the same probabilities.
+- **sum norm restriction (item centering):** The idea here is that we give the model an additional “rule”: it should estimate the item difficulties $\beta$ such that the sum of the item difficulties equals 0 ($\sum_{i = 1}^I \beta_i = 0$).
+  Simply put: Because the model now not only seeks the parameters most likely to predict the data but must also satisfy the new rule, there are no longer an infinite number of possible solutions, and the model becomes identifiable.
 
-  - Consequently there is than no single mathematical solution.
-    In such a situation a model is not identifiable
+- **fix the difficulty of one item (anchor item):** The idea here is that we set the item difficulty $\beta_i$ of a given item to a specific value (usually $\beta_i = 0$).
+  The logic here is that the items differ in their $\beta$ relative to one another.
+  By fixing a $\beta_i$ (also known as “setting it”) and requiring the remaining items to maintain a certain distance from that item in order to reflect the relative distances, we obtain unique solutions.
+  To put it simply, you can think of it this way: We know that Item 2 is two units more difficult than Item 1, and Item 3 is one unit easier than Item 1.
+  Without any restrictions, there would now be an infinite number of possible $\beta$ values for these items, e.g., $\beta_1 = 2$, $\beta_2 = 4$, and $\beta_3 = 1$, or $\beta_1 = 10$, $\beta_2 = 12$, and $\beta_3 = 9$.
+  However, if we now introduce a restriction and define that $\beta_1 = 0$ (fixing it), then there is only one solution for the other $\beta$ values that correctly represents the relative distances between the items, namely $\beta_2 = 2$ and $\beta_3 = -1$.
 
-- To solve this, one hase to anchor the metrics origin and unit of measurement [@deayala2022*, p. 44*]
+- **set expected value of person trait to 0 (person centering):** This is a similar idea to the sum norm restriction.
+  We tell the model to estimate the $\theta$ values so that they predict the data as well as possible, but also so that the mean of the estimated $\theta$ values is 0.
 
-  - In the Rasch model the unit of measurement is set to 1
+Since the person parameters ($\theta$) and item parameters ($\beta$) lie on the same latent scale, it is sufficient to apply one of the restrictions mentioned to specify the origin of the metric [@deayala2022, p. 44].
 
-  - since the persons/ability and items are on the same continuum it is enough to anker one of these to
+### Information
 
-- there are different forms of restrictions available to make the model identifiable
+#### Item information
 
-  - sum norm restriction (item centering)
+A key concept in IRT that is very helpful for test development—and one that does not exist in this form in CTT—is item information.
+One can think of information as a measure of measurement accuracy or precision.
+One can understand this quite intuitively if one take a closer look at the ICC of an item.
 
-  - fix the difficulty of one item (Ankeritem)
+![](figures_irt_tutorial/info_ICC.png){#fig-example_ICC_info}
 
-  - set expected value of person trait to 0 (person centering)
+The ICC plots the different $\theta$ values on the x-axis and the probability to respond to the item with a 1 on the y-axis.
+We can see that the Function follows a S-shaped curve.
+Therefore, the slope of the function is not constant—as it is, for example, in a linear function—but varies depending on the point on the x-axis.
+Consequently, we can see that the change in the probability to respond to the item with a 1 (y-axsis) is different depending on the $\theta$-area on the continuum.
 
-### Test- and item-information
+For example for persons with very high $\theta$-values (or very low) the probability doesn't really change if the $\theta$ increases or decreases.
+We can see this in @fig-example_ICC_info .
+The two green persons have rather high $\theta$ values ($\theta_{\text{green1}} = 4$ and $\theta_{\text{green2}} = 5$).
+Although person green2 has a $\theta$ value that is one unit larger, we can see on the y-axis that the probability that the individuals will answer 1 to the item barely differs ($P(Y_{\text{green1}i} =1) = 0.98$ and $P(Y_{\text{green2}i} = 1) = 0.99$).
+This is because, in the low and high $\theta$ ranges, the slope of the item function/ICC is quite flat.
+This means that changes along the x-axis are hardly reflected in changes along the y-axis.
 
-- Information is basically a measure of measurement accuracy or precision
+The situation is different when we consider the $\theta$ range around the item difficulty (here, $\theta_i = 0$).
+Here, we see that the slope of the ICC is quite steep compared to the extremes.
+Let's take a look at the two blue persons ($\theta_{\text{blue1}} = -0.5$ and $\theta_{\text{blue2}} = 0.5$) in @fig-example_ICC_info .
+These two people differ by exactly one $\theta$ unit, just like the two green people.
+However, we see here that this $\theta$ difference between the blue people makes a big difference in the probability that the person will answer the item with a 1.
+Person “blue” has a 38% probability of answering the item with a 1, while person “blue2” has a 62% probability.
+Put simply, one could say that person ‘blue2’ is unlikely to agree with the item, while person “blue” is likely to agree with it.
 
-- Therefore the item information shows us which areas of the $\theta$ continuum an item can capture especially well
+So we see that the steeper the slope, the more differences in $\theta$ also make a difference in the response probability.
+That’s why we can also say that the steeper the slope, the better we can distinguish or differentiate between individuals, even if they have very similar $\theta$ values.
+We therefore “learn” the most about the $\theta$ values of individuals in those ranges of the $\theta$ continuum (x-axis) where the slope of the ICC is steep.
+In other words, these ranges contain the most *information*.
+Therefore item information shows us which areas of the $\theta$ continuum an item can capture especially well (in the sense of where it can differentiate between persons with $\theta$ values close to each other).
 
-  - This means that an item can differentiate between persons with $\theta$ values close to each other
+With this intuitive and visual introduction to the concept of information, it should now be clear that item information is related to the slope of the ICC.
+The ICC reaches its steepest slope at the inflection point; accordingly, most of an item’s information is concentrated around the item difficulty, since we have learned that the item difficulty ($\beta$) marks the inflection point of the ICC.
 
-- This is a difference to the CTT
+> Mathematically the Iteminformation for a certain $\theta$ value $I_i(\theta)$ for the Rasch model can be calculated by the probability to solve the item $p(X_i = 1)$ times the probability to not solve the item $p(X_i = 0)$ ([@debelak2022, p. 51], [@raschmo1995, p.55]):
+>
+> $$\begin{align}
+> I_i(\theta) = p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)
+> = \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
+> \end{align}$$ {#eq-iteminfo}
 
-  - in the CTT we have reliability as a measure of precision
+If we theoretically calculate for every possible $\theta$ value the Information $I_i(\theta)$ (see @eq-iteminfo) and plotting the $\theta$s on the x-axis and the Iteminformation on the y-axis, then we get the *Item-Information curve* (see @fig-example_ICC_info for an example) .
 
-  - however in CTT the reliability of an item is the same across the whole $\theta$ continuum
+![](figures_irt_tutorial/example_plot_item_info.png){#fig-example_item_info}
 
-  - This implies that an item can measure at every level equally well
+This is quite usefull because we can visually see where on the $\theta$ continuum the item is especially informative or which part on the $\theta$ continuum the item measures especially precise.
+Since we have already determined that the item information is greatest at the point of item difficulty (because that is where the ICC slope is steepest) and we know that the probability of a correct response at the point of item difficulty is 50% (because that is how item difficulty is defined), we can say that the maximum possible information in the Rasch Model is 0.25 (because $I_i(\theta = \beta_i) = 0.5 \cdot 0.5 = 0.25$) and lies at the point of item difficulty.
+Therefore, the peak of the item information curve always corresponds to the item's difficulty level
 
-  - However this is unrealistic: for example if we have an easy math item, this item can separate people who are poor in math from people who are good in math.
-    However if we compare only people who are good in math an easy item doesn't differentiate between those people because every person can solve the item
+The concept of item information as a measure of the (in)accuracy with which an item measures differs from CTT, and this is one advantage of IRT over CTT.
+This is, because in the CTT we have reliability as a measure of precision.
+However in CTT the reliability of an item is the same across the whole $\theta$ continuum.
+This implies that an item can measure at every $\theta$ level equally well.
+However this is rather unrealistic: for example consider an easy math item.
+This item is challenging for persons with low math ability and not everyone will solve it, so we can differentiate between people at the lower end of the math ability continuum.
+However the same item is easy for persons with a high math ability.
+So every person with high math ability will solve this item.
+However if we compare only people who are good in math an easy item doesn't differentiate between those people because every person can solve the item.
+However, the CTT's reliability concept would suggest that a simple math item measures people with high math ability just as well as it does for people with low math ability.
+In IRT, this is viewed more realistically based on item information, since each item can only accurately measure certain areas of a construct.
+Put differently, in IRT the reliability varies over $\theta$ @hoffman2024 .
 
-  - In IRT, this is viewed more realistically based on item information, since it is stated that each item can only accurately measure certain areas of ability.
+*Hab hier das Mathe-Beispiel beibehalten, weil ich es intuitiver finde als das mit environmetal concerns zu erklären*
 
-    - That's why it's called “Information”—because the item is particularly informative for certain areas of ability, as it can clearly distinguish between people with different levels of ability in this area.
-    - @hoffman2024 : "Because the loadings/slopes relate nonlinearly to theta, this implies that reliability (now called “test information”) must vary across theta values. So items are not just “good” or “bad”, but are “good” or “bad” for whom?"
+#### Test information
+
+Most of the time we don't have a single item but a whole scale consisting of multiple items.
+Since we learned that the item information is the largest around the item difficulty and the difficulty may vary from item to item, we could ask our self how the scale as a whole can differentiate between persons across the whole $\theta$ continuum.
+One metric that reflects this is the test information.
+
+Since each item contributes some information, we can calculate the total test information by summing up the item information of all items [@deayala2022, p.31].
+Formally, this can be expressed as follows:
+
+$$I(\theta) = \sum_{i=0}^I I_i(\theta)$$
+ {#eq-testinfo}
+
+If we calculate the test information for every possible $\theta$ value with @eq-iteminfo and plotting the $\theta$s on the x-axis and the test information on the y-axis, then we get the *Test-Information curve* (see @fig-example_ICC_test_info for an example) .
+
+![](figures_irt_tutorial/example_plot_test_info.png){#fig-example_ICC_test_info}
+
+Information is a measure of precision, and accordingly, it is also related to measures of imprecision.
+Therefore, the test information is also related to the standard error.
+Formally, this can be expressed as follows @hoffman2024, @meiser2025, [@deayala2022, p. 31]:
+
+$$\text{SE}(\theta) = \frac{1}{\sqrt{I(\theta)}} = \frac{1}{\sqrt{\sum_{i=0}^I I_i(\theta)}}$$
+
+This also makes intuitive sense, as we can see in the example @fig-example_ICC_test_info : At the $\theta$ areas where we measure very precisely (a lot of test information), we logically measure with less uncertainty (smaller standard error), and vice versa.
+
+The Test information again demonstrates an interesting difference to CTT: In CTT, reliability always depends on the exact composition of the scale.
+The contribution of an item to reliability/validity always depends on which other items it is measured alongside [@lord1980, p. 22].
+In IRT on the other side, the information contribution of an item is independent of the other items included in the scale.
+Despite these differences between CTT and IRT, the test information can also be converted into a reliability metric [@hoffman2024, p. 41]:
+
+$$\text{Reliability} = \frac{I(\theta)}{I(\theta) + 1}$$
+
+However, it is important to note that this reliability measure is again $\theta$-specific, since the test information is $\theta$-specific.
+To obtain a measure of overall model-based reliability, one could sum the reliabilities for each possible $\theta$ value and weight them by the number of individuals at that $\theta$ level @hoffman2024 .
+@hoffman2024, however, questions the value of such an approach, since it negates the very advantage that an IRT-based perspective provides.
+
+- @hoffman2024 : "Because the loadings/slopes relate nonlinearly to theta, this implies that reliability (now called “test information”) must vary across theta values. So items are not just “good” or “bad”, but are “good” or “bad” for whom?"
+
+- Therefore if we just look at the probability to solve the item, we can not really predict the exact $\theta$ value, if the probability is low (high), because multiple different $\theta$ values produce similar low (high) probabilities
 
 - One can understand this quite intuitively if one take a closer look at the ICC of an item
-
-  - The ICC plots the different $\theta$ values on the x-axis and the probability to solve the item on the y-axis.
-
-  - since the function follows a S-shaped curve, we can see that the change in the probability to solve the item (y-axsis) is different depending on the $\theta$-area on the continuum
-
-    - For example for persons with very low or very high $\theta$-values the probability doesn't really change.
-      Therefore if we just look at the probability to solve the item, we can not really predict the exact $\theta$ value, if the probability is low (high), because multiple different $\theta$ values produce similar low (high) probabilities
-
-    - On the other hand, if we look at the $\theta$-area around the item difficulty, we can see that even if the $\theta$ of a person is slightly higher than from another person from this area, we can see huge differences in the probability to solve the item
 
   - An even more intuitive example:
 
@@ -639,71 +718,12 @@ This, too, ensures a specific level of objectivity (see [@rasch1961, p. 332] and
     - In the second case, the item thus reveals differences between individuals, and we can learn something about them.
       Therefore, the item is more “informative” in this case.
 
-  - Therefore it gets clear that the item information relates to the slope of the ICC
-
-    - s\.
-      @deayala2022
-
-    - most information around the infliction point
-
-    - This means that the closer persons are to the item difficulty, the better we can distinguish between them, since the ICC rises most steeply in this range
-
-  - Mathematically the Information for a certain $\theta$ value for the Rasch model can be calculated by the probability to solve the item $p(X_i = 1)$ times the probability to not solve the item $p(X_i = 0)$
-
-    $$\begin{align}
-    I_i(\theta) &= p(X_i = 1) \cdot p(X_i = 0)\\
-    &= \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
-    \end{align}$$
-
-    - if we theoretically calculate for every possible $\theta$ value the Information $I_i(\theta)$ and plotting the $\theta$s on the x-axis and the Information on the y-axis, then we get the *Item-Information curve*
-
-      - This is quite usefull because we can visually see where on the $\theta$ continuum the item is especially informative or which part on the $\theta$ continuum the item measures especially precise
-
-      - Since we have already determined that the item information is greatest at the point of item difficulty (because that is where the ICC slope is steepest) and we know that the probability of a correct response at the point of item difficulty is 50% (because that is how item difficulty is defined), we can say that the maximum possible information is 0.25 and lies at the point of item difficulty (PLEASE NOTE that the 0.25 only hold in the Rasch Model).
-
-        - $I_i(\theta = \beta_i) = 0.5 \cdot 0.5 = 0.25$
-
-        - Therefore, the peak of the item information curve always corresponds to the item's difficulty level
-
   - More mathematically formal explanation -\> <mark> should this be included?`<`{=html}
     `/mark>`{=html}
 
     - Understanding information through the second derivative *-\> could be more intuitive because it can be displayed visually and linked to the slope-logic*
 
     - Understanding information through the standard error (s. [@deayala2022, p. 29])
-
-- One can transform Information in to Reliability by:
-
-  $$\text{Reliability} = \frac{\text{Information}}{(\text{Information + 1})}$$
-
-  - However, note that the Information is always depended from $\theta$, this means that the reliability is different for different $\theta$ as wie saw allredy visually, as described above
-
-- Testinformation
-
-  - most of the time we dont't have a single item but a whole scale
-
-  - Since we learned that the Iteminformation is the largest around the item difficulty and the difficulty may vary from item to item, we could ask our self how the the scale as a whole can differentiate between persons across the whole $\theta$ continuum
-
-  - We can sum the individual item informations to get the test information (because of local stochastic independence)
-
-    - Formally:
-
-      $$\begin{align}
-      I(\theta) &= \sum_{i=1}^II_i(\theta)\\
-      &= \sum_{i=1}^I \frac{exp(\theta - \beta_i)}{1+exp(\theta-\beta_i)} \cdot \frac{1}{1+exp(\theta-\beta_i)}
-      \end{align}$$
-
-  - This again is a interessting difference to the CTT
-
-    - In the CTT the contribution of an item to the test reliability always depends on what other items are included in the test [@lord1980, p. 22]
-
-      - Das liegt daran, dass die Reliabilität mit erklärter Varianz arbeitet. Die unique Varianz die ein Item aufklärt, ist aber immer abhängig von den anderen Items
-
-    - since we can see in the equation for the testinformation that the iteminformation of every item is added, each item contributes it's own part to the information
-
-  - If we again plot each Testinformation for every $\theta$ value, we get the *Test Information Curve*
-
-    - therefore. we can easily inspect visually which parts of the $\theta$ continuum our scale measures especially precise
 
 - Example with Information curves and interpretation, what we can learn about the scale
 
