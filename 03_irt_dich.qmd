@@ -306,7 +306,7 @@ However, this restriction ensures a consistent scaling that allows for comparabi
     - <mark>Is this to technical for a beginner tutorial?
       Especially because the discrimination parameter is introduced in the 2PL part</mark>
 
-### Interpretation of model parameters & Visualisation (ICCs)
+### Interpretation of model parameters
 
 Let’s take a closer look at the two model parameters.
 
@@ -371,7 +371,18 @@ Conversely, the higher $\beta_i$ (e.g., the level of environmental concern requi
 
 In other words, the greater the discrepancy between $\theta_n$ and $\beta_i$, the more the probability that a person will agree with the item deviates from 50%, and the more certain we are of our prediction.
 
-### Item Characteristic Curve
+Now that we understand the logic behind the Rasch model, the question arises: How do we actually know the $\theta$ and $\beta$ values for the individuals and items, respectively?
+Although the exact mathematical background and various estimation procedures are beyond the scope of this tutorial, in simple terms, the parameters of the Rasch model can be estimated based on a dataset containing the respondents’ item responses.
+This involves using a search algorithm that attempts to determine the $\theta$ and $\beta$ values for each person and each item in such a way that the model can predict the data as accurately as possible.
+As a practitioner, this is very easy to implement thanks to statistical software.
+In this tutorial, we’ll use the statistical programming language R and the `mirt` package for this purpose.
+
+```{r}
+
+```
+### Visualizations of the Rasch Model
+
+#### Item Characteristic Curve
 
 We can also visualize these relationships.
 To do so, we can conduct a small thought experiment: Imagine we select an item for which we know the item difficulty.
@@ -673,8 +684,7 @@ One metric that reflects this is the test information.
 Since each item contributes some information, we can calculate the total test information by summing up the item information of all items [@deayala2022, p.31].
 Formally, this can be expressed as follows:
 
-$$I(\theta) = \sum_{i=0}^I I_i(\theta)$$
- {#eq-testinfo}
+$$I(\theta) = \sum_{i=0}^I I_i(\theta)$$ {#eq-testinfo}
 
 If we calculate the test information for every possible $\theta$ value with @eq-iteminfo and plotting the $\theta$s on the x-axis and the test information on the y-axis, then we get the *Test-Information curve* (see @fig-example_ICC_test_info for an example) .
 
@@ -698,6 +708,75 @@ $$\text{Reliability} = \frac{I(\theta)}{I(\theta) + 1}$$
 However, it is important to note that this reliability measure is again $\theta$-specific, since the test information is $\theta$-specific.
 To obtain a measure of overall model-based reliability, one could sum the reliabilities for each possible $\theta$ value and weight them by the number of individuals at that $\theta$ level @hoffman2024 .
 @hoffman2024, however, questions the value of such an approach, since it negates the very advantage that an IRT-based perspective provides.
+
+#### Practical use of information
+
+Item and test information can be very useful and insightful for diagnosticians and in scale development, as it allows us to assess at a glance how well—and in which areas—our items or scale are able to estimate the latent construct $\theta$ (see also @deayala2022 for an illustration of this point).
+We can understand this by looking at the fictional example shown in the @fig-usecase_info .
+Here we have a scale consisting of 5 items, for which we know the item difficulties: $\beta_1 = 0$, $\beta_2 = 1$, $\beta_3 = 3.5$, $\beta_4 = -1.5$ and $\beta_5 = -3.5$.
+This allows us to determine and plot the item information and test information for all possible values of $\theta$.
+As we've learned, an item can best differentiate between individuals within the area around its item difficulty, and therefore most of the information about that item is also found within that same area.
+We can see this clearly in the figure.
+Take, for example, item 5, which can be described as an easy item because it has a very low $\beta$.
+Accordingly, we can see in the pink item information curve for this item that the peak of the curve (i.e., the most information) occurs at the item difficulty $\beta_5 = -3.5$ and then decreases toward the sides.
+We can now clearly see that Item 5 is well-suited for assessing individuals with a low $\theta$ around -3.5, but that this item provides us with hardly any information about individuals with high $\theta$ values.
+For example, the item information for Item 5 is effectively 0 for a person with $\theta_n = 2.5$.
+In other words, Item 5 contributes nothing to our knowledge about a person with $\theta_n = 2.5$.
+
+For Item 3, the exact opposite is true.
+This item is a difficult item ($\beta_3 = 3.5$) and is therefore particularly effective at distinguishing between high $\theta$ scores.
+So if we want to measure individuals with high $\theta$ scores, Item 3 is the better choice than Item 5.
+However, this comes at the cost of Item 3 not being suitable for measuring individuals with low $\theta$ scores, as we can see from the very flat item information curve in low $\theta$ areas.
+
+Fortunately, we usually don't measure a latent construct using just a single item, but rather use a scale based on multiple items.
+Fortunately, we usually do not measure a latent construct using just a single item, but rather use a scale based on multiple items.
+Therefore, we do not need to find a single item that can measure all $\theta$ ranges simultaneously with a high level of information (which is an unrealistic assumption).
+Instead, we can consider the purpose for which we want to develop our measurement instrument.
+For example, suppose we want to develop a measurement instrument that can be used for the general population.
+For many constructs, it is assumed that they are normally distributed within the population.
+This means that most individuals tend to have average scores on the construct (medium $\theta$ scores), but there are also some individuals with scores well above and well below average (low and high $\theta$ scores).
+Therefore, our instrument must be capable of covering a broad $\theta$ continuum.
+The five items on our scale would serve as a good measurement tool for this purpose, since we can see in the plot that the item information curves actually cover the entire relevant $\theta$ scale (from -5 to 5), as the scale contains items with very different $\beta$ values.
+The black test information curve also summarizes this well.
+Here we see that, overall, the scale has the most information around $\theta = 0$ and that the information decreases toward the sides.
+Thus, the shape of the test information curve also resembles the distribution we assume in our population (normal distribution).
+Of course, it should be noted here that this is an ideal example based on simulated data.
+
+Therefore let's consider another scenario.
+Let's imagine we want to develop a measurement tool designed exclusively for people with high $\theta$ values.
+This could be, for example, an intelligence test specifically for highly gifted individuals.
+For such a scenario, the fictitious scale from our example is not optimal.
+For example, items 5, 4, and 1 contribute very little to the estimation of $\theta$ in our target continuum range.
+In fact, only item 3 differentiates particularly well in high $\theta$ areas.
+The test information curve also drops quite steeply starting at $\theta = 2.5$.
+So we would actually need additional items with high item difficulty (high $\beta$) to obtain more information in the high $\theta$ ranges.
+In return, we could eliminate items that provide information for $\theta$ ranges that do not actually interest us (such as items 5, 4, and 1).
+Therefore, as @hoffman2024 notes, there is no universally “ideal” test information curve, since the optimal test information curve always depends on the purpose for which the measuring instrument was designed.
+
+![](figures_irt_tutorial/Example_usecase_info.png){#fig-usecase_info}
+
+These examples should highlight the advantage of IRT over CTT.
+Because the item and respondent parameters are located on the same latent scale and we can determine the information from an item differentiated according to the $\theta$ values, we get a much more nuanced picture of our measurement tool and for whom it works particularly well.
+From a scale development perspective we can adapt the design of our measurement instrument in a highly individualized and flexible manner to the specific requirements of the measurement situation [@deayala2022, p. 35].
+
+Thus, IRT can be used to:
+
+- optimize existing scales: e.g. by "filling" the information gaps by adding new items, which are informative for a specific $\theta$ range.
+  Here, too, the ECo Scale is a good example.
+  In fact, optimizing the measurement was one of the motivations behind the development of the ECo Scale, since analyses of existing measurement instruments for environmental concerns had shown that these provided little information in areas of high environmental concern [@gomm2026, Figure 1 and Figure 2].
+
+- create short versions of scales without a substantial loss of information: e.g. we might see in the item information plot that the information curves for two items overlap significantly.
+  Therefore, we can omit one of the items, since the $\theta$ range is already covered.
+
+- develop measurement instruments specifically tailored to a particular situation or target population.
+  To this end, Lord also suggests using a target information curve [@lord1980, p.23]: To do this, you need an item pool for which you already know the item information curves.
+  You also need to consider the test information curve you want to achieve with your scale (e.g., a curve focused on a specific $\theta$ range or a curve that covers a broad continuum).
+  This desired curve is the target information curve.
+  You can then begin selecting items from the item pool that can fill the area under the target information curve.
+  To do this, after each step, you calculate the test information curve obtained from the selected items and compare it with the target curve.
+  In the next step, you then try to select a new item that brings you even closer to the target curve.
+  For example, if one observes that the current items only cover the low $\theta$ range well, but high $\theta$ values should also be differentiated below the target information curve, then one could add a difficult item (high $\beta$) in the next step to fill this “gap” relative to the target information curve.
+  This process is repeated iteratively until a scale has been composed that comes as close as possible to the target information curve.
 
 - @hoffman2024 : "Because the loadings/slopes relate nonlinearly to theta, this implies that reliability (now called “test information”) must vary across theta values. So items are not just “good” or “bad”, but are “good” or “bad” for whom?"
 
