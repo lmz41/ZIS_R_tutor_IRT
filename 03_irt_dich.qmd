@@ -243,13 +243,13 @@ In achievement testing, however, 1 could also mean “Correct” and 0 could mea
 
 The Rasch model is described by the following formula:
 
-$$P(Y_{ni} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)}$$
+$$P(Y_{ni} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)}$$ {#eq-rasch}
 
 Let's take a look at the individual components to better understand the formula:
 
 On the left side of the equation is the probability that a person $n$ will answer item $i$ with a 1 ($P(Y_{ni} = 1)$).
 Thus, $Y_{ni}$ denotes the response of person $n$ to item $i$ and can take the values 0 or 1.
-In the context of regression, this probability $P(Y_{ni} = 1)$ is therefore our dependent variable, which we want to predict.
+In the framework of regression, this probability $P(Y_{ni} = 1)$ is therefore our dependent variable, which we want to predict.
 
 To make this prediction, we need predictors.
 The Rasch model assumes two predictors or parameters:
@@ -272,7 +272,7 @@ Later on, however, we'll also learn about IRT models with more item-specific par
 Strictly speaking, however, the Rasch model is a special case of a 1PL model.
 This is because the 1PL model is defined as follows:
 
-$$P(Y_{ni} = 1) = \frac{\exp(\alpha(\theta_n - \beta_i))}{1 + \exp(\alpha(\theta_n - \beta_i))}$$
+$$P(Y_{ni} = 1) = \frac{\exp(\alpha(\theta_n - \beta_i))}{1 + \exp(\alpha(\theta_n - \beta_i))}$$ {#eq-1PL}
 
 As we can see, this formula looks almost identical to the Rasch model, except that a new parameter $\alpha$, has been added.
 This is the discrimination parameter, which we will examine in more detail later.
@@ -318,12 +318,12 @@ $\beta$ is the item difficulty.
 The $\beta$ parameter has the index $i$ because items vary in difficulty.
 The term “difficulty” stems from the historical background of the IRT, which was developed primarily for achievement and ability applications.
 In the context of personality assessment or the measurement of attitudes, difficulty can be understood as how easy it is for individuals to agree with or disagree with an item.
-A more neutral term, which is therefore also frequently used to refer to item difficulty, is “item location”.
+A more neutral term, which is therefore also frequently used to refer to item difficulty, is “item location” @wilson2023, @deayala2022 .
 
 The term “location” highlights an important property of IRT models.
 Specifically, $\theta$ and $\beta$ lie on the same continuum or scale.
 
-![](figures_irt_tutorial/Rasch-Kontinuum.png)
+![](figures_irt_tutorial/Rasch-Kontinuum.png){#fig-one_continuum}
 
 In our example, the continuum represents environmental concerns.
 We can now compare individuals with one another and see, for example, that Person 1 ($\theta_1$) has the lowest level of environmental concerns compared to the other two individuals.
@@ -332,7 +332,7 @@ For example, Item 1 ($\beta_1$) is a “easy” item, since it requires only a l
 This also makes intuitive sense when we look at what Item 1 and Item 8 of the ECo scale ask.
 Item 1 asks: "I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live." That's a statement most people can probably agree with.
 In contrast, Item 8 asks "Are you willing to pay much higher taxes to protect the environment?" Something that probably far fewer people are willing to do.
-Therefore Item 8 is more difficult to agree with and has a higher $\beta$ than item 1.
+Therefore Item 8 is more "difficult" to agree with and has a higher $\beta$ than item 1.
 
 However, since $\theta$ and $\beta$ are now on the same continuum, we can also compare $\theta$ with $\beta$.
 For example, we might expect Person 1 ($\theta_1$) to agree with Item 1 because Person 1 has higher environmental concerns than the location associated with Item 1.
@@ -363,7 +363,7 @@ Here we can observe something interesting: namely, that if a person's ability ma
 In fact this is the definition of item difficulty: The item difficulty is the point on the theta continuum at which the probability that the person will solve the item is exactly the same as the probability that the person will not solve it.
 
 This shows us that, ultimately, only the discrepancy between $\theta_n$ and $\beta_i$ is relevant to the probability that a person will agree with an item.
-The rest of the formula serves only to restrict the result to a range between 0 and 1, so that we can interpret the results as probabilities.
+The rest of the formula serves only to restrict the result to a range between 0 and 1, so that we can interpret the results as probabilities (link-function).
 
 This means, the higher the $\theta_n$ (e.g. the higher the environmental concerns of a person are) compared to the $\beta_i$ (e.g. amount of environmental concerns required to have a probability to agree with the item of 50%), the higher is the probability that a person will agree with an item.
 
@@ -371,15 +371,118 @@ Conversely, the higher $\beta_i$ (e.g., the level of environmental concern requi
 
 In other words, the greater the discrepancy between $\theta_n$ and $\beta_i$, the more the probability that a person will agree with the item deviates from 50%, and the more certain we are of our prediction.
 
+::: {.callout-note appearance="simple"}
+## Let's do it in R
+
+
 Now that we understand the logic behind the Rasch model, the question arises: How do we actually know the $\theta$ and $\beta$ values for the individuals and items, respectively?
 Although the exact mathematical background and various estimation procedures are beyond the scope of this tutorial, in simple terms, the parameters of the Rasch model can be estimated based on a dataset containing the respondents’ item responses.
 This involves using a search algorithm that attempts to determine the $\theta$ and $\beta$ values for each person and each item in such a way that the model can predict the data as accurately as possible.
 As a practitioner, this is very easy to implement thanks to statistical software.
-In this tutorial, we’ll use the statistical programming language R and the `mirt` package for this purpose.
+In this tutorial, we’ll use the statistical programming language R and the `mirt` package @chalmers2012 for this purpose.
 
 ```{r}
+#| message: false
 
+# install and load the mirt package for IRT analyses
+
+#install.packages("mirt") 
+library(mirt)
 ```
+
+::: column-margin
+You only need to run `install.packages()`only once, if you haven't already installed the `mirt` package yet.
+:::
+
+Using the `mirt()` function from the `mirt` package, we can now fit a Rasch model to our example data from the ECo-Scale.
+The `mirt` function expects the following arguments:
+
+- `data` = Here, we pass our dataset, which contains the responses of all participants to the items on our scale.
+
+- `model` = This argument affects how the model is estimated.
+  A single number indicates how many latent constructs our measurement instrument measures.
+  Since the ECo Scale measures a single latent trait (environmental concerns), we can leave the default value (= 1) as is.
+
+- `itemtype` = As we'll see later, `mirt` is capable of fitting a wide variety of IRT models.
+  Using `itemtype`, we therefore tell `mirt` which IRT model we want to fit to the data.
+  Since we want to fit a Rasch model, we pass the string “Rasch” to the argument here.
+
+- `SE` = If this argument is set to `TRUE`, standard errors for the model's parameters will also be included in the output.
+  If we don't want that, we can simply set the argument to `FALSE` or omit it.
+
+```{r}
+# estimate the Rasch model with the mirt() function
+eco_rasch <- mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = "Rasch", 
+                  SE = TRUE)
+print(eco_rasch)
+```
+
+::: column-margin
+Note that we save with `<-` the results of the `mirt` function in an object (= `eco_rasch`).
+This allows us to save the Rasch model in our environment.
+It also enables us to retrieve only specific information and parameters from the model and use them in other R commands.
+:::
+
+Although this code estimates a Rasch model, when we use `print` to display the model, we initially see only a summary of how the model was estimated and how well it fits the data overall—but we don't see any $\theta$ or $\beta$ values.
+This is because `mirt` provides us with a large amount of information about our model and stores it in the `eco_rasch` object.
+We can see this, for example, by clicking in the environment the blue arrow next to `eco_rasch` or by running `str(eco_rasch)`.
+When we do this, we see that the `eco_rasch` object is quite large and nested, and contains far too much information to display all at once.
+Therefore, we need to specifically retrieve the information we’re interested in from the object.
+
+For example, to access the item parameters, we can use the `coef()` function.
+The `coef()` function expects the following arguments, among others:
+
+- An object that contains the estimated model—in our example, `eco_rasch`
+
+- `IRTpars` = This argument determines whether the item location is specified as item difficulty or item ease.
+  If we set the argument to `TRUE`, we obtain the $\beta$ values as we have come to know them as item difficulties.
+  If the argument is omitted or set to `FALSE`, the item ease is output instead.
+  This means that the higher the item ease, the lower the $\theta$ value required for the probability of answering the item with a 1 to be 50%.
+
+- `simplify` = If this argument is set to `TRUE`, the output is simplified and presented in a clearer format.
+  However, if you also want to obtain the confidence intervals for the item parameters, you can set `simplify` to `FALSE` or omit it.
+
+```{r}
+# extract the itemspecific parameters from our Rasch model
+item_par_eco_rasch <- coef(eco_rasch, IRTpars=TRUE, simplify=TRUE)
+
+item_par_eco_rasch
+```
+
+Let's take a look at the output.
+The output consists of three sections:
+
+1.  `$items`: Here we find all item-specific model parameters.
+    The items are listed in the rows.
+    As we have learned, the Rasch model has only one item-specific parameter, namely the item difficulty $\beta_i$.
+    This is shown in column `b`.
+    The other columns represent additional item-specific model parameters that also play a role in other IRT models, but which we can ignore in the case of a Rasch model.
+
+2.  `$means`: This contains the latent means of all latent factors assumed by our model.
+    Since we assume only one latent factor (environmental concerns) in our model, the output shows only this latent factor (labeled `F1`).
+    Here, the latent mean is 0.
+    This means that individuals with a $\theta = 0$ have an average level of environmental concerns.
+
+3.  `$cov`: Here we find a variance-covariance matrix for our latent factors.
+    However, since we assume only one latent factor in our model, we see only a 1 $\times$ 1 matrix—that is, the covariance of the latent factor with itself—which simply corresponds to the variance within the latent factor.
+
+If we want to extract the individual parameters ($\theta_n$) from our Rasch model/`mirt` object (`eco_rasch`), we can use the `fscore()` function.
+
+```{r}
+# extract the personspecific parameters from our Rasch model
+person_par_eco_rasch <- fscores(eco_rasch)
+
+head(person_par_eco_rasch)
+```
+
+::: column-margin
+Note that our dataset consists of 7,932 individuals.
+Therefore, when we use `fscore()`, we also get 7,932 different $\theta_n$ values (one per individual).
+To keep the output concise, we use `head()` to display only the first 6 $\theta_n$ values out of the 7,932 $\theta_n$ values we have stored in `person_par_eco_rasch`.
+:::
+
+:::
+
 ### Visualizations of the Rasch Model
 
 #### Item Characteristic Curve
@@ -392,7 +495,7 @@ Such a plot is called an *item characteristic curve* (ICC) or *item response fun
 
 As an example, the ICC for Item 6 of the ECo scale is shown in the following:
 
-![](figures_irt_tutorial/Example_ICC_I6.png)
+![](figures_irt_tutorial/Example_ICC_I6.png){#fig-ICC6_Rasch}
 
 In the case of the Rasch model, we have the distinctive feature that the item difficulty always lies at the inflection point of the ICC.
 In our example, item 6 has an item difficulty of $\beta_6 = -0.018$.
@@ -400,7 +503,7 @@ If we go to the corresponding point on the x-axis in the figure and look at the 
 
 We can now conduct our thought experiment not only for a single item, but also for all items on the scale, so that we can calculate an ICC curve for each item:
 
-![](figures_irt_tutorial/Example_ICC_ECo.png)
+![](figures_irt_tutorial/Example_ICC_ECo.png){#fig-ICCEco_Rasch}
 
 When we consider multiple items or ICCs simultaneously, we see that the varying item difficulties result in a shift of the ICCs along the x-axis.
 This makes sense, since a more difficult item lies further to the right on the $\theta$ continuum.
@@ -415,9 +518,49 @@ Conversely, however, we can also see that individuals with higher $\theta$ score
 We can see this in the ICC plot as well.
 For example, the y-values of the ICCs at $\theta = 2$ are higher for each item than at $\theta = -2$.
 
-- both on the same scale (s. Wright-map -\> p.26 and figure 1.10 in @wilson2023
+::: {.callout-note appearance="simple"}
+## Let's do it in R
 
-- In a regression logic we can also say, that the difference/distance between a person and an item on the continuum can be used as a predictor to predict the probability that a person will solve the item
+To plot the ICC for a single item from our ECo scale, we can use the `itemplot()` function.
+This function expects the following arguments, among others:
+
+- `object`: Here, we pass in the IRT model that we estimated using the `mirt()` function (here: `eco_rasch`.
+
+- `item`: Here, we specify which item we want to plot.
+  We can either enter a number or the item name.
+  So instead of 6, we could also specify “Eco_cog_6_dicho”
+
+- `type` = Here we can specify what should be plotted.
+  To obtain the ICC, select “trace.”
+
+```{r}
+itemplot(eco_rasch, item = 6, type="trace")
+```
+
+If we want to plot the ICCs for all items at the same time, we can use the `plot()` function:
+
+- `object`: Here, we pass in the IRT model that we estimated using the `mirt()` function (here: `eco_rasch`.
+
+- `type` = Here we can specify what should be plotted.
+  To obtain the ICC, select “trace.”
+
+- `theta_lim`: Here, we can specify the range of $\theta$ values shown in the plot.
+  In other words, we can specify the portion of the x-axis that should be plotted.
+
+- `facet`: If we set this argument to `FALSE`, all ICCs are plotted on a single graph.
+  If we set the argument to `TRUE` or omit it, we get a grid of plots, with the ICC for each item plotted in each cell.
+
+```{r}
+plot(eco_rasch, type="trace", theta_lim=c(-5,5), facet = FALSE)
+```
+
+Here's another example of what happens when you set `facet = TRUE`:
+
+```{r}
+plot(eco_rasch, type="trace", theta_lim=c(-5,5), facet = TRUE)
+```
+
+:::
 
 #### Wright Map
 
@@ -451,18 +594,22 @@ For example, a person with high levels of environmental concern will agree with 
 Consequently, a person’s responses are correlated because they are all based on the same level of environmental concern.
 However, if you account for this source of commonality among a person’s item responses, then that person’s responses to the items should be independent—that is, random.
 
-> Mathematically, this can be expressed as follows [@lord1980, p. 19]:
->
-> $$P(Y_{ni} = 1| \theta_n) = P(Y_{ni} = 1|\theta, Y_{nj}, Y_{nk}, ...) \quad (i \neq j, k. ...)$$
->
-> This means that the probability that person $n$ answers item $i$ with a 1, given $\theta$, is the same as the probability that person $n$ answers item $i$ with a 1, given $\theta$ and given person $n$’s answers to items $j$, $k$, and all other items that are not $i$.
-> Put simply, this means that the information about what the person said on the other items does not influence the answer to item $i$.
->
-> Another possible way to write this is [@lord1980, p. 19]:
->
-> $$P(Y_{ni} = 1, Y_{nj} = 1, Y_{nk} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n) \cdot P(Y_{nj} = 1|\theta_n) \cdot P(Y_{nk} = 1|\theta_n)$$
->
-> This expression states that the probability that a person answers all three items $i$, $j$, and $k$ with 1, given $\theta_n$, is equal to the product of the individual probabilities of answering an item with 1
+::: {.callout-tip appearance="simple"}
+## Mathematical background
+
+Mathematically, this can be expressed as follows [@lord1980, p. 19]:
+
+$$P(Y_{ni} = 1| \theta_n) = P(Y_{ni} = 1|\theta, Y_{nj}, Y_{nk}, ...) \quad (i \neq j, k. ...)$$ {#eq-local_indi_1}
+
+This means that the probability that person $n$ answers item $i$ with a 1, given $\theta$, is the same as the probability that person $n$ answers item $i$ with a 1, given $\theta$ and given person $n$’s answers to items $j$, $k$, and all other items that are not $i$.
+Put simply, this means that the information about what the person said on the other items does not influence the answer to item $i$.
+
+Another possible way to write this is [@lord1980, p. 19]:
+
+$$P(Y_{ni} = 1, Y_{nj} = 1, Y_{nk} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n) \cdot P(Y_{nj} = 1|\theta_n) \cdot P(Y_{nk} = 1|\theta_n)$$ {#eq-local_indi_2}
+
+This expression states that the probability that a person answers all three items $i$, $j$, and $k$ with 1, given $\theta_n$, is equal to the product of the individual probabilities of answering an item with 1
+:::
 
 If the assumption of local independence is violated, this means that, in addition to the construct \$\\theta\$ that we wish to measure, there are one or more other sources of systematic variance that influence individuals' response behavior.
 These could be, for example, other latent constructs that also affect the response process.
@@ -494,6 +641,42 @@ The property of a sufficient statistic holds only as long as the assumptions of 
 For other IRT models, the total score is not a sufficient statistic.
 :::
 
+::: {.callout-tip appearance="simple"}
+## Mathematical background
+
+To show that the total score is a sufficient statistic, we can first consider how the Rasch model can predict a person’s response vector.
+This means that we want to predict which responses a person gave to the various items based on their $\theta$ value.
+As we have learned, if the assumption of local stochastic independence holds, we can multiply the individual probabilities for each item response to obtain the probability of a person's overall response pattern across all items (see @eq-local_indi_2).
+You can see that in the first line of @eq-proof_suff_1 (The equations were taken from @meiser2025).
+If we rearrange the equation, we see that the number of items answered with 1 ($\sum_i x_i$), is included in the equation.
+This corresponds to the true score, so we can also write $\sum_i x_i$ as $t$.
+
+$$\begin{align}
+P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta) &= \prod_{i = 1}^I P(X_i = x_i |\theta) \\
+&= \prod_{i = 1}^I \frac{\exp(x_i(\theta - \beta_i)}{1 + \exp(\theta - \beta_i)}\\
+&= \frac{\prod_i \exp(x_i(\theta - \beta_i))}{\prod_i (1 + \exp(\theta - \beta_i))}\\
+&= \frac{\exp[\sum_i (x_i(\theta - \beta_i))]}{\prod_i (1 + \exp(\theta - \beta_i))}\\
+&= \frac{\exp[\sum_i x_i\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))}\\
+&= \frac{\exp[t\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))} \quad \text{with} \quad t = \sum_i x_i
+\end{align}$$ {#eq-proof_suff_1}
+
+If the true score $t$ is known (we can count in the data how often a person responded with 1), we can rearrange the equation as follows:
+
+$$\begin{align}
+P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &= \frac{\frac{\exp[t\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))}}{\sum_{X_t} \frac{\exp[t\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))}}\\
+&= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\
+&= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\
+&= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)}
+\end{align}$$ {#eq-proof_suff_2}
+
+What we can see from all these rearrangements is that if we include the total score $t$ in the equation, we can completely eliminate the parameter $\theta$.
+Ultimately, we no longer need $\theta$ to predict a person’s response vector.
+It is sufficient to know the total score $t$.
+Therefore, the total score $t$ is a sufficient statistic.
+
+@meiser2025 *-\> darf ich die zitieren????*
+:::
+
 #### Specific objectivity
 
 The property of specific objectivity means that, when comparing individuals in terms of their $\theta$ values, it does not matter which item is used.
@@ -508,7 +691,7 @@ This parallelism satisfies the requirement for specific objectivity.
 Thus, we can see that the higher a person’s $\theta$ is, the higher the probability of answering the item with a 1 ($P(Y_{ni} = 1)$), regardless of which item we are considering.
 This is also evident in @fig_ICC_spec_obj_Rasch : Regardless of whether it is Item 1 or Item 2, the green person ($\theta = 2$) always has a higher probability of answering ($P(Y_{ni} = 1)$) (see the point of intersection with the y-axis) than the pink person ($\theta = -2$).
 
-![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_Rasch.png){#fig_ICC_spec_obj_Rasch}
+![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_Rasch.png){#fig-ICC_spec_obj_Rasch}
 
 Conversely, we see that regardless of whether we consider the green person ($\theta = 2$) or the pink person ($\theta = -2$), both individuals have lower response probabilities on the more difficult Item 2 than on Item 1.
 This is evident from the fact that the red horizontal dashed line for Item 1 for each person always lies above the blue horizontal dashed line for Item 2.
@@ -525,56 +708,58 @@ Here, the pink person ($\theta = -2$) is more likely to answer Item 2 with a 1 t
 For the blue person ($\theta = 2$), it is exactly the opposite.
 So, here, for example, the probability of answering an item with a 1 is not always lower for a more difficult item (Item 2), as the pink person demonstrates.
 
-![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_2PL.png){#fig_ICC_spec_obj_2PL}
+![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_2PL.png){#fig-ICC_spec_obj_2PL}
 
-> It can also be shown mathematically that specific objectivity holds under the Rasch model, as demonstrated, for example, in [@debekla2000, p. 30] and below.
->
-> To illustrate this, let's imagine we want to compare two people, $n$ and $n^\prime$.
-> To do this, we can look at the difference in the probability that each person answers 1 to the item.
-> To calculate the probability that a person will answer the item with a 1, we can use the formula from the Rasch model:
->
-> $$P(Y_{ni} = 1) - P(Y_{n^\prime i} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)} - \frac{\exp(\theta_{n^\prime} - \beta_i)}{1 + \exp(\theta_{n^\prime} - \beta_i)}$$
->
-> However, if instead of calculating the probability that a person will answer the item with 1, we now want to calculate the log odds, then we can rewrite the formula for the Rasch model.
-> We have learned that we can also think of the Rasch model as a generalized linear model.
-> Therefore, if we apply the inverse of our link function to our dependent variable (the probability of answering an item with a 1), we obtain only the linear term ($\theta_n - \beta_i$) on the predictor side of the equation, and the dependent variable is transformed into the log odds.:
->
-> $$\log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) = \theta_n - \beta_i$$
->
-> If we now rewrite the comparison of the persons accordingly, we get:
->
-> $$\begin{align}
-> \log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{n^\prime i} = 1)}{1 - P(Y_{n^\prime i} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n^\prime} - \beta_i)\\
-> &= \theta_n - \beta_i - \theta_{n^\prime} +  \beta_i\\
-> &= \theta_n - \theta_{n^\prime} +  \beta_i - \beta_i\\
-> &= \theta_n - \theta_{n^\prime}
-> \end{align}$$
->
-> As you can see, in the end, only the comparison of $\theta$ remains, and the item parameters cancel out.
-> This means that when comparing two individuals, $n$ and $n^\prime$, it does not matter on which items the two individuals are compared.
-> This corresponds to the definition of specific objectivity.
->
-> The same can be shown for the comparison of two items, $i$ and $i^\prime$:
->
-> $$\begin{align}
-> \log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{ni^\prime} = 1)}{1 - P(Y_{ni^\prime} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n} - \beta_{i^\prime})\\
-> &= \theta_n - \beta_i - \theta_n +  \beta_{i^\prime}\\
-> &= \theta_n - \theta_n + \beta_{i^\prime} - \beta_i\\
-> &= \beta_{i^\prime} - \beta_i
-> \end{align}$$
->
-> Here, too, we see that when comparing items, the person-specific parameters cancel each other out.
-> Therefore, when comparing two items, $i$ and $i^\prime$, it does not matter which individuals answered the two items.
-> This, too, is consistent with the definition of specific objectivity.
+::: {.callout-tip appearance="simple"}
+## Mathematical background
+
+It can also be shown mathematically that specific objectivity holds under the Rasch model, as demonstrated, for example, in [@debelak2022, p. 30] and below.
+
+To illustrate this, let's imagine we want to compare two people, $n$ and $n^\prime$.
+To do this, we can look at the difference in the probability that each person answers 1 to the item.
+To calculate the probability that a person will answer the item with a 1, we can use the formula from the Rasch model:
+
+$$P(Y_{ni} = 1) - P(Y_{n^\prime i} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)} - \frac{\exp(\theta_{n^\prime} - \beta_i)}{1 + \exp(\theta_{n^\prime} - \beta_i)}$$
+
+However, if instead of calculating the probability that a person will answer the item with 1, we now want to calculate the log odds, then we can rewrite the formula for the Rasch model.
+We have learned that we can also think of the Rasch model as a generalized linear model.
+Therefore, if we apply the inverse of our link function to our dependent variable (the probability of answering an item with a 1), we obtain only the linear term ($\theta_n - \beta_i$) on the predictor side of the equation, and the dependent variable is transformed into the log odds.:
+
+$$\log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) = \theta_n - \beta_i$$
+
+If we now rewrite the comparison of the persons accordingly, we get:
+
+$$\begin{align}
+\log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{n^\prime i} = 1)}{1 - P(Y_{n^\prime i} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n^\prime} - \beta_i)\\
+&= \theta_n - \beta_i - \theta_{n^\prime} +  \beta_i\\
+&= \theta_n - \theta_{n^\prime} +  \beta_i - \beta_i\\
+&= \theta_n - \theta_{n^\prime}
+\end{align}$$
+
+As you can see, in the end, only the comparison of $\theta$ remains, and the item parameters cancel out.
+This means that when comparing two individuals, $n$ and $n^\prime$, it does not matter on which items the two individuals are compared.
+This corresponds to the definition of specific objectivity.
+
+The same can be shown for the comparison of two items, $i$ and $i^\prime$:
+
+$$\begin{align}
+\log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{ni^\prime} = 1)}{1 - P(Y_{ni^\prime} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n} - \beta_{i^\prime})\\
+&= \theta_n - \beta_i - \theta_n +  \beta_{i^\prime}\\
+&= \theta_n - \theta_n + \beta_{i^\prime} - \beta_i\\
+&= \beta_{i^\prime} - \beta_i
+\end{align}$$
+
+Here, too, we see that when comparing items, the person-specific parameters cancel each other out.
+Therefore, when comparing two items, $i$ and $i^\prime$, it does not matter which individuals answered the two items.
+This, too, is consistent with the definition of specific objectivity.
+:::
 
 Ultimately, specific objectivity is related to a form of fairness, since it requires that a comparison is based solely on the the latent construct ($\theta$) and does not depend on the items used to measure the construct [@debelak2022, p. 28].
 With regard to test development, it is also important that the comparison of different items not depend on who answers them.
 This, too, ensures a specific level of objectivity.With regard to test development, it is also important that the comparison of different items not depend on who answers them.
 This, too, ensures a specific level of objectivity (see [@rasch1961, p. 332] and [@wilson2023, p. 248].
 
-
-
-- These properties are based on some assumptions which can be tested to check if the Rasch model holds
+- *These properties are based on some assumptions which can be tested to check if the Rasch model holds*
 
 ### Identifiability
 
@@ -645,12 +830,16 @@ Therefore item information shows us which areas of the $\theta$ continuum an ite
 With this intuitive and visual introduction to the concept of information, it should now be clear that item information is related to the slope of the ICC.
 The ICC reaches its steepest slope at the inflection point; accordingly, most of an item’s information is concentrated around the item difficulty, since we have learned that the item difficulty ($\beta$) marks the inflection point of the ICC.
 
-> Mathematically the Iteminformation for a certain $\theta$ value $I_i(\theta)$ for the Rasch model can be calculated by the probability to solve the item $p(X_i = 1)$ times the probability to not solve the item $p(X_i = 0)$ ([@debelak2022, p. 51], [@raschmo1995, p.55]):
->
-> $$\begin{align}
-> I_i(\theta) = p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)
-> = \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
-> \end{align}$$ {#eq-iteminfo}
+::: {.callout-tip appearance="simple"}
+## Mathematical background
+
+Mathematically the Iteminformation for a certain $\theta$ value $I_i(\theta)$ for the Rasch model can be calculated by the probability to solve the item $p(X_i = 1)$ times the probability to not solve the item $p(X_i = 0)$ ([@debelak2022, p. 51], [@raschmo1995, p.55]):
+
+$$\begin{align}
+I_i(\theta) = p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)
+= \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
+\end{align}$$ {#eq-iteminfo}
+:::
 
 If we theoretically calculate for every possible $\theta$ value the Information $I_i(\theta)$ (see @eq-iteminfo) and plotting the $\theta$s on the x-axis and the Iteminformation on the y-axis, then we get the *Item-Information curve* (see @fig-example_ICC_info for an example) .
 
@@ -777,6 +966,46 @@ Thus, IRT can be used to:
   In the next step, you then try to select a new item that brings you even closer to the target curve.
   For example, if one observes that the current items only cover the low $\theta$ range well, but high $\theta$ values should also be differentiated below the target information curve, then one could add a difficult item (high $\beta$) in the next step to fill this “gap” relative to the target information curve.
   This process is repeated iteratively until a scale has been composed that comes as close as possible to the target information curve.
+
+::: {.callout-note appearance="simple"}
+## Let's do it in R
+
+
+To plot the item information, we can use the functions we're already familiar with from the ICCs: With `itemplot()`, we get the information curve for a specific item, while with `plot()` we can plot the information curves for all items together in a single plot.
+What's new here is that we're selecting a different option in the `type` argument.
+Instead of “trace” for the ICC, we're now selecting ‘info’ (for the `itemplot()` function) or “infotrace” (for the `plot()` function) to plot the item information.
+
+```{r}
+# plot item information curve of a specific item
+itemplot(eco_rasch,6, type='info')
+
+# plot all item information curves in a grid
+plot(eco_rasch, type="infotrace", theta_lim=c(-5,5), facet = TRUE)
+
+# plot all item information curves in a single plot
+plot(eco_rasch, type="infotrace", theta_lim=c(-5,5), facet = FALSE)
+```
+
+To plot the test data, we can also use the `plot()` function:
+
+```{r}
+# plot test information curve
+plot(eco_rasch, type="info")
+```
+
+We can also combine different types of information.
+To do this, we can look at the various options offered by `type`.
+For example, we can use “infoSE” to plot both the information curve and the standard error, or use “infotrace” to plot both the information and the ICC.
+
+```{r}
+# plot test information curve with SE
+plot(eco_rasch, type="infoSE")
+
+# plot item information curve of a specific item together with ICC
+itemplot(eco_rasch,6, type='infotrace')
+```
+
+:::
 
 - @hoffman2024 : "Because the loadings/slopes relate nonlinearly to theta, this implies that reliability (now called “test information”) must vary across theta values. So items are not just “good” or “bad”, but are “good” or “bad” for whom?"
 
