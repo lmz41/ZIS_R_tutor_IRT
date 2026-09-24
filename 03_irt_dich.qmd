@@ -371,9 +371,8 @@ Conversely, the higher $\beta_i$ (e.g., the level of environmental concern requi
 
 In other words, the greater the discrepancy between $\theta_n$ and $\beta_i$, the more the probability that a person will agree with the item deviates from 50%, and the more certain we are of our prediction.
 
-::: {.callout-note appearance="simple"}
+:::::: {.callout-note appearance="simple"}
 ## Let's do it in R
-
 
 Now that we understand the logic behind the Rasch model, the question arises: How do we actually know the $\theta$ and $\beta$ values for the individuals and items, respectively?
 Although the exact mathematical background and various estimation procedures are beyond the scope of this tutorial, in simple terms, the parameters of the Rasch model can be estimated based on a dataset containing the respondents’ item responses.
@@ -423,7 +422,18 @@ This allows us to save the Rasch model in our environment.
 It also enables us to retrieve only specific information and parameters from the model and use them in other R commands.
 :::
 
-Although this code estimates a Rasch model, when we use `print` to display the model, we initially see only a summary of how the model was estimated and how well it fits the data overall—but we don't see any $\theta$ or $\beta$ values.
+We can also quickly check whether our estimation algorithm has found a solution or put differently whether it was able to successfully estimate the model.
+To do this, we can test whether the variables `converged` and `secondordertest` in our Rasch model have become `TRUE`.
+
+```{r}
+# is the estimation algorith converged?
+eco_rasch@OptimInfo$converged
+
+# has the estimation algorith found plausible Maximum/Minimum
+eco_rasch@OptimInfo$secondordertest
+```
+
+Although we have estimated a Rasch model with the `mirt()`function, we initially see only a summary of how the model was estimated and how well it fits the data overall, when we use `print` to display the model—but we don't see any $\theta$ or $\beta$ values.
 This is because `mirt` provides us with a large amount of information about our model and stores it in the `eco_rasch` object.
 We can see this, for example, by clicking in the environment the blue arrow next to `eco_rasch` or by running `str(eco_rasch)`.
 When we do this, we see that the `eco_rasch` object is quite large and nested, and contains far too much information to display all at once.
@@ -480,8 +490,7 @@ Note that our dataset consists of 7,932 individuals.
 Therefore, when we use `fscore()`, we also get 7,932 different $\theta_n$ values (one per individual).
 To keep the output concise, we use `head()` to display only the first 6 $\theta_n$ values out of the 7,932 $\theta_n$ values we have stored in `person_par_eco_rasch`.
 :::
-
-:::
+::::::
 
 ### Visualizations of the Rasch Model
 
@@ -559,7 +568,6 @@ Here's another example of what happens when you set `facet = TRUE`:
 ```{r}
 plot(eco_rasch, type="trace", theta_lim=c(-5,5), facet = TRUE)
 ```
-
 :::
 
 #### Wright Map
@@ -611,7 +619,7 @@ $$P(Y_{ni} = 1, Y_{nj} = 1, Y_{nk} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n) \cdot
 This expression states that the probability that a person answers all three items $i$, $j$, and $k$ with 1, given $\theta_n$, is equal to the product of the individual probabilities of answering an item with 1
 :::
 
-If the assumption of local independence is violated, this means that, in addition to the construct \$\\theta\$ that we wish to measure, there are one or more other sources of systematic variance that influence individuals' response behavior.
+If the assumption of local independence is violated, this means that, in addition to the construct $\theta$ that we wish to measure, there are one or more other sources of systematic variance that influence individuals' response behavior.
 These could be, for example, other latent constructs that also affect the response process.
 For instance, in addition to environmental concerns, the need for cognitive closure might also influence item responses.
 However, since we assume only a unidimensional structure, this additional construct is not represented in our model (Please note, that there are also multidimensional IRT models, however, this topic is beyond the scope of this tutorial).
@@ -620,6 +628,50 @@ There may also be other sources of systematic variance.
 For example, item order effects.
 For instance, the response to a previous item could influence how one responds to a subsequent item.
 This, too, would violate the assumption of local stochastic independence.
+
+::: {.callout-note appearance="simple"}
+## Let's do it in R
+We can test whether the assumption of local stochastic independence holds for our model. To do so, we use the Q3 approach proposed by Yen.
+
+```{r}
+#| include: false
+
+
+eco_rasch_Q3 <- mirt::residuals(eco_rasch, type = "Q3")
+```
+
+To make the output clearer, we'll rename the row and column labels of the resulting matrix.
+
+```{r}
+
+row.names(eco_rasch_Q3) <- c(paste("Item", 1:9))
+colnames(eco_rasch_Q3) <- c(paste("Item", 1:9))
+
+eco_rasch_Q3
+
+```
+
+::: {.callout-important appearance="simple"}
+## Be careful
+
+A rule of thumb is that when residual correlations are greater than 0.20, local stochastic independence is violated. However, this is only a rule of thumb and not a 100% guarantee or proof that local stochastic independence holds.
+:::
+
+We can check whether the cutoff of 0.2 is exceeded in our matrix:
+
+```{r}
+# test if any residual correlation exceeds 0.2
+any(eco_rasch_Q3 > 0.2 & eco_rasch_Q3 != 1)  # if TRUE local independence does not hold
+
+# which item pairs are affected?
+which(eco_rasch_Q3 > 0.2 & eco_rasch_Q3 != 1)
+
+# overview in a matrix:
+eco_rasch_Q3 > 0.2 & eco_rasch_Q3 != 1
+```
+
+
+:::
 
 #### Sufficient statistic
 
@@ -662,12 +714,7 @@ P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta) &= \prod_{i = 1}^I P(X_i = x_i |\
 
 If the true score $t$ is known (we can count in the data how often a person responded with 1), we can rearrange the equation as follows:
 
-$$\begin{align}
-P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &= \frac{\frac{\exp[t\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))}}{\sum_{X_t} \frac{\exp[t\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))}}\\
-&= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\
-&= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\
-&= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)}
-\end{align}$$ {#eq-proof_suff_2}
+$$\begin{align} P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &= \frac{(\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}{\sum_{X_t} (\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}\\ &= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\ &= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\ &= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)} \end{align}$$ {#eq-proof_suff_2}
 
 What we can see from all these rearrangements is that if we include the total score $t$ in the equation, we can completely eliminate the parameter $\theta$.
 Ultimately, we no longer need $\theta$ to predict a person’s response vector.
@@ -970,7 +1017,6 @@ Thus, IRT can be used to:
 ::: {.callout-note appearance="simple"}
 ## Let's do it in R
 
-
 To plot the item information, we can use the functions we're already familiar with from the ICCs: With `itemplot()`, we get the information curve for a specific item, while with `plot()` we can plot the information curves for all items together in a single plot.
 What's new here is that we're selecting a different option in the `type` argument.
 Instead of “trace” for the ICC, we're now selecting ‘info’ (for the `itemplot()` function) or “infotrace” (for the `plot()` function) to plot the item information.
@@ -1004,7 +1050,6 @@ plot(eco_rasch, type="infoSE")
 # plot item information curve of a specific item together with ICC
 itemplot(eco_rasch,6, type='infotrace')
 ```
-
 :::
 
 - @hoffman2024 : "Because the loadings/slopes relate nonlinearly to theta, this implies that reliability (now called “test information”) must vary across theta values. So items are not just “good” or “bad”, but are “good” or “bad” for whom?"
