@@ -361,7 +361,7 @@ However, this restriction ensures a consistent scaling that allows for comparabi
     - <mark>Is this to technical for a beginner tutorial?
       Especially because the discrimination parameter is introduced in the 2PL part</mark>
 
-### Interpretation of model parameters
+### Interpretation of model parameters {#sec-mod_par}
 
 Let’s take a closer look at the two model parameters.
 
@@ -671,8 +671,8 @@ plot(eco_rasch, type="trace", theta_lim=c(-5,5), facet = TRUE)
 
 the more items our scale consists of, the more confusing the ICC plots can become [@wilson2023].
 Another useful visualization from which we can also learn a lot of information is the so-called *Wright Map*, also known as the *Person Item Map*.
-To do this, we take advantage of the fact that, in the Rasch model, the probability that a person will answer “1” for an item actually depends on only two parameters ($\theta$ and $\beta$), and we can place both parameters on the same latent scale [@wilson2023].
-We're already familiar with this idea from the section where we looked at the meaning of the model parameters, and in fact, we had already worked there with a kind of Wright map in the form of @fig-one_continuum .
+To do this, we take advantage of the fact that, in the Rasch model, the probability that a person will answer “1” for an item actually depends on only two parameters ($\theta$ and $\beta$), and we can place both parameters on the same latent scale [@wilson2023, p. 142].
+We're already familiar with this idea from the section where we looked at the meaning of the model parameters ([see Section @sec-mod_par]) , and in fact, we had already worked there with a kind of Wright map in the form of @fig-one_continuum .
 
 Nevertheless, let's now take a closer look at the Wright map using a fictional example shown in @fig-wright_map_example .
 The axis on the left side labeled “Logits” represents our latent continuum, on which we can locate our individuals and items.
@@ -693,6 +693,25 @@ The core idea behind the Wright map is that it allows us to compare items and in
 Let's take Person 1, for example, who has a very low score on the construct (see $\theta_1 = -2.5$); this could be a person with very low environmental concerns, in the case of the ECo scale.
 We can see that virtually all items except Item 1 lie significantly above Person 1’s trait score (above the dashed red line).
 If we now recall that the item difficulty $\beta_i$ corresponds to the $\theta$ score at which the probability of answering the item with a 1 is 50%, we can see here—even without looking at the exact ICC curves—that Person 1’s probability of answering the item with 1 for most items is well below 50%, meaning they will answer most items with a 0.
+To put it simply, you could say that the scale is too difficult for Person 1.
+
+For Person 3, it’s exactly the opposite.
+This person has such a high construct score ($\theta_3 = 2.5$) that they score above all items except Item 2.
+Accordingly, Person 3 also scores above the difficulty level of most items and therefore has a probability of answering correctly greater than 50% for most items.
+This means that Person 3 is highly likely to answer most items with a 1.
+Simply put, the scale is too easy for Person 3.
+
+Person 2 is in the middle between the other two people and has a moderate construct score ($\theta_2 = 0$).
+Here we see that some items lie below the blue line, meaning Person 1 has a greater than 50% probability of answering the item with a 1 (e.g., Item 3); some items lie above the blue line, meaning Person 1 has a less than 50% probability of answering the item with a 1 (e.g., Item 8); and some items lie very close to the blue line, in which case Person 1 has roughly a 50% probability of answering the item with a 1 (e.g., Item 9).
+We can therefore see that this person will likely answer some items correctly but will fail to answer others.
+
+For another illustrative example and intuitive introduction to the Wright Map see also @wilson2023.
+
+To measure a construct accurately for an individual, it is best if the difficulty of an item corresponds to that individual’s level on the construct.
+We’ll take a closer look at why this is the case later on ([see Section @sec-Information]). It follows, then, that the item difficulties should cover the entire range of the construct we wish to measure [@debelak2022].
+We can now check this very easily using the Wright Map.
+In our example, we see that the items are distributed across the entire length of the histogram.
+This means we have items that not only measure exactly at the center of the distribution (e.g., Item 9) but also items that can measure exactly at the edges of the distribution (e.g., Item 3 and Item 8); thus, our scale covers the various construct levels $\theta$ that also occur in our sample.
 
 ::: {.callout-note appearance="simple"}
 ## Let's do it in R
@@ -1076,7 +1095,7 @@ There are various ways to do this, known as restrictions (since the possible sol
 
 Since the person parameters ($\theta$) and item parameters ($\beta$) lie on the same latent scale, it is sufficient to apply one of the restrictions mentioned to specify the origin of the metric [@deayala2022, p. 44].
 
-### Information
+### Information {#sec-Information}
 
 #### Item information
 

@@ -164,11 +164,11 @@ window.Quarto = {
   <ul class="collapse">
   <li><a href="#formula" id="toc-formula" class="nav-link" data-scroll-target="#formula">Formula</a></li>
   <li><a href="#pl" id="toc-pl" class="nav-link" data-scroll-target="#pl">1PL</a></li>
-  <li><a href="#interpretation-of-model-parameters" id="toc-interpretation-of-model-parameters" class="nav-link" data-scroll-target="#interpretation-of-model-parameters">Interpretation of model parameters</a></li>
+  <li><a href="#sec-mod_par" id="toc-sec-mod_par" class="nav-link" data-scroll-target="#sec-mod_par">Interpretation of model parameters</a></li>
   <li><a href="#visualizations-of-the-rasch-model" id="toc-visualizations-of-the-rasch-model" class="nav-link" data-scroll-target="#visualizations-of-the-rasch-model">Visualizations of the Rasch Model</a></li>
   <li><a href="#assumptions-and-properties-of-the-rasch-model" id="toc-assumptions-and-properties-of-the-rasch-model" class="nav-link" data-scroll-target="#assumptions-and-properties-of-the-rasch-model">Assumptions and Properties of the Rasch Model</a></li>
   <li><a href="#identifiability" id="toc-identifiability" class="nav-link" data-scroll-target="#identifiability">Identifiability</a></li>
-  <li><a href="#information" id="toc-information" class="nav-link" data-scroll-target="#information">Information</a></li>
+  <li><a href="#sec-Information" id="toc-sec-Information" class="nav-link" data-scroll-target="#sec-Information">Information</a></li>
   <li><a href="#implementation-in-r" id="toc-implementation-in-r" class="nav-link" data-scroll-target="#implementation-in-r">Implementation in R</a></li>
   </ul></li>
   <li><a href="#pl-1" id="toc-pl-1" class="nav-link" data-scroll-target="#pl-1">2PL</a>
@@ -518,8 +518,8 @@ window.Quarto = {
 </ul></li>
 </ul>
 </section>
-<section id="interpretation-of-model-parameters" class="level3 page-columns page-full">
-<h3 class="anchored" data-anchor-id="interpretation-of-model-parameters">Interpretation of model parameters</h3>
+<section id="sec-mod_par" class="level3 page-columns page-full">
+<h3 class="anchored" data-anchor-id="sec-mod_par">Interpretation of model parameters</h3>
 <p>Let’s take a closer look at the two model parameters.</p>
 <p><span class="math inline">\theta</span> refers to the person parameter - that is, the latent construct we want to measure. Since the latent construct represents a continuum, the <span class="math inline">\theta</span> parameter requires the index <span class="math inline">n</span>, because each person is located at a different point on the continuum. In our example, <span class="math inline">\theta</span> would be “environmental concerns,” and <span class="math inline">\theta_n</span> would be the level of environmental concerns of person <span class="math inline">n</span>.</p>
 <p><span class="math inline">\beta</span> is the item difficulty. The <span class="math inline">\beta</span> parameter has the index <span class="math inline">i</span> because items vary in difficulty. The term “difficulty” stems from the historical background of the IRT, which was developed primarily for achievement and ability applications. In the context of personality assessment or the measurement of attitudes, difficulty can be understood as how easy it is for individuals to agree with or disagree with an item. A more neutral term, which is therefore also frequently used to refer to item difficulty, is “item location” <span class="citation" data-cites="wilson2023 deayala2022">(<a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023</a>; <a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022</a>)</span>.</p>
@@ -614,14 +614,14 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  6.025269
+Condition number of information matrix =  5.93131
 
-Log-likelihood = -39169.92
+Log-likelihood = -39227.32
 Estimated parameters: 10 
-AIC = 78359.83
-BIC = 78429.62; SABIC = 78397.84
-G2 (501) = 1981.81, p = 0
-RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
+AIC = 78474.63
+BIC = 78544.42; SABIC = 78512.64
+G2 (501) = 2013.72, p = 0
+RMSEA = 0.02, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
 <p>When we use <code>print()</code> to output our mirt object, we first see a summary with general information about our model. The first block contains information about the estimation method that <code>mirt()</code> used to estimate the model. The lower block contains fit criteria regarding the model fit. The exact estimation algorithm is beyond the scope of this tutorial. To put it simply, however, the model parameters are estimated by first substituting random values for the <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> and then checking how likely it is to observe the data we have collected. In the next step, new values for <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> are substituted, and it is checked whether these values are more likely to produce the data pattern we have collected. This process is repeated many times until the parameter values that most likely fit our observed data are found. Since this process can theoretically take an extremely long time, the algorithm must be given termination rules. There are two options here, which we can also see in the output.</p>
@@ -670,15 +670,15 @@ RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                 a      b g u
-Eco_aff_1_dicho 1 -1.697 0 1
-Eco_aff_2_dicho 1 -1.532 0 1
-Eco_aff_3_dicho 1 -1.261 0 1
-Eco_cog_4_dicho 1 -1.094 0 1
-Eco_cog_5_dicho 1 -1.079 0 1
-Eco_cog_6_dicho 1 -0.049 0 1
-Eco_con_7_dicho 1 -0.756 0 1
-Eco_con_8_dicho 1  0.417 0 1
-Eco_con_9_dicho 1 -1.397 0 1
+Eco_aff_1_dicho 1 -1.685 0 1
+Eco_aff_2_dicho 1 -1.477 0 1
+Eco_aff_3_dicho 1 -1.290 0 1
+Eco_cog_4_dicho 1 -1.066 0 1
+Eco_cog_5_dicho 1 -1.105 0 1
+Eco_cog_6_dicho 1 -0.058 0 1
+Eco_con_7_dicho 1 -0.733 0 1
+Eco_con_8_dicho 1  0.453 0 1
+Eco_con_9_dicho 1 -1.405 0 1
 
 $means
 F1 
@@ -686,7 +686,7 @@ F1
 
 $cov
       F1
-F1 2.217</code></pre>
+F1 2.193</code></pre>
 </div>
 </div>
 <p>The output consists of three sections:</p>
@@ -703,12 +703,12 @@ F1 2.217</code></pre>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_rasch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              F1
-[1,] -0.55348791
-[2,] -0.09705609
-[3,] -0.98445793
-[4,] -0.09705609
-[5,] -0.55348791
-[6,] -2.38317945</code></pre>
+[1,] -0.08996521
+[2,] -0.08996521
+[3,] -0.97567377
+[4,]  0.42186375
+[5,] -0.08996521
+[6,] -2.99220335</code></pre>
 </div>
 </div>
 
@@ -845,7 +845,7 @@ Figure&nbsp;3
 </section>
 <section id="wright-map" class="level4">
 <h4 class="anchored" data-anchor-id="wright-map">Wright Map</h4>
-<p>the more items our scale consists of, the more confusing the ICC plots can become <span class="citation" data-cites="wilson2023">(<a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023</a>)</span>. Another useful visualization from which we can also learn a lot of information is the so-called <em>Wright Map</em>, also known as the <em>Person Item Map</em>. To do this, we take advantage of the fact that, in the Rasch model, the probability that a person will answer “1” for an item actually depends on only two parameters (<span class="math inline">\theta</span> and <span class="math inline">\beta</span>), and we can place both parameters on the same latent scale <span class="citation" data-cites="wilson2023">(<a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023</a>)</span>. We’re already familiar with this idea from the section where we looked at the meaning of the model parameters, and in fact, we had already worked there with a kind of Wright map in the form of <a href="#fig-one_continuum" class="quarto-xref">Figure&nbsp;1</a> .</p>
+<p>the more items our scale consists of, the more confusing the ICC plots can become <span class="citation" data-cites="wilson2023">(<a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023</a>)</span>. Another useful visualization from which we can also learn a lot of information is the so-called <em>Wright Map</em>, also known as the <em>Person Item Map</em>. To do this, we take advantage of the fact that, in the Rasch model, the probability that a person will answer “1” for an item actually depends on only two parameters (<span class="math inline">\theta</span> and <span class="math inline">\beta</span>), and we can place both parameters on the same latent scale <span class="citation" data-cites="wilson2023">(<a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023, 142</a>)</span>. We’re already familiar with this idea from the section where we looked at the meaning of the model parameters (<a href="#sec-mod_par" class="quarto-xref">see Section&nbsp;5.3</a>) , and in fact, we had already worked there with a kind of Wright map in the form of <a href="#fig-one_continuum" class="quarto-xref">Figure&nbsp;1</a> .</p>
 <p>Nevertheless, let’s now take a closer look at the Wright map using a fictional example shown in <a href="#fig-wright_map_example" class="quarto-xref">Figure&nbsp;4</a> . The axis on the left side labeled “Logits” represents our latent continuum, on which we can locate our individuals and items. The x-axis represents the different items. Accordingly, the points on the graph represent the item difficulties <span class="math inline">\beta_i</span>. For example, we can go to the point labeled “Item 3” on the x-axis, read the corresponding y-value for the point <span class="math inline">\beta_3</span>, and see that this item has a <span class="math inline">\beta_3</span> of approximately -1.8. On the left, labeled “Respondents,” we see a histogram that extends along the “Logits” scale. Here we find our individual parameters <span class="math inline">\theta_n</span>. Since we often have large samples (for example, <span class="math inline">n = 500</span> individuals are simulated here), it would be very confusing to plot every single <span class="math inline">\theta_n</span> value. Therefore, a histogram is provided here. We see that, in our example, this follows a normal distribution, with most individuals in our sample having a <span class="math inline">\theta</span> value centered around 0. Very large or very small <span class="math inline">\theta</span> values, on the other hand, are very rare. For further illustration, three individuals with different <span class="math inline">\theta</span> values were selected from this distribution and marked with colored dashed lines.</p>
 <div id="fig-wright_map_example" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -857,7 +857,11 @@ Figure&nbsp;4
 </figcaption>
 </figure>
 </div>
-<p>The core idea behind the Wright map is that it allows us to compare items and individuals very effectively and thus assess how well our test fits the sample we are using for measurement. Let’s take Person 1, for example, who has a very low score on the construct (see <span class="math inline">\theta_1 = -2.5</span>); this could be a person with very low environmental concerns, in the case of the ECo scale. We can see that virtually all items except Item 1 lie significantly above Person 1’s trait score (above the dashed red line). If we now recall that the item difficulty <span class="math inline">\beta_i</span> corresponds to the <span class="math inline">\theta</span> score at which the probability of answering the item with a 1 is 50%, we can see here—even without looking at the exact ICC curves—that Person 1’s probability of answering the item with 1 for most items is well below 50%, meaning they will answer most items with a 0.</p>
+<p>The core idea behind the Wright map is that it allows us to compare items and individuals very effectively and thus assess how well our test fits the sample we are using for measurement. Let’s take Person 1, for example, who has a very low score on the construct (see <span class="math inline">\theta_1 = -2.5</span>); this could be a person with very low environmental concerns, in the case of the ECo scale. We can see that virtually all items except Item 1 lie significantly above Person 1’s trait score (above the dashed red line). If we now recall that the item difficulty <span class="math inline">\beta_i</span> corresponds to the <span class="math inline">\theta</span> score at which the probability of answering the item with a 1 is 50%, we can see here—even without looking at the exact ICC curves—that Person 1’s probability of answering the item with 1 for most items is well below 50%, meaning they will answer most items with a 0. To put it simply, you could say that the scale is too difficult for Person 1.</p>
+<p>For Person 3, it’s exactly the opposite. This person has such a high construct score (<span class="math inline">\theta_3 = 2.5</span>) that they score above all items except Item 2. Accordingly, Person 3 also scores above the difficulty level of most items and therefore has a probability of answering correctly greater than 50% for most items. This means that Person 3 is highly likely to answer most items with a 1. Simply put, the scale is too easy for Person 3.</p>
+<p>Person 2 is in the middle between the other two people and has a moderate construct score (<span class="math inline">\theta_2 = 0</span>). Here we see that some items lie below the blue line, meaning Person 1 has a greater than 50% probability of answering the item with a 1 (e.g., Item 3); some items lie above the blue line, meaning Person 1 has a less than 50% probability of answering the item with a 1 (e.g., Item 8); and some items lie very close to the blue line, in which case Person 1 has roughly a 50% probability of answering the item with a 1 (e.g., Item 9). We can therefore see that this person will likely answer some items correctly but will fail to answer others.</p>
+<p>For another illustrative example and intuitive introduction to the Wright Map see also <span class="citation" data-cites="wilson2023">Wilson (<a href="#ref-wilson2023" role="doc-biblioref">2023</a>)</span>.</p>
+<p>To measure a construct accurately for an individual, it is best if the difficulty of an item corresponds to that individual’s level on the construct. We’ll take a closer look at why this is the case later on (<a href="#sec-Information" class="quarto-xref">see Section&nbsp;5.7</a>). It follows, then, that the item difficulties should cover the entire range of the construct we wish to measure <span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022</a>)</span>. We can now check this very easily using the Wright Map. In our example, we see that the items are distributed across the entire length of the histogram. This means we have items that not only measure exactly at the center of the distribution (e.g., Item 9) but also items that can measure exactly at the edges of the distribution (e.g., Item 3 and Item 8); thus, our scale covers the various construct levels <span class="math inline">\theta</span> that also occur in our sample.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1030,15 +1034,15 @@ Figure&nbsp;4
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Item 1 Item 2 Item 3 Item 4 Item 5 Item 6 Item 7 Item 8 Item 9
-Item 1  1.000  0.086 -0.142 -0.057 -0.071 -0.123 -0.182 -0.151 -0.123
-Item 2  0.086  1.000 -0.121 -0.063 -0.014 -0.078 -0.174 -0.153 -0.154
-Item 3 -0.142 -0.121  1.000 -0.168 -0.017 -0.084 -0.120 -0.111 -0.120
-Item 4 -0.057 -0.063 -0.168  1.000 -0.158 -0.138 -0.184 -0.177 -0.152
-Item 5 -0.071 -0.014 -0.017 -0.158  1.000 -0.132 -0.169 -0.120 -0.130
-Item 6 -0.123 -0.078 -0.084 -0.138 -0.132  1.000 -0.135 -0.158 -0.113
-Item 7 -0.182 -0.174 -0.120 -0.184 -0.169 -0.135  1.000  0.166  0.054
-Item 8 -0.151 -0.153 -0.111 -0.177 -0.120 -0.158  0.166  1.000 -0.010
-Item 9 -0.123 -0.154 -0.120 -0.152 -0.130 -0.113  0.054 -0.010  1.000</code></pre>
+Item 1  1.000  0.101 -0.154 -0.059 -0.064 -0.136 -0.187 -0.150 -0.129
+Item 2  0.101  1.000 -0.141 -0.081 -0.008 -0.102 -0.171 -0.155 -0.132
+Item 3 -0.154 -0.141  1.000 -0.170 -0.017 -0.081 -0.098 -0.113 -0.101
+Item 4 -0.059 -0.081 -0.170  1.000 -0.162 -0.116 -0.178 -0.168 -0.173
+Item 5 -0.064 -0.008 -0.017 -0.162  1.000 -0.130 -0.168 -0.116 -0.113
+Item 6 -0.136 -0.102 -0.081 -0.116 -0.130  1.000 -0.134 -0.174 -0.110
+Item 7 -0.187 -0.171 -0.098 -0.178 -0.168 -0.134  1.000  0.160  0.042
+Item 8 -0.150 -0.155 -0.113 -0.168 -0.116 -0.174  0.160  1.000  0.003
+Item 9 -0.129 -0.132 -0.101 -0.173 -0.113 -0.110  0.042  0.003  1.000</code></pre>
 </div>
 </div>
 <p>We can check whether the cutoff of 0.2 is exceeded in our matrix:</p>
@@ -1214,8 +1218,8 @@ Figure&nbsp;6: The illustration is similar to Figure 2.4 in @debelak2022
 </ul>
 <p>Since the person parameters (<span class="math inline">\theta</span>) and item parameters (<span class="math inline">\beta</span>) lie on the same latent scale, it is sufficient to apply one of the restrictions mentioned to specify the origin of the metric <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 44</a>)</span>.</p>
 </section>
-<section id="information" class="level3">
-<h3 class="anchored" data-anchor-id="information">Information</h3>
+<section id="sec-Information" class="level3">
+<h3 class="anchored" data-anchor-id="sec-Information">Information</h3>
 <section id="item-information" class="level4">
 <h4 class="anchored" data-anchor-id="item-information">Item information</h4>
 <p>A key concept in IRT that is very helpful for test development—and one that does not exist in this form in CTT—is item information. One can think of information as a measure of measurement accuracy or precision. One can understand this quite intuitively if one take a closer look at the ICC of an item.</p>
