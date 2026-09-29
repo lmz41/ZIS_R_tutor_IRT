@@ -3,7 +3,7 @@ title: "A Practical Introduction to Item Response Theory"
 subtitle: "*R-Tutorials in Psychometrics*"
 logo: technical/pics/zis_logo.svg
 picture: technical/pics/kodaqs_icon.png 
-bibliography: irt_references.bib
+bibliography: 03_irt_dich_files/irt_references.bib
 author:
   - name: Leon Martinez
     affiliations: "GESIS – Leibniz Institute for the Social Sciences; University of Mannheim"
@@ -231,7 +231,7 @@ dat_eco <- dat_eco %>%                                        # <5>
 
 ```
 
-1.  Ffirst we save the loaded dataset in a new object named "dat_quoß", which is more meaningful tha "w7".
+1.  First we save the loaded dataset in a new object named "dat_quoß", which is more meaningful tha "w7".
     We can delete the old "w7" object from the environment with `rm()`
 
 2.  Next we can reduce the dataset to the variables we actually need (the items of the ECo scale) and save the results in the new object "dat_eco".
@@ -378,7 +378,7 @@ A more neutral term, which is therefore also frequently used to refer to item di
 The term “location” highlights an important property of IRT models.
 Specifically, $\theta$ and $\beta$ lie on the same continuum or scale.
 
-![](figures_irt_tutorial/Rasch-Kontinuum.png){#fig-one_continuum}
+![](03_irt_dich_files/figure-html/Rasch-Kontinuum.png){#fig-one_continuum}
 
 In our example, the continuum represents environmental concerns.
 We can now compare individuals with one another and see, for example, that Person 1 ($\theta_1$) has the lowest level of environmental concerns compared to the other two individuals.
@@ -592,7 +592,7 @@ Such a plot is called an *item characteristic curve* (ICC) or *item response fun
 
 As an example, the ICC for Item 6 of the ECo scale is shown in the following:
 
-![](figures_irt_tutorial/Example_ICC_I6.png){#fig-ICC6_Rasch}
+![](03_irt_dich_files/figure-html/Example_ICC_I6.png){#fig-ICC6_Rasch}
 
 In the case of the Rasch model, we have the distinctive feature that the item difficulty always lies at the inflection point of the ICC.
 In our example, item 6 has an item difficulty of $\beta_6 = -0.018$.
@@ -600,7 +600,7 @@ If we go to the corresponding point on the x-axis in @fig-ICC6_Rasch and look at
 
 We can now conduct our thought experiment not only for a single item, but also for all items on the scale, so that we can calculate an ICC curve for each item:
 
-![](figures_irt_tutorial/Example_ICC_ECo.png){#fig-ICCEco_Rasch}
+![](03_irt_dich_files/figure-html/Example_ICC_ECo.png){#fig-ICCEco_Rasch}
 
 When we consider multiple items or ICCs simultaneously, we see in @fig-ICCEco_Rasch that the varying item difficulties result in a shift of the ICCs along the x-axis.
 This makes sense, since a more difficult item lies further to the right on the $\theta$ continuum.
@@ -687,7 +687,7 @@ We see that, in our example, this follows a normal distribution, with most indiv
 Very large or very small $\theta$ values, on the other hand, are very rare.
 For further illustration, three individuals with different $\theta$ values were selected from this distribution and marked with colored dashed lines.
 
-![](figures_irt_tutorial/wright_map_sim2.png){#fig-wright_map_example}
+![](03_irt_dich_files/figure-html/wright_map_sim2.png){#fig-wright_map_example}
 
 The core idea behind the Wright map is that it allows us to compare items and individuals very effectively and thus assess how well our test fits the sample we are using for measurement.
 Let's take Person 1, for example, who has a very low score on the construct (see $\theta_1 = -2.5$); this could be a person with very low environmental concerns, in the case of the ECo scale.
@@ -976,7 +976,7 @@ This parallelism satisfies the requirement for specific objectivity.
 Thus, we can see that the higher a person’s $\theta$ is, the higher the probability of answering the item with a 1 ($P(Y_{ni} = 1)$), regardless of which item we are considering.
 This is also evident in @fig-ICC_spec_obj_Rasch : Regardless of whether it is Item 1 or Item 2, the green person ($\theta = 2$) always has a higher probability of answering ($P(Y_{ni} = 1)$) (see the point of intersection with the y-axis) than the pink person ($\theta = -2$).
 
-![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_Rasch.png){#fig-ICC_spec_obj_Rasch}
+![The illustration is similar to Figure 2.4 in \@debelak2022](03_irt_dich_files/figure-html/spec_obj_ICCs_Rasch.png){#fig-ICC_spec_obj_Rasch}
 
 Conversely, we see that regardless of whether we consider the green person ($\theta = 2$) or the pink person ($\theta = -2$), both individuals have lower response probabilities on the more difficult Item 2 than on Item 1.
 This is evident from the fact that the red horizontal dashed line for Item 1 for each person always lies above the blue horizontal dashed line for Item 2.
@@ -993,7 +993,7 @@ Here, the pink person ($\theta = -2$) is more likely to answer Item 2 with a 1 t
 For the blue person ($\theta = 2$), it is exactly the opposite.
 So, here, for example, the probability of answering an item with a 1 is not always lower for a more difficult item (Item 2), as the pink person demonstrates.
 
-![The illustration is similar to Figure 2.4 in \@debelak2022](figures_irt_tutorial/spec_obj_ICCs_2PL.png){#fig-ICC_spec_obj_2PL}
+![The illustration is similar to Figure 2.4 in \@debelak2022](03_irt_dich_files/figure-html/spec_obj_ICCs_2PL.png){#fig-ICC_spec_obj_2PL}
 
 ::: {.callout-tip appearance="simple"}
 ## Mathematical background
@@ -1084,7 +1084,7 @@ A key concept in IRT that is very helpful for test development—and one that do
 One can think of information as a measure of measurement accuracy or precision.
 One can understand this quite intuitively if one take a closer look at the ICC of an item.
 
-![](figures_irt_tutorial/info_ICC.png){#fig-example_ICC_info}
+![](03_irt_dich_files/figure-html/info_ICC.png){#fig-example_ICC_info}
 
 The ICC plots the different $\theta$ values on the x-axis and the probability to respond to the item with a 1 on the y-axis.
 We can see that the Function follows a S-shaped curve.
@@ -1128,7 +1128,7 @@ I_i(\theta) = p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)
 
 If we theoretically calculate for every possible $\theta$ value the Information $I_i(\theta)$ (see @eq-iteminfo) and plotting the $\theta$s on the x-axis and the Iteminformation on the y-axis, then we get the *Item-Information curve* (see @fig-example_ICC_info for an example) .
 
-![](figures_irt_tutorial/example_plot_item_info.png){#fig-example_item_info}
+![](03_irt_dich_files/figure-html/example_plot_item_info.png){#fig-example_item_info}
 
 This is quite usefull because we can visually see where on the $\theta$ continuum the item is especially informative or which part on the $\theta$ continuum the item measures especially precise.
 Since we have already determined that the item information is greatest at the point of item difficulty (because that is where the ICC slope is steepest) and we know that the probability of a correct response at the point of item difficulty is 50% (because that is how item difficulty is defined), we can say that the maximum possible information in the Rasch Model is 0.25 (because $I_i(\theta = \beta_i) = 0.5 \cdot 0.5 = 0.25$) and lies at the point of item difficulty.
@@ -1162,7 +1162,7 @@ $$I(\theta) = \sum_{i=0}^I I_i(\theta)$$ {#eq-testinfo}
 
 If we calculate the test information for every possible $\theta$ value with @eq-iteminfo and plotting the $\theta$ on the x-axis and the test information on the y-axis, then we get the *Test-Information curve* (see @fig-example_ICC_test_info for an example) .
 
-![](figures_irt_tutorial/example_plot_test_info.png){#fig-example_ICC_test_info}
+![](03_irt_dich_files/figure-html/example_plot_test_info.png){#fig-example_ICC_test_info}
 
 Information is a measure of precision, and accordingly, it is also related to measures of imprecision.
 Therefore, the test information is also related to the standard error.
@@ -1228,7 +1228,7 @@ So we would actually need additional items with high item difficulty (high $\bet
 In return, we could eliminate items that provide information for $\theta$ ranges that do not actually interest us (such as items 5, 4, and 1).
 Therefore, as @hoffman2024 notes, there is no universally “ideal” test information curve, since the optimal test information curve always depends on the purpose for which the measuring instrument was designed.
 
-![](figures_irt_tutorial/Example_usecase_info.png){#fig-usecase_info}
+![](03_irt_dich_files/figure-html/Example_usecase_info.png){#fig-usecase_info}
 
 These examples should highlight the advantage of IRT over CTT.
 Because the item and respondent parameters are located on the same latent scale and we can determine the information from an item differentiated according to the $\theta$ values, we get a much more nuanced picture of our measurement tool and for whom it works particularly well.
