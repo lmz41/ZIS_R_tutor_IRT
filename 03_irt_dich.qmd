@@ -158,7 +158,7 @@ The [data](https://doi.org/10.7910/DVN/ZMQRIH) from this paper has been made pub
 Instruction: *What do you think about the following statements and questions?*
 
 | Item | Item text |
-|------------------------------------|------------------------------------|
+|----|----|
 | 1 | I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live. |
 | 2 | If we continue in the same way, we are heading towards an environmental disaster. |
 | 3 | We worry too much about the future of the environment and not enough about prices and jobs today. |
@@ -294,7 +294,7 @@ Generally speaking, 1 represents an success and 0 a failure.
 In our example with the ECo-Scale, a success can be interpreted as agreement with the item and a failure as disagreement with the item.
 In achievement testing, however, 1 could also mean “Correct” and 0 could mean “Incorrect.”
 
-### Formula
+### Model formula
 
 The Rasch model is described by the following formula:
 
@@ -479,6 +479,9 @@ It also enables us to retrieve only specific information and parameters from the
 :::
 
 ```{r}
+#| lst-label: lst-print-rasch
+#| lst-cap: Summary of the Rasch model
+
 print(eco_rasch)
 ```
 
@@ -526,6 +529,7 @@ For example, to access the item parameters, we can use the `coef()` function.
 The `coef()` function expects the following arguments, among others:
 
 ```{r}
+
 # extract the itemspecific parameters from our Rasch model
 item_par_eco_rasch <- coef(eco_rasch,       # <1>
                            IRTpars=TRUE,    # <2>
@@ -545,6 +549,9 @@ item_par_eco_rasch <- coef(eco_rasch,       # <1>
 Let's take a look at the output of our new `coef`-object.
 
 ```{r}
+#| lst-label: lst-rasch-item-param
+#| lst-cap: Item parameters of the Rasch model
+
 item_par_eco_rasch
 ```
 
@@ -708,8 +715,9 @@ We can therefore see that this person will likely answer some items correctly bu
 For another illustrative example and intuitive introduction to the Wright Map see also @wilson2023.
 
 To measure a construct accurately for an individual, it is best if the difficulty of an item corresponds to that individual’s level on the construct.
-We’ll take a closer look at why this is the case later on ([see Section @sec-Information]). It follows, then, that the item difficulties should cover the entire range of the construct we wish to measure [@debelak2022].
-We can now check this very easily using the Wright Map.
+We’ll take a closer look at why this is the case later on ([see Section @sec-Information]).
+It follows, then, that the item difficulties should cover the entire range of the construct we wish to measure [@debelak2022].
+We can now check this very easily using the Wright Map [e.g., @debelak2022 Figure 4.1; @chen2026].
 In our example, we see that the items are distributed across the entire length of the histogram.
 This means we have items that not only measure exactly at the center of the distribution (e.g., Item 9) but also items that can measure exactly at the edges of the distribution (e.g., Item 3 and Item 8); thus, our scale covers the various construct levels $\theta$ that also occur in our sample.
 
@@ -776,12 +784,6 @@ wm <- wrightMap(theta,                                    # <1>
 
 6.  Here we can give our plot a title.
 :::
-
-*s. [@wilson2023, p.142] -\> aber bisschen redundant zu oben?*
-
-- *both on the same scale (s. Wright-map -\> p.26 and figure 1.10 in @wilson2023*
-
-- *In a regression logic we can also say, that the difference/distance between a person and an item on the continuum can be used as a predictor to predict the probability that a person will solve the item*
 
 ### Assumptions and Properties of the Rasch Model
 
@@ -1033,12 +1035,12 @@ $$\log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) = \theta_n - \beta_i$
 
 If we now rewrite the comparison of the persons accordingly, we get:
 
-$$\begin{align}
+$$\begin{aligned}
 \log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{n^\prime i} = 1)}{1 - P(Y_{n^\prime i} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n^\prime} - \beta_i)\\
 &= \theta_n - \beta_i - \theta_{n^\prime} +  \beta_i\\
 &= \theta_n - \theta_{n^\prime} +  \beta_i - \beta_i\\
 &= \theta_n - \theta_{n^\prime}
-\end{align}$$
+\end{aligned}$$
 
 As you can see, in the end, only the comparison of $\theta$ remains, and the item parameters cancel out.
 This means that when comparing two individuals, $n$ and $n^\prime$, it does not matter on which items the two individuals are compared.
@@ -1046,12 +1048,12 @@ This corresponds to the definition of specific objectivity.
 
 The same can be shown for the comparison of two items, $i$ and $i^\prime$:
 
-$$\begin{align}
+$$\begin{aligned}
 \log\left(\frac{P(Y_{ni} = 1)}{1 - P(Y_{ni} = 1)}\right) - \log\left(\frac{P(Y_{ni^\prime} = 1)}{1 - P(Y_{ni^\prime} = 1)}\right) &= (\theta_n - \beta_i) - (\theta_{n} - \beta_{i^\prime})\\
 &= \theta_n - \beta_i - \theta_n +  \beta_{i^\prime}\\
 &= \theta_n - \theta_n + \beta_{i^\prime} - \beta_i\\
 &= \beta_{i^\prime} - \beta_i
-\end{align}$$
+\end{aligned}$$
 
 Here, too, we see that when comparing items, the person-specific parameters cancel each other out.
 Therefore, when comparing two items, $i$ and $i^\prime$, it does not matter which individuals answered the two items.
@@ -1290,7 +1292,7 @@ plot(eco_rasch, type="infotrace", theta_lim=c(-5,5), facet = TRUE)
 plot(eco_rasch, type="infotrace", theta_lim=c(-5,5), facet = FALSE)
 ```
 
-To plot the test data, we can also use the `plot()` function:
+To plot the test information curve, we can also use the `plot()` function:
 
 ```{r}
 # plot test information curve
@@ -1347,144 +1349,257 @@ itemplot(eco_rasch,6, type='infotrace')
 
     - ähnliche Idee aber hier noch zweite Dimension durch Testinformation
 
-### Implementation in R
-
-- *compact and all together at the end or combined with the text and devided over the sections?*
-
 ## 2PL
 
-### Intuitive introduction in a regression/predictor logic
+In the Rasch model we basically make the assumption, that all differences between responses can be explained by the discrepancy between the person parameter $\theta$ and the item difficulty $\beta$.
+In a regression logic this discrepancy is our only predictor, to predict the responses of a person on an item.
 
-- Maybe the assumption, that only the trait and the item difficulty are influencing the response probability are a little bit harsh
+But maybe this assumption, that only the person parameter and the item difficulty are influencing the response probability are a little bit harsh.
+Maybe there are other predictors which also influence the response probabilities.
+For example a further predictor could be the ability of an item to "differentiate among individuals located a different points on the continuum" [@deayala2022, p.137].
+This is also called *discrimination.* From the Rasch model we are already familiar with this idea and know that this has something to do with the slope of the ICC.
+However, in the Rasch model the slopes of the different items were all fixed at 1, which results in parallel ICCs.
+This means that all items differentiated to the same degree between persons.
+The only difference was where on the $\theta$ continuum they differentiated but they all differentiated equally "strong".
+If we relax this assumption, we can now allow that different items can differentiate to varying degrees.
+Therefore, we get a new property of the items, which we can use as a predictor to predict the response probability of a person on an item.
 
-- Maybe there are other factors/predictors, which are also influencing the response probability
-
-- A further predictor could be the ability of an item to "differentiate among individuals located a different points on the continuum" @deayala2022 p.137.
-  This is also called *discrimination*
-
-- Since we now have two parameters in our model (item difficulty & discrimination) this is an extention to the Rasch model.
-  which has onls 1 Parameter (1PL).
-  Therefore the new model is called (Birnbaum) two-parameter logistic model (2PL)
+By adding this new item property to our prediction framework, we now have two item parameters in our model (item difficulty & discrimination).
+This is an extention to the Rasch model, which has only 1 Parameter (1PL).
+Therefore this new extension is called (Birnbaum) two-parameter logistic model (2PL).
 
 ### Model formula
 
-- The formula looks pretty similar to the Rasch-model
+The formula of the 2PL looks pretty similar to the Rasch-model.
 
-- New is the $\alpha_i$-parameter, which represents the discrimination of an item $i$
+$$P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}$$
 
-- As we can see the probability that a person solves item $i$ depends now also from the discrimination parameter ($P(x_j = 1| \theta, \alpha_j, \beta_j)$)
+Let’s take a look at the individual components to better understand the formula:
 
-- If we ignore the link-function, which is there solely to ensure that our model outputs probabilities.
-  than we can think of the formula as a simple linear regression
+On the left side of the equation is agian the probability that a person $n$ will answer item $i$ with a 1 ($P(Y_{ni} = 1)$).
+Thus, $Y_{ni}$ denotes the response of person $n$ to item $i$ .
+As the Rasch model the 2PL also assumes dichotomouse response data, so $Y_{ni}$ can take the values 0 or 1.
+To predict this probability $P(Y_{ni} = 1)$ we again use the person parameter $\theta_n$ and the item difficulty $\beta_i$.
+New is now the additional parameter $\alpha_i$, which represents the item discrimination.
+Note that the item discrimination parameter is item specific, as we can see by the index $i$ of the $\alpha$ parameter.
+This means that each item can have a different $\alpha_i$ value.
 
-  - If we get rid of the link-functon we have $\alpha_j (\theta - \beta_j)$
+Here we can also see that the Rasch model is a special case of the 2PL where the item discrimination of every item is 1.
+Formally speaking:
 
-  - When we expand the term we have $\alpha_j \theta - \alpha_j \beta_j$
+$$\alpha_i = 1 \quad \forall\, i \in \{1, \dots, I\}$$
 
-  - If we now define a new variable called $\gamma_j$, which is equal to $-\alpha_j \beta_j$ than we can write $\alpha_j \theta + \gamma_j$
+We can also see this in the Output of the Rasch model (@lst-rasch-item-param).
+The `a` column reflects the $\alpha_i$ values and as we can see are all at 1 in the Rasch model.
 
-    - this looks like a linear regression
+### Interpretation of the item discrimination parameter
 
-    - we can see that the new discrimination paramter $\alpha_j$ functions as the slope-parameter of the regression.
-      Thus the higher the discrimination parameter, the steeper the slope of the regression line
+If we ignore the link-function for a moment, which is there solely to ensure that our model outputs values in the interval of \[0;1\] to ensure a metric compatible with probabilities, than we are left with a linear term.
+If we rewrite the formula we can see that this is basically a linear regression [@debelak2022]:
 
-- This we can also see visually in the ICCs
+$$\alpha_i(\theta_n - \beta_i) = \alpha_i\theta_n - \alpha_i\beta_i$$
 
-  - explaining the effect of $\alpha_j$ visually with a plot like Figure 5.1 in @deayala2022
+If we define a new variable $\gamma_i = -\alpha_i\beta_i$ than we can write:
 
-- But how can we interpret the alpha parameter in terms of its meaning?
+$$\alpha_i\theta_n + \gamma_i$$
 
-### Interpretation of the alpha parameter:
+Now we can see that this looks like a simple linear regression, where $\theta_n$ is the predictor and $\gamma_i$ is the intercept.
+More importantly, we can now see that the new item discrimination parameter $\alpha_i$ works as the slope of the function.
 
-s\.
-also example in [@deayala2022, p. 20]
+We can also see this in the ICCs of a 2PL model.
 
-- The alpha parameter indicates how well an item can differentiate between persons.
-  But what does this mean
+![](03_irt_dich_files/figure-html/Example_ICC_2PL.png){#fig-2PL-ICC-example-alphas}
 
-- Imagine a very able person and a very unable person
+As one can see, the more the $\alpha_i$ parameter increases, the steeper is the slope of the ICC around the item difficulty $\beta_i$.
+The other way around, the smaller the $\alpha_i$ parameter get's the flatter the ICC becomes.
 
-  - In terms of parameters this would mean, that one Person has a very high $\theta$ and the other has a very low $\theta$
+But how can we interpret the $\alpha_i$ parameter in terms of its meaning?
+We already learned that the $\alpha_i$ parameter is also called item discrimination.
+So what does discrimination actually mean?
 
-  - because the one Person is much more competent than the other Person the predicted probability that the competent person will solve the item is probably much higher than for the less competent person
+Technically we know this already from the of the Rasch model (see @sec-Information).
+There we learned that the steeper the slope of the ICC the better we can differentiate between two persons with $\theta_n$ values close to each other.
+We also learned that an item can differentiate the best around the item difficulty $\beta_i$ because there lies the point of infliction and the slope of the ICC is the steepest.
+But we've always illustrated this using just a single item (with an $\alpha_i = 1$).
+So let's now consider what happens when items differ in their slope.
 
-  - Because of this large difference in the probability to solve the items, the model can distinguish these two persons quite well
+![](03_irt_dich_files/figure-html/Explanation_discrim_2PL.png){#fig-2PL-expl-discr}
 
-- Now imagine two persons with $\theta$ values close to each other
+In @fig-2PL-expl-discr we can see two different items with different $\alpha_i$ parameters but the same item difficulty $\beta_1 = \beta_2 = 0$.
+Now imagin we have two Persons with very similar $\theta_n$ values, e.g. two persons with a similar amount of environmental concerns.
+Lets say Person 1 has a $\theta_1 = -0.25$ and Person 2 has a $\theta_2 = 0.25$.
+Both persons, therefore, fall within a range close to the difficulty levels of the two items—that is, a range in which the two items can best distinguish between persons.
+So even though the two persons are located in the optimal $\theta$ range for both items, we can see that Item 2 is significantly better at distinguishing between the two persons than Item 1.
+This is because Item 2 has a much steeper slope around the item difficulty than Item 1.
+This results in lager differences in the model implied probabilities, that the person will answer the item with a 1, between the persons.
+This we can see on the dashed lines in @fig-2PL-expl-discr.
+The blue dashed lines are further apart from each other than the red ones.
+A larger difference in the probabilities of answering the item with a 1 results in a clearer response pattern, in the sense that the respondents’ answers are more likely to differ.
+The probability that Person 2 will answer with a 1 and Person 1 will answer with a 0 is greater for Item 2 than for Item 1.
+If the two individuals’ answers differ, we can learn more about the individual or distinguish them more clearly.
+Therefore, Item 2 has better discriminative power and we learned that "the magnitude of the difference in these predicted probabilities is a direct function of the item's $\alpha$" [@deayala2022, p. 20].
 
-  - if we plug in the theta-values of these two persons the model gives them pretty similar probabilities to solve this item
+::: {.callout-tip appearance="simple"}
+## Mathematical background
 
-  - Therefore it's hard to differentiate between these persons
+Note that the discrimination parameter of the IRT relates also to the item-total correlation from the CTT, which is also sometimes called item discrimination [@lord1980, p33]:
 
-- Now the alpha parameter comes into play
+$$\alpha_i \approx \frac{\rho_{ix}}{\sqrt{1-\rho_{ix}^2}} \quad ; \quad
+\rho_{ix} \approx \frac{\alpha_i}{\sqrt{1+\alpha_i^2}}$$
 
-  - we learned, that the alpha parameter affects the slope of the ICC
+However, this mathematical relationship holds only if $\theta$ is restricted to a standard normal distribution and there is no guessing involved [@lord1980].
+:::
 
-  - if the alpha parameter is increased the slope gets steeper
+::: {.callout-note appearance="simple"}
+## Let's do it in R
 
-  - in this case we can see in the ICC, that the difference on the y-axis (probability to solve the item) is larger although the two persons are still close to each other on the x-axis (their true ability $\theta$)
+To estimate the 2PL model we can also use the `mirt` package [@chalmers2012] and very similar syntax as with the Rasch model.
 
-  - Therefore, even though the persons are quite similar the item can still differentiate or discriminate between the persons, if the discrimination parameter is large enough
+```{r}
+# estimate a 2PL model:
 
-> Tip: "good" values of $\alpha$ range from 0.8 to 2.5 [@deayala2022, p. 137]
+eco_2PL <-  mirt(dat_eco_dicho[12:20], 
+                 1, 
+                 itemtype = "2PL",      # <1>
+                 SE = TRUE)
+```
 
-- However, this was only a simplified and intuitive explanation of the discrimination parameter
+1.  To estimate the 2PL model we can use the same code as for the Rasch model and just change the value in the `itemtype` argument from "Rasch" to "2PL".
 
-  - If you take a close look at the ICCs, you can see that the slope is not constant across the entire $\theta$ range, since the function is not a straight line
+We can use the `print()` function again to get a summary and some general informations about our 2PL model with regard to the estimation procedure and the overall model fit.
 
-  - This implies, that an item doesn\`t descriminate equaly well across the $\theta$ continuum
+```{r}
+# get general estimation and fit information about our model:
 
-    - e.g. persons in the high/low end have basicly the same probabilities
+print(eco_2PL)
+```
 
-  - An item can discriminate the most around the item difficulty $\beta$
+A detailed description of how to interpret this output was already covered in the Rasch section of the tutorial and can be found there (@lst-print-rasch).
 
-    - this can also been seen visually, because the infliction point of the ICC of every item is located at the item difficulty
+Again we can also do a quick check of convergence by using the `converged` and `secondordertest` variables from our `mirt` object:
 
-    - The infliction point, is the point with the steepest slope (slope at $\beta = 0.25 \cdot \alpha$)
+```{r}
+# is the estimation algorith converged?
+eco_2PL@OptimInfo$converged
 
-    - Since we learned, that an item can discriminate the better the steeper the slope, the item discriminates the most around the item difficulty
+# has the estimation algorith found plausible Maximum/Minimum
+eco_2PL@OptimInfo$secondordertest
+```
 
-- The discrimination parameter of the IRT relates to the item-total correlation from the CTT, which is also sometimes called item discrimination (Trennschärfe) [@lord1980, p33]
+To inspect the item parameters we use the `coef()` function, as in the Rasch model
 
-  $$\alpha_i \approx \frac{\rho_{ix}}{\sqrt{1-\rho_{ix}^2}} \quad ; \quad
-  \rho_{ix} \approx \frac{\alpha_i}{\sqrt{1-\alpha_i^2}}$$
+```{r}
+# extract the itemspecific parameters from our 2PL model
 
-  - However, this mathematical relationship holds only if $\theta$ is restricted to a standard normal distribution and there is no guessing involved.
+item_par_eco_2PL <- coef(eco_2PL, IRTpars=TRUE, simplify=TRUE)
 
-### Item- and Test-Information
+item_par_eco_2PL
+```
 
-- *Reference Rasch-Part, where the concept of information is introduced*
+The output consists of the three sections we are already familiar with.
+Not that in contrast to the output of the Rasch model, her we have now `a` values, which differ from 1.
+This is because the `a` column in the `$items` section contains our $\alpha_i$ parameters.
 
-- Since we learned in the first part, that the information is related to the slope of the ICC, the new $\alpha$ parameter of the 2PL also influences the information
+To extract the person parameters ($\theta_n$) we can use the `fscore()` function.
+Note, that to keep the output short, we are only printing the first 6 person parameters to the console by using `head()` .
 
-  - If the $\alpha$ parameter is \> 1 the slope gets steeper.
-    Therefore, the discriminatory power increases because the item can better separate between persons around the item difficulty
+```{r}
+# extract the personspecific parameters from our Rasch model
+person_par_eco_2PL <- fscores(eco_2PL)
 
-  - If the $\alpha$ parameter is \< 1 the slope gets flatter.
-    Therefore, the discriminatory power decreases because the item has more difficulty distinguishing between people depending on the element's level of difficulty
+head(person_par_eco_2PL)
+```
 
-  - This can also be seen by the formular for the Iteminformation
+**Visualizations of the 2PL:**
 
-    $$\begin{align}
-    I_i(\theta) &= \alpha_i^2 \cdot p(X_i = 1) \cdot p(X_i = 0)\\
-    &= \alpha_i^2 \cdot \frac{exp(\alpha_i(\theta - \beta_i))}{1 + exp(\alpha_i(\theta - \beta_i))} \cdot \frac{1}{1 + exp(\alpha_i(\theta - \beta_i))}
-    \end{align}$$
+Also for the ICCs we can use the same functions as with the Rasch model.
 
-  - Also the maximal Iteminformation can contrary to the Rasch-model exceed 0.25 because the maximal item Information is at the item difficulty (where the probability to solve the item is 50%) but then the probability to solve the item times the probability to not solve the item is weighted by $\alpha_i^2$
+Therefore, to plot the ICC of a single item from our scale, we can use the `itemplot()` function
 
-    - if $\alpha > 1$, then the maximal possible item infromation \> 0.25 (contributes more information than Rasch model)
+```{r}
+# plotting a ICC of a specific item
 
-    - if $\alpha < 1$, then the maximal possible item infromation \< 0.25 (contributes less information than Rasch model)
+itemplot(eco_2PL,
+         item = 6,
+         type="trace")
+```
 
-- In summary, the Iteminformation depends on two factors
+To plot the ICCs of all items at the same time, we can use the `plot()` function.
 
-  1.  The distance of the person to the item difficulty ($\theta_n - \beta_i$)
+```{r}
+# plot all ICCs of a scale
 
-  2.  the discimination parameter $\alpha_i$ (the higher the discrimination. the higher the information around the item difficulty)
+plot(eco_2PL,
+     type="trace",
+     theta_lim=c(-5,5),
+     facet = FALSE)
 
-- As in the Rasch model, the test information is simply the sum of item informations given theta
+# plot all ICCs in a grid
 
-  - $$I(\theta) = \sum_{i = 1}^II_i(\theta)$$
+plot(eco_2PL, 
+     type="trace", 
+     theta_lim=c(-5,5), 
+     facet = TRUE)
+```
+:::
+
+### Information in the 2PL
+
+#### Item information
+
+In the Rasch model we already saw that the slope of the ICC of an item relates to it's information and therefore to the precision of an item @sec-Information .
+In the 2PL we learned that that the $\alpha$ parameter influences the slope of the ICC and therefore $\alpha_i$ also relates to the information of an item.
+The steeper the slope, the better we can distinguish between individuals, the more accurately we measure, and the greater the information we obtain.
+Accordingly, a larger $\alpha$ also leads to more information.
+As a rule of thumb values of $\alpha$ ranging from 0.8 to 2.5 can be considered as "good" [@deayala2022, p. 137].
+However, this statement applies only to the $\theta$ range around the item difficulty $\beta_i$.
+As we have learned, one advantage of IRT over CTT is the fact that it does not assume that an item can measure equally well across the entire $\theta$ continuum.
+Therefore, it must also be noted that a higher $\alpha$ causes the measurement accuracy to be concentrated more strongly within a smaller $\theta$ range.
+Within this range, we measure very accurately and “better”; in return, however, we get less information for the $\theta$ ranges outside this "high precision" range than we would with an item having a lower $\alpha$.
+
+To make this point even clearer, we can use the example from @fig-2PL-expl-discr earlier again.
+In this example, we looked at two similar individuals near the item difficulty and found that the item with the steeper slope—or higher $\alpha$—is better at discriminating, meaning it measures more accurately and contains more information.
+Now let's take two more persons (Person 3 with $\theta_3 = 2.5$ and Person 4 with $\theta_4 = 3$) who are the same distance apart as people 1 and 2 in @fig-2PL-expl-discr, but who are farther away from the item difficulty.
+This situation is displayed in @fig-2PL-expl-discr2 .
+For these two new persons we can see that actually item 1 differentiates better between the two persons than Item 2 although Item 2 has the higher $\alpha_i$.
+We can see this because the red dashed lines are farther apart than the blue ones.
+This means that the differences in the predicted response probabilities for Item 1 are greater than those for Item 2.
+This shows once again that while a higher $\alpha$ can improve measurement accuracy, this improvement is also concentrated within a smaller $\theta$ range.
+
+![](03_irt_dich_files/figure-html/Explanation_discrim2_2PL.png){#fig-2PL-expl-discr2}
+
+::: {.callout-tip appearance="simple"}
+## Mathematical background
+
+We can also see the effect of $\alpha_i$ on the information in the mathematical formula for item information
+
+$$\begin{aligned}
+I_i(\theta) &= \alpha_i^2 \cdot p(X_i = 1) \cdot p(X_i = 0)\\
+&= \alpha_i^2 \cdot \frac{exp(\alpha_i(\theta - \beta_i))}{1 + exp(\alpha_i(\theta - \beta_i))} \cdot \frac{1}{1 + exp(\alpha_i(\theta - \beta_i))}
+\end{aligned}$$
+
+We can also see from this, that contrary to the Rasch model the maximal item information can exceed 0.25.
+We know that the maximal item information is at the point of the item difficulty.
+Since the item difficulty is defined as the point on the $\theta$ scale where the probability of answering the item with a 1 is 50% we get for the point of the item difficulty:
+
+$$I_i(\theta = \beta_i) = \alpha_i^2 \cdot 0.5 \cdot 0.5 = \alpha_i^2 \cdot 0.25$$
+
+As we can see in the 2PL the 0.25 are additionally weighted by the squared item discrimination $\alpha_1$.
+Consequently, if $\alpha_i > 1$, then the maximal possible item information is greater than 0.25.
+Conversely, if $\alpha_i < 1$, then the maximal possible item information is smaller than 0.25.
+:::
+
+In summary, we learned that in the 2PL the item information depends now on two factors:
+
+1.  The distance of the person to the item difficulty ($\theta_n - \beta_i$)
+
+2.  the discrimination parameter $\alpha_i$ (the higher the discrimination, the higher the information around the item difficulty)
+
+#### Test information
+
+As in the Rasch model, the test information is simply the sum of item information over all items
+
+$$I(\theta) = \sum_{i = 1}^II_i(\theta)$$
 
 ::: {.callout-tip appearance="simple"}
 ## Mathematical background
@@ -1513,6 +1628,50 @@ In summary, this intuitive example is intended to illustrate that the second der
 
 FALSCH: Umschreiben auf log likelihood NICHT auf ICC sonder auf log-Likelihood beziehen.
 Geht ja um die Schätzer der PArameter -\> viel Information -\> klares Signal -\> klarer Gipfel der log-Likelihood
+:::
+
+::: {.callout-note appearance="simple"}
+## Let's do it in R
+
+Here, too, we can essentially use the exact same code blocks as we did with the Rasch model.
+We just need to make sure to pass the 2PL model object to the functions instead of the Rasch model.
+
+To plot the information curve of a sinfle item we can use the `itemplot()` function.
+
+```{r}
+# plot item information curve of a specific item
+
+itemplot(eco_2PL, 6, type='info')
+```
+
+To plot all item information curves at the same time, we can use the `plot()` function.
+
+```{r}
+# plot all item information curves in a single plot
+plot(eco_2PL, type="infotrace", theta_lim=c(-5,5), facet = FALSE)
+
+# plot all item information curves in a grid
+plot(eco_2PL, type="infotrace", theta_lim=c(-5,5), facet = TRUE)
+```
+
+To plot the test information curve we can also use the `plot()` function.
+
+```{r}
+# plot test information curve
+plot(eco_2PL, type="info")
+```
+
+We can also combine different types of information.
+To do this, we can look at the various options offered by `type`.
+For example, we can use “infoSE” to plot both the information curve and the standard error, or use “infotrace” to plot both the information and the ICC.
+
+```{r}
+# plot test information curve with SE
+plot(eco_2PL, type="infoSE")
+
+# plot item information curve of a specific item together with ICC
+itemplot(eco_2PL,6, type='infotrace')
+```
 :::
 
 ### Difference to the Rasch-model
