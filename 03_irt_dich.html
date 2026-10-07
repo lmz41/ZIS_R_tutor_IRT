@@ -230,7 +230,7 @@ window.Quarto = {
          <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">06.10.2026</p>
+        <p class="date">07.10.2026</p>
       </div>
     </div>
       </div>
@@ -622,28 +622,48 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  5.980144
+Condition number of information matrix =  5.985957
 
-Log-likelihood = -39218.89
+Log-likelihood = -39143.31
 Estimated parameters: 10 
-AIC = 78457.78
-BIC = 78527.57; SABIC = 78495.79
-G2 (501) = 1931.54, p = 0
-RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
+AIC = 78306.62
+BIC = 78376.41; SABIC = 78344.63
+G2 (501) = 2032.26, p = 0
+RMSEA = 0.02, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
 <p>When we use <code>print()</code> to output our mirt object, we first see a summary with general information about our model. The first block contains information about the estimation method that <code>mirt()</code> used to estimate the model. The lower block contains fit criteria regarding the model fit. The exact estimation algorithm is beyond the scope of this tutorial. To put it simply, however, the model parameters are estimated by first substituting random values for the <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> and then checking how likely it is to observe the data we have collected. In the next step, new values for <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> are substituted, and it is checked whether these values are more likely to produce the data pattern we have collected. This process is repeated many times until the parameter values that most likely fit our observed data are found. Since this process can theoretically take an extremely long time, the algorithm must be given termination rules. There are two options here, which we can also see in the output.</p>
-<p>First, there is the tolerance. This specifies how small the change in the probability of the parameters must be, given the data, for the algorithm to terminate. The reasoning behind this is that if, under the new parameters, the data is only, say, 0.0001% more likely than under the parameter values from the previous iteration, then it no longer makes sense to continue optimizing the parameters, since the increase in probability is so small that it is practically irrelevant. We see that the default tolerance of <code>mirt</code> is 0.0001 (1e-04). This makes <code>mirt</code> more lenient than other software, where the tolerance is often set to 0.00001 (1e-05). However, you can also set the algorithm’s tolerance manually by adding the <code>TOL</code> argument to the <code>mirt()</code> function (e.g., <code>mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = “Rasch”, SE = TRUE, TOL = 1e-5)</code>).</p>
-<p>Second, you can define a maximum number of iterations after which the algorithm terminates, regardless of whether a unique solution for the parameters has been found or not. By default, <code>mirt</code> allows a maximum of 500 iterations. In the output, we can see that only 25 iterations were needed for our Rasch model. However, more complex models may well require more iterations. Therefore, you can set your own maximum number of iterations using the argument <code>technical = list(NCYCLES = 1000)</code>, e.g., <code>mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = “Rasch”, SE = TRUE, TOL = 1e-5, technical = list(NCYCLES = 1000))</code>.</p>
+<p>First, there is the tolerance. This specifies how small the change in the probability of the parameters must be, given the data, for the algorithm to terminate. The reasoning behind this is that if, under the new parameters, the data is only, say, 0.0001% more likely than under the parameter values from the previous iteration, then it no longer makes sense to continue optimizing the parameters, since the increase in probability is so small that it is practically irrelevant. We see that the default tolerance of <code>mirt</code> is 0.0001 (1e-04). This makes <code>mirt</code> more lenient than other software, where the tolerance is often set to 0.00001 (1e-05). However, you can also set the algorithm’s tolerance manually by adding the <code>TOL</code> argument to the <code>mirt()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example for estimation with smaller tolerance</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mirt</span>(<span class="at">data =</span> dat_eco_dicho[<span class="dv">12</span><span class="sc">:</span><span class="dv">20</span>], </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">model =</span> <span class="dv">1</span>, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">itemtype =</span> <span class="st">"Rasch"</span>, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">SE =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">TOL =</span> <span class="fl">1e-5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Second, you can define a maximum number of iterations after which the algorithm terminates, regardless of whether a unique solution for the parameters has been found or not. By default, <code>mirt</code> allows a maximum of 500 iterations. In the output, we can see that only 25 iterations were needed for our Rasch model. However, more complex models may well require more iterations. Sometimes, the model may reaches the maximum possible number of steps without converging to a unique solution. When this happens, the parameter estimators are unstable and should not be interpreted <span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022, 148</a>)</span> . <code>mirt</code> will then display a message stating that <code>EM cycles terminated after 500 iterations</code>. Therefore, you can set your own maximum number of iterations using the argument <code>technical = list(NCYCLES = 1000)</code><span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022, 148</a>)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example for estimation with increased maximum cycles</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mirt</span>(<span class="at">data =</span> dat_eco_dicho[<span class="dv">12</span><span class="sc">:</span><span class="dv">20</span>], </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">model =</span> <span class="dv">1</span>, </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">itemtype =</span> <span class="st">"Rasch"</span>, </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">SE =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">TOL =</span> <span class="fl">1e-5</span>, </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">technical =</span> <span class="fu">list</span>(<span class="at">NCYCLES =</span> <span class="dv">1000</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>     )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <p>We can also quickly check whether our estimation algorithm has found a solution or put differently whether it was able to successfully estimate the model. To do this, we can test whether the variables <code>converged</code> and <code>secondordertest</code> in our Rasch model have become <code>TRUE</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># is the estimation algorith converged?</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>eco_rasch<span class="sc">@</span>OptimInfo<span class="sc">$</span>converged</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># is the estimation algorith converged?</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>eco_rasch<span class="sc">@</span>OptimInfo<span class="sc">$</span>converged</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># has the estimation algorith found plausible Maximum/Minimum</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>eco_rasch<span class="sc">@</span>OptimInfo<span class="sc">$</span>secondordertest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># has the estimation algorith found plausible Maximum/Minimum</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>eco_rasch<span class="sc">@</span>OptimInfo<span class="sc">$</span>secondordertest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
@@ -651,23 +671,23 @@ RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
 <p>Although we have estimated a Rasch model with the <code>mirt()</code>function, we initially see only a summary of how the model was estimated and how well it fits the data overall, when we use <code>print</code> to display the model—but we don’t see any <span class="math inline">\theta</span> or <span class="math inline">\beta</span> values. This is because <code>mirt</code> provides us with a large amount of information about our model and stores it in the <code>eco_rasch</code> object. We can see this, for example, by clicking in the environment the blue arrow next to <code>eco_rasch</code> or by running <code>str(eco_rasch)</code>. When we do this, we see that the <code>eco_rasch</code> object is quite large and nested, and contains far too much information to display all at once. Therefore, we need to specifically retrieve the information we’re interested in from the object.</p>
 <p>For example, to access the item parameters, we can use the <code>coef()</code> function. The <code>coef()</code> function expects the following arguments, among others:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-9"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-9-1"><a href="#annotated-cell-9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the itemspecific parameters from our Rasch model</span></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-9-2" class="code-annotation-target"><a href="#annotated-cell-9-2" aria-hidden="true" tabindex="-1"></a>item_par_eco_rasch <span class="ot">&lt;-</span> <span class="fu">coef</span>(eco_rasch,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-9-3" class="code-annotation-target"><a href="#annotated-cell-9-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">IRTpars=</span><span class="cn">TRUE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-9" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-9-4" class="code-annotation-target"><a href="#annotated-cell-9-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">simplify=</span><span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-11"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-11-1"><a href="#annotated-cell-11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the itemspecific parameters from our Rasch model</span></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-11-2" class="code-annotation-target"><a href="#annotated-cell-11-2" aria-hidden="true" tabindex="-1"></a>item_par_eco_rasch <span class="ot">&lt;-</span> <span class="fu">coef</span>(eco_rasch,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-11-3" class="code-annotation-target"><a href="#annotated-cell-11-3" aria-hidden="true" tabindex="-1"></a>                           <span class="at">IRTpars=</span><span class="cn">TRUE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-11" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-11-4" class="code-annotation-target"><a href="#annotated-cell-11-4" aria-hidden="true" tabindex="-1"></a>                           <span class="at">simplify=</span><span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-9" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="2" data-code-annotation="1">An object that contains the estimated model—in our example, <code>eco_rasch</code></span>
+<span data-code-cell="annotated-cell-11" data-code-lines="2" data-code-annotation="1">An object that contains the estimated model—in our example, <code>eco_rasch</code></span>
 </dd>
-<dt data-target-cell="annotated-cell-9" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="3" data-code-annotation="2"><code>IRTpars</code> = This argument determines whether the item location is specified as item difficulty or item ease. If we set the argument to <code>TRUE</code>, we obtain the <span class="math inline">\beta</span> values as we have come to know them as item difficulties. If the argument is omitted or set to <code>FALSE</code>, the item ease is output instead. This means that the higher the item ease, the lower the <span class="math inline">\theta</span> value required for the probability of answering the item with a 1 to be 50%.</span>
+<span data-code-cell="annotated-cell-11" data-code-lines="3" data-code-annotation="2"><code>IRTpars</code> = This argument determines whether the item location is specified as item difficulty or item ease. If we set the argument to <code>TRUE</code>, we obtain the <span class="math inline">\beta</span> values as we have come to know them as item difficulties. If the argument is omitted or set to <code>FALSE</code>, the item ease is output instead. This means that the higher the item ease, the lower the <span class="math inline">\theta</span> value required for the probability of answering the item with a 1 to be 50%.</span>
 </dd>
-<dt data-target-cell="annotated-cell-9" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-11" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-9" data-code-lines="4" data-code-annotation="3"><code>simplify</code> = If this argument is set to <code>TRUE</code>, the output is simplified and presented in a clearer format. However, if you also want to obtain the confidence intervals for the item parameters, you can set <code>simplify</code> to <code>FALSE</code> or omit it.</span>
+<span data-code-cell="annotated-cell-11" data-code-lines="4" data-code-annotation="3"><code>simplify</code> = If this argument is set to <code>TRUE</code>, the output is simplified and presented in a clearer format. However, if you also want to obtain the confidence intervals for the item parameters, you can set <code>simplify</code> to <code>FALSE</code> or omit it.</span>
 </dd>
 </dl>
 </div>
@@ -680,22 +700,22 @@ RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
 Listing&nbsp;2: Item parameters of the Rasch model
 </figcaption>
 <div aria-describedby="lst-rasch-item-param-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>item_par_eco_rasch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>item_par_eco_rasch</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </figure>
 </div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                 a      b g u
-Eco_aff_1_dicho 1 -1.680 0 1
-Eco_aff_2_dicho 1 -1.513 0 1
-Eco_aff_3_dicho 1 -1.252 0 1
-Eco_cog_4_dicho 1 -1.081 0 1
-Eco_cog_5_dicho 1 -1.114 0 1
-Eco_cog_6_dicho 1 -0.014 0 1
-Eco_con_7_dicho 1 -0.720 0 1
-Eco_con_8_dicho 1  0.431 0 1
-Eco_con_9_dicho 1 -1.417 0 1
+Eco_aff_1_dicho 1 -1.710 0 1
+Eco_aff_2_dicho 1 -1.511 0 1
+Eco_aff_3_dicho 1 -1.283 0 1
+Eco_cog_4_dicho 1 -1.117 0 1
+Eco_cog_5_dicho 1 -1.094 0 1
+Eco_cog_6_dicho 1 -0.004 0 1
+Eco_con_7_dicho 1 -0.752 0 1
+Eco_con_8_dicho 1  0.450 0 1
+Eco_con_9_dicho 1 -1.418 0 1
 
 $means
 F1 
@@ -703,7 +723,7 @@ F1
 
 $cov
       F1
-F1 2.204</code></pre>
+F1 2.195</code></pre>
 </div>
 </div>
 <p>The output consists of three sections:</p>
@@ -714,18 +734,18 @@ F1 2.204</code></pre>
 </ol>
 <p>If we want to extract the individual parameters (<span class="math inline">\theta_n</span>) from our Rasch model/<code>mirt</code> object (<code>eco_rasch</code>), we can use the <code>fscore()</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the personspecific parameters from our Rasch model</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>person_par_eco_rasch <span class="ot">&lt;-</span> <span class="fu">fscores</span>(eco_rasch)</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_rasch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the personspecific parameters from our Rasch model</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>person_par_eco_rasch <span class="ot">&lt;-</span> <span class="fu">fscores</span>(eco_rasch)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_rasch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>              F1
-[1,] -0.08866361
-[2,]  1.04212057
-[3,] -0.97616177
-[4,]  0.42410895
-[5,] -0.08866361
-[6,] -2.37411531</code></pre>
+<pre><code>             F1
+[1,] -0.9832673
+[2,]  0.4191064
+[3,] -0.5516561
+[4,]  1.0376520
+[5,] -0.0944823
+[6,] -3.0025211</code></pre>
 </div>
 </div>
 
@@ -781,78 +801,78 @@ Figure&nbsp;3
 <div class="callout-body-container callout-body">
 <p>To plot the ICC for a single item from our ECo scale, we can use the <code>itemplot()</code> function. This function expects the following arguments, among others:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-17"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-17-1"><a href="#annotated-cell-17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting a ICC of a specific item</span></span>
-<span id="annotated-cell-17-2"><a href="#annotated-cell-17-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-17-3" class="code-annotation-target"><a href="#annotated-cell-17-3" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_rasch,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-17-4" class="code-annotation-target"><a href="#annotated-cell-17-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">item =</span> <span class="dv">6</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-17" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-17-5" class="code-annotation-target"><a href="#annotated-cell-17-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">type=</span><span class="st">"trace"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-19"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-19-1"><a href="#annotated-cell-19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting a ICC of a specific item</span></span>
+<span id="annotated-cell-19-2"><a href="#annotated-cell-19-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-19-3" class="code-annotation-target"><a href="#annotated-cell-19-3" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_rasch,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-19-4" class="code-annotation-target"><a href="#annotated-cell-19-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">item =</span> <span class="dv">6</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-19" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-19-5" class="code-annotation-target"><a href="#annotated-cell-19-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">type=</span><span class="st">"trace"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-17" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-19" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="3" data-code-annotation="1"><code>object</code>: Here, we pass in the IRT model that we estimated using the <code>mirt()</code> function (here: <code>eco_rasch</code>.</span>
+<span data-code-cell="annotated-cell-19" data-code-lines="3" data-code-annotation="1"><code>object</code>: Here, we pass in the IRT model that we estimated using the <code>mirt()</code> function (here: <code>eco_rasch</code>.</span>
 </dd>
-<dt data-target-cell="annotated-cell-17" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-19" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="4" data-code-annotation="2"><code>item</code>: Here, we specify which item we want to plot. We can either enter a number or the item name. So instead of 6, we could also specify “Eco_cog_6_dicho”</span>
+<span data-code-cell="annotated-cell-19" data-code-lines="4" data-code-annotation="2"><code>item</code>: Here, we specify which item we want to plot. We can either enter a number or the item name. So instead of 6, we could also specify “Eco_cog_6_dicho”</span>
 </dd>
-<dt data-target-cell="annotated-cell-17" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-19" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-17" data-code-lines="5" data-code-annotation="3"><code>type</code> = Here we can specify what should be plotted. To obtain the ICC, select “trace.”</span>
+<span data-code-cell="annotated-cell-19" data-code-lines="5" data-code-annotation="3"><code>type</code> = Here we can specify what should be plotted. To obtain the ICC, select “trace.”</span>
 </dd>
 </dl>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>If we want to plot the ICCs for all items at the same time, we can use the <code>plot()</code> function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-18"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-18-1"><a href="#annotated-cell-18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all ICCs of a scale</span></span>
-<span id="annotated-cell-18-2"><a href="#annotated-cell-18-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-18-3" class="code-annotation-target"><a href="#annotated-cell-18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-18-4" class="code-annotation-target"><a href="#annotated-cell-18-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"trace"</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-18-5" class="code-annotation-target"><a href="#annotated-cell-18-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>),</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-18" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-18-6" class="code-annotation-target"><a href="#annotated-cell-18-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">facet =</span> <span class="cn">FALSE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-20"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-20-1"><a href="#annotated-cell-20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all ICCs of a scale</span></span>
+<span id="annotated-cell-20-2"><a href="#annotated-cell-20-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-20-3" class="code-annotation-target"><a href="#annotated-cell-20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-20-4" class="code-annotation-target"><a href="#annotated-cell-20-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"trace"</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-20-5" class="code-annotation-target"><a href="#annotated-cell-20-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-20-6" class="code-annotation-target"><a href="#annotated-cell-20-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">facet =</span> <span class="cn">FALSE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-18" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-20" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="3" data-code-annotation="1"><code>object</code>: Here, we pass in the IRT model that we estimated using the <code>mirt()</code> function (here: <code>eco_rasch</code>.</span>
+<span data-code-cell="annotated-cell-20" data-code-lines="3" data-code-annotation="1"><code>object</code>: Here, we pass in the IRT model that we estimated using the <code>mirt()</code> function (here: <code>eco_rasch</code>.</span>
 </dd>
-<dt data-target-cell="annotated-cell-18" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-20" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="4" data-code-annotation="2"><code>type</code> = Here we can specify what should be plotted. To obtain the ICC, select “trace.”</span>
+<span data-code-cell="annotated-cell-20" data-code-lines="4" data-code-annotation="2"><code>type</code> = Here we can specify what should be plotted. To obtain the ICC, select “trace.”</span>
 </dd>
-<dt data-target-cell="annotated-cell-18" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-20" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="5" data-code-annotation="3"><code>theta_lim</code>: Here, we can specify the range of <span class="math inline">\theta</span> values shown in the plot. In other words, we can specify the portion of the x-axis that should be plotted.</span>
+<span data-code-cell="annotated-cell-20" data-code-lines="5" data-code-annotation="3"><code>theta_lim</code>: Here, we can specify the range of <span class="math inline">\theta</span> values shown in the plot. In other words, we can specify the portion of the x-axis that should be plotted.</span>
 </dd>
-<dt data-target-cell="annotated-cell-18" data-target-annotation="4">4</dt>
+<dt data-target-cell="annotated-cell-20" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-18" data-code-lines="6" data-code-annotation="4"><code>facet</code>: If we set this argument to <code>FALSE</code>, all ICCs are plotted on a single graph. If we set the argument to <code>TRUE</code> or omit it, we get a grid of plots, with the ICC for each item plotted in each cell.</span>
+<span data-code-cell="annotated-cell-20" data-code-lines="6" data-code-annotation="4"><code>facet</code>: If we set this argument to <code>FALSE</code>, all ICCs are plotted on a single graph. If we set the argument to <code>TRUE</code> or omit it, we get a grid of plots, with the ICC for each item plotted in each cell.</span>
 </dd>
 </dl>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Here’s another example of what happens when you set <code>facet = TRUE</code>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"trace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"trace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -893,73 +913,73 @@ Figure&nbsp;4
 <p>To create a Wright map in R we are using the <code>WrightMap</code> package <span class="citation" data-cites="torresirribarra">(<a href="#ref-torresirribarra" role="doc-biblioref">Torres Irribarra and Freund, n.d.</a>)</span>.</p>
 <p>Before we can create the Map itself we have to prepare the data.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-20"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-20-1"><a href="#annotated-cell-20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load package</span></span>
-<span id="annotated-cell-20-2"><a href="#annotated-cell-20-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-20-3" class="code-annotation-target"><a href="#annotated-cell-20-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(WrightMap)</span>
-<span id="annotated-cell-20-4"><a href="#annotated-cell-20-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-20-5"><a href="#annotated-cell-20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data for wright map</span></span>
-<span id="annotated-cell-20-6"><a href="#annotated-cell-20-6" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-20-7" class="code-annotation-target"><a href="#annotated-cell-20-7" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">fscores</span>(eco_rasch, <span class="at">method =</span> <span class="st">"EAP"</span>)[,<span class="dv">1</span>]</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-20" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-20-8" class="code-annotation-target"><a href="#annotated-cell-20-8" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">coef</span>(eco_rasch, <span class="at">IRTpars =</span> <span class="cn">TRUE</span>, <span class="at">simplify =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>items[, <span class="st">"b"</span>]</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-22"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-22-1"><a href="#annotated-cell-22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># load package</span></span>
+<span id="annotated-cell-22-2"><a href="#annotated-cell-22-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-22" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-22-3" class="code-annotation-target"><a href="#annotated-cell-22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(WrightMap)</span>
+<span id="annotated-cell-22-4"><a href="#annotated-cell-22-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-22-5"><a href="#annotated-cell-22-5" aria-hidden="true" tabindex="-1"></a><span class="co"># prepare data for wright map</span></span>
+<span id="annotated-cell-22-6"><a href="#annotated-cell-22-6" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-22" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-22-7" class="code-annotation-target"><a href="#annotated-cell-22-7" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">fscores</span>(eco_rasch, <span class="at">method =</span> <span class="st">"EAP"</span>)[,<span class="dv">1</span>]</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-22" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-22-8" class="code-annotation-target"><a href="#annotated-cell-22-8" aria-hidden="true" tabindex="-1"></a>beta <span class="ot">&lt;-</span> <span class="fu">coef</span>(eco_rasch, <span class="at">IRTpars =</span> <span class="cn">TRUE</span>, <span class="at">simplify =</span> <span class="cn">TRUE</span>)<span class="sc">$</span>items[, <span class="st">"b"</span>]</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-20" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-22" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-20" data-code-lines="3" data-code-annotation="1">First we have to load the package, so that we can use it in our R session. If you haven’t installed the package yet, you can use this code: <code>install.packages("WrightMap")</code></span>
+<span data-code-cell="annotated-cell-22" data-code-lines="3" data-code-annotation="1">First we have to load the package, so that we can use it in our R session. If you haven’t installed the package yet, you can use this code: <code>install.packages("WrightMap")</code></span>
 </dd>
-<dt data-target-cell="annotated-cell-20" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-22" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-20" data-code-lines="7" data-code-annotation="2">Next we save the estimated person parameters (<span class="math inline">\theta_n</span>) in an object we call “theta”. We should already be familiar with this code from earlier, so it won’t be explained in detail here. New is only the <code>[,1]</code> at the end of the syntax. Basically, this tells R to just take all rows but only column 1 from the <code>fscores()</code> object, because we are only interested in the values and not the person IDs.</span>
+<span data-code-cell="annotated-cell-22" data-code-lines="7" data-code-annotation="2">Next we save the estimated person parameters (<span class="math inline">\theta_n</span>) in an object we call “theta”. We should already be familiar with this code from earlier, so it won’t be explained in detail here. New is only the <code>[,1]</code> at the end of the syntax. Basically, this tells R to just take all rows but only column 1 from the <code>fscores()</code> object, because we are only interested in the values and not the person IDs.</span>
 </dd>
-<dt data-target-cell="annotated-cell-20" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-22" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-20" data-code-lines="8" data-code-annotation="3">Here we save the item difficulties ($\beta_i$) in an object we call “beta”. Again, this code should be familiar. If you recall from above, <code>coef()</code> gives three section in its output. We are only interested in the itemparameters, therefore, we extract them by adding $items to the code. In the case of the Rasch model we are only interested in the item difficulties, so we can ignore the other item specific parameters. To only extract the <span class="math inline">\beta_i</span> we add <code>[, "b"]</code> (“extract all rows but only the <code>b</code> column”)</span>
+<span data-code-cell="annotated-cell-22" data-code-lines="8" data-code-annotation="3">Here we save the item difficulties ($\beta_i$) in an object we call “beta”. Again, this code should be familiar. If you recall from above, <code>coef()</code> gives three section in its output. We are only interested in the itemparameters, therefore, we extract them by adding $items to the code. In the case of the Rasch model we are only interested in the item difficulties, so we can ignore the other item specific parameters. To only extract the <span class="math inline">\beta_i</span> we add <code>[, "b"]</code> (“extract all rows but only the <code>b</code> column”)</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>Now we can create the plot by using the <code>wrightMap()</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-21"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-21-1"><a href="#annotated-cell-21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting the Wright map</span></span>
-<span id="annotated-cell-21-2"><a href="#annotated-cell-21-2" aria-hidden="true" tabindex="-1"></a></span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-21-3" class="code-annotation-target"><a href="#annotated-cell-21-3" aria-hidden="true" tabindex="-1"></a>wm <span class="ot">&lt;-</span> <span class="fu">wrightMap</span>(theta,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-21-4" class="code-annotation-target"><a href="#annotated-cell-21-4" aria-hidden="true" tabindex="-1"></a>                beta,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-21-5" class="code-annotation-target"><a href="#annotated-cell-21-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">label.items =</span> <span class="fu">paste</span>(<span class="st">"Item"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>),</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-21-6" class="code-annotation-target"><a href="#annotated-cell-21-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">show.thr.lab =</span> <span class="cn">FALSE</span>,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="5" onclick="event.preventDefault();" href="">5</a><span id="annotated-cell-21-7" class="code-annotation-target"><a href="#annotated-cell-21-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">item.side   =</span> itemModern,</span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-21" data-target-annotation="6" onclick="event.preventDefault();" href="">6</a><span id="annotated-cell-21-8" class="code-annotation-target"><a href="#annotated-cell-21-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">main.title  =</span> <span class="st">"Wright Map"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-23"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-23-1"><a href="#annotated-cell-23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting the Wright map</span></span>
+<span id="annotated-cell-23-2"><a href="#annotated-cell-23-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-23-3" class="code-annotation-target"><a href="#annotated-cell-23-3" aria-hidden="true" tabindex="-1"></a>wm <span class="ot">&lt;-</span> <span class="fu">wrightMap</span>(theta,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-23-4" class="code-annotation-target"><a href="#annotated-cell-23-4" aria-hidden="true" tabindex="-1"></a>                beta,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-23-5" class="code-annotation-target"><a href="#annotated-cell-23-5" aria-hidden="true" tabindex="-1"></a>                <span class="at">label.items =</span> <span class="fu">paste</span>(<span class="st">"Item"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>),</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="4" onclick="event.preventDefault();" href="">4</a><span id="annotated-cell-23-6" class="code-annotation-target"><a href="#annotated-cell-23-6" aria-hidden="true" tabindex="-1"></a>                <span class="at">show.thr.lab =</span> <span class="cn">FALSE</span>,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="5" onclick="event.preventDefault();" href="">5</a><span id="annotated-cell-23-7" class="code-annotation-target"><a href="#annotated-cell-23-7" aria-hidden="true" tabindex="-1"></a>                <span class="at">item.side   =</span> itemModern,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-23" data-target-annotation="6" onclick="event.preventDefault();" href="">6</a><span id="annotated-cell-23-8" class="code-annotation-target"><a href="#annotated-cell-23-8" aria-hidden="true" tabindex="-1"></a>                <span class="at">main.title  =</span> <span class="st">"Wright Map"</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-21" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="3" data-code-annotation="1">Here we pass in our person locations, or <span class="math inline">\theta_n</span></span>
+<span data-code-cell="annotated-cell-23" data-code-lines="3" data-code-annotation="1">Here we pass in our person locations, or <span class="math inline">\theta_n</span></span>
 </dd>
-<dt data-target-cell="annotated-cell-21" data-target-annotation="2">2</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="2">2</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="4" data-code-annotation="2">Here we pass in our item locations or item difficulties, or <span class="math inline">\beta_i</span></span>
+<span data-code-cell="annotated-cell-23" data-code-lines="4" data-code-annotation="2">Here we pass in our item locations or item difficulties, or <span class="math inline">\beta_i</span></span>
 </dd>
-<dt data-target-cell="annotated-cell-21" data-target-annotation="3">3</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="3">3</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="5" data-code-annotation="3">This is where the item names are defined. Since the names of our items in the ECo scale data are quite long, and to keep the plot clear, we’ll use new item names here by simply numbering the items. However, you can also easily use the item names from the data by replacing <code>paste()</code> with <code>rownames(beta)</code></span>
+<span data-code-cell="annotated-cell-23" data-code-lines="5" data-code-annotation="3">This is where the item names are defined. Since the names of our items in the ECo scale data are quite long, and to keep the plot clear, we’ll use new item names here by simply numbering the items. However, you can also easily use the item names from the data by replacing <code>paste()</code> with <code>rownames(beta)</code></span>
 </dd>
-<dt data-target-cell="annotated-cell-21" data-target-annotation="4">4</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="4">4</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="6" data-code-annotation="4">This argument is relevant for more complex IRT models and can be ignored in the case of the Rasch model; therefore, it is set to <code>FALSE</code> here.</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="6" data-code-annotation="4">This argument is relevant for more complex IRT models and can be ignored in the case of the Rasch model; therefore, it is set to <code>FALSE</code> here.</span>
 </dd>
-<dt data-target-cell="annotated-cell-21" data-target-annotation="5">5</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="5">5</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="7" data-code-annotation="5">Here we can specify the plot’s design. For the different themes available, see the function’s documentation.</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="7" data-code-annotation="5">Here we can specify the plot’s design. For the different themes available, see the function’s documentation.</span>
 </dd>
-<dt data-target-cell="annotated-cell-21" data-target-annotation="6">6</dt>
+<dt data-target-cell="annotated-cell-23" data-target-annotation="6">6</dt>
 <dd>
-<span data-code-cell="annotated-cell-21" data-code-lines="8" data-code-annotation="6">Here we can give our plot a title.</span>
+<span data-code-cell="annotated-cell-23" data-code-lines="8" data-code-annotation="6">Here we can give our plot a title.</span>
 </dd>
 </dl>
 </div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1037,31 +1057,31 @@ Figure&nbsp;4
 <div class="callout-body-container callout-body">
 <p>We can test whether the assumption of local stochastic independence holds for our model. To do so, we use the Q3 approach proposed by Yen.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3 <span class="ot">&lt;-</span> mirt<span class="sc">::</span><span class="fu">residuals</span>(eco_rasch, <span class="at">type =</span> <span class="st">"Q3"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3 <span class="ot">&lt;-</span> mirt<span class="sc">::</span><span class="fu">residuals</span>(eco_rasch, <span class="at">type =</span> <span class="st">"Q3"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>To make the output clearer, we’ll rename the row and column labels of the resulting matrix.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(eco_rasch_Q3) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"Item"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>))</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(eco_rasch_Q3) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"Item"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>))</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(eco_rasch_Q3) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"Item"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>))</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(eco_rasch_Q3) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">paste</span>(<span class="st">"Item"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">9</span>))</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Item 1 Item 2 Item 3 Item 4 Item 5 Item 6 Item 7 Item 8 Item 9
-Item 1  1.000  0.119 -0.152 -0.054 -0.051 -0.144 -0.205 -0.146 -0.143
-Item 2  0.119  1.000 -0.137 -0.090 -0.033 -0.114 -0.163 -0.146 -0.119
-Item 3 -0.152 -0.137  1.000 -0.183 -0.018 -0.071 -0.107 -0.095 -0.103
-Item 4 -0.054 -0.090 -0.183  1.000 -0.172 -0.115 -0.161 -0.159 -0.158
-Item 5 -0.051 -0.033 -0.018 -0.172  1.000 -0.130 -0.169 -0.123 -0.120
-Item 6 -0.144 -0.114 -0.071 -0.115 -0.130  1.000 -0.125 -0.165 -0.103
-Item 7 -0.205 -0.163 -0.107 -0.161 -0.169 -0.125  1.000  0.138  0.033
-Item 8 -0.146 -0.146 -0.095 -0.159 -0.123 -0.165  0.138  1.000 -0.008
-Item 9 -0.143 -0.119 -0.103 -0.158 -0.120 -0.103  0.033 -0.008  1.000</code></pre>
+Item 1  1.000  0.094 -0.163 -0.045 -0.060 -0.119 -0.199 -0.145 -0.141
+Item 2  0.094  1.000 -0.128 -0.073 -0.014 -0.096 -0.157 -0.149 -0.158
+Item 3 -0.163 -0.128  1.000 -0.182 -0.009 -0.086 -0.098 -0.116 -0.084
+Item 4 -0.045 -0.073 -0.182  1.000 -0.174 -0.104 -0.197 -0.174 -0.151
+Item 5 -0.060 -0.014 -0.009 -0.174  1.000 -0.122 -0.165 -0.100 -0.142
+Item 6 -0.119 -0.096 -0.086 -0.104 -0.122  1.000 -0.142 -0.172 -0.118
+Item 7 -0.199 -0.157 -0.098 -0.197 -0.165 -0.142  1.000  0.154  0.054
+Item 8 -0.145 -0.149 -0.116 -0.174 -0.100 -0.172  0.154  1.000 -0.003
+Item 9 -0.141 -0.158 -0.084 -0.151 -0.142 -0.118  0.054 -0.003  1.000</code></pre>
 </div>
 </div>
 <p>We can check whether the cutoff of 0.2 is exceeded in our matrix:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test if any residual correlation exceeds 0.2</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(eco_rasch_Q3 <span class="sc">&gt;</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> eco_rasch_Q3 <span class="sc">!=</span> <span class="dv">1</span>)  <span class="co"># if TRUE local independence does not hold</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># test if any residual correlation exceeds 0.2</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">any</span>(eco_rasch_Q3 <span class="sc">&gt;</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> eco_rasch_Q3 <span class="sc">!=</span> <span class="dv">1</span>)  <span class="co"># if TRUE local independence does not hold</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] FALSE</code></pre>
 </div>
@@ -1069,16 +1089,16 @@ Item 9 -0.143 -0.119 -0.103 -0.158 -0.120 -0.103  0.033 -0.008  1.000</code></pr
 
 <p>If the residual correlation of at leat one item pair exceeds 0.2 we can filter for all item pairs, which are violating the 0.2 cut off.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># which item pairs are affected?</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(eco_rasch_Q3 <span class="sc">&gt;</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> eco_rasch_Q3 <span class="sc">!=</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># which item pairs are affected?</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">which</span>(eco_rasch_Q3 <span class="sc">&gt;</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> eco_rasch_Q3 <span class="sc">!=</span> <span class="dv">1</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>integer(0)</code></pre>
 </div>
 </div>
 <p>Note that in this case the output gives us <code>integer(0)</code> because no item pair violates the cutoff. However, if any residual correlations exceed 0.2, the output consists of the positions of the correlations in the <code>eco_rasch_Q3</code> object. If the output is, for example, 10, this means that the tenth residual correlation exceeds 0.2. This corresponds to the item pair consisting of Item 1 and Item 2. If the number of items is not too large, the results can also be presented as a matrix, making it easier to identify the item pairs:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># overview in a matrix:</span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3 <span class="sc">&gt;</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> eco_rasch_Q3 <span class="sc">!=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># overview in a matrix:</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3 <span class="sc">&gt;</span> <span class="fl">0.2</span> <span class="sc">&amp;</span> eco_rasch_Q3 <span class="sc">!=</span> <span class="dv">1</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Item 1 Item 2 Item 3 Item 4 Item 5 Item 6 Item 7 Item 8 Item 9
 Item 1  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE
@@ -1137,7 +1157,7 @@ P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta) &amp;= \prod_{i = 1}^I P(X_i = x_
 <p>If the true score <span class="math inline">t</span> is known (we can count in the data how often a person responded with 1), we can rearrange the equation as follows:</p>
 <p><span id="eq-proof_suff_2"><span class="math display">\begin{align} P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &amp;= \frac{(\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}{\sum_{X_t} (\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}\\ &amp;= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\ &amp;= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\ &amp;= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)} \end{align} \tag{6}</span></span></p>
 <p>What we can see from all these rearrangements is that if we include the total score <span class="math inline">t</span> in the equation, we can completely eliminate the parameter <span class="math inline">\theta</span>. Ultimately, we no longer need <span class="math inline">\theta</span> to predict a person’s response vector. It is sufficient to know the total score <span class="math inline">t</span>. Therefore, the total score <span class="math inline">t</span> is a sufficient statistic.</p>
-<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span><mark><em>-&gt;darf</em></mark><mark><em>ich die zitieren????</em></mark></p>
+<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span><mark><em>-&gt;darfichdiezitieren????</em></mark></p>
 </div>
 </div>
 </section>
@@ -1341,50 +1361,8 @@ Figure&nbsp;10
 <div class="callout-body-container callout-body">
 <p>To plot the item information, we can use the functions we’re already familiar with from the ICCs: With <code>itemplot()</code>, we get the information curve for a specific item, while with <code>plot()</code> we can plot the information curves for all items together in a single plot. What’s new here is that we’re selecting a different option in the <code>type</code> argument. Instead of “trace” for the ICC, we’re now selecting ‘info’ (for the <code>itemplot()</code> function) or “infotrace” (for the <code>plot()</code> function) to plot the item information.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_rasch,<span class="dv">6</span>, <span class="at">type=</span><span class="st">'info'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a grid</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-21-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a single plot</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-21-3.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>To plot the test information curve, we can also use the <code>plot()</code> function:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve</span></span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"info"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>We can also combine different types of information. To do this, we can look at the various options offered by <code>type</code>. For example, we can use “infoSE” to plot both the information curve and the standard error, or use “infotrace” to plot both the information and the ICC.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve with SE</span></span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"infoSE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_rasch,<span class="dv">6</span>, <span class="at">type=</span><span class="st">'info'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1392,12 +1370,54 @@ Figure&nbsp;10
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item together with ICC</span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_rasch,<span class="dv">6</span>, <span class="at">type=</span><span class="st">'infotrace'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a grid</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
 <p><img src="03_irt_dich_files/figure-html/unnamed-chunk-23-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a single plot</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-23-3.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To plot the test information curve, we can also use the <code>plot()</code> function:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve</span></span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"info"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also combine different types of information. To do this, we can look at the various options offered by <code>type</code>. For example, we can use “infoSE” to plot both the information curve and the standard error, or use “infotrace” to plot both the information and the ICC.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve with SE</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_rasch, <span class="at">type=</span><span class="st">"infoSE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item together with ICC</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_rasch,<span class="dv">6</span>, <span class="at">type=</span><span class="st">'infotrace'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-25-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1512,26 +1532,26 @@ Figure&nbsp;12
 <div class="callout-body-container callout-body">
 <p>To estimate the 2PL model we can also use the <code>mirt</code> package <span class="citation" data-cites="chalmers2012">(<a href="#ref-chalmers2012" role="doc-biblioref">Chalmers 2012</a>)</span> and very similar syntax as with the Rasch model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-37"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-37-1"><a href="#annotated-cell-37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate a 2PL model:</span></span>
-<span id="annotated-cell-37-2"><a href="#annotated-cell-37-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="annotated-cell-37-3"><a href="#annotated-cell-37-3" aria-hidden="true" tabindex="-1"></a>eco_2PL <span class="ot">&lt;-</span>  <span class="fu">mirt</span>(dat_eco_dicho[<span class="dv">12</span><span class="sc">:</span><span class="dv">20</span>], </span>
-<span id="annotated-cell-37-4"><a href="#annotated-cell-37-4" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">1</span>, </span>
-<a class="code-annotation-anchor" data-target-cell="annotated-cell-37" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-37-5" class="code-annotation-target"><a href="#annotated-cell-37-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">itemtype =</span> <span class="st">"2PL"</span>,</span>
-<span id="annotated-cell-37-6"><a href="#annotated-cell-37-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">SE =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-39"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-39-1"><a href="#annotated-cell-39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate a 2PL model:</span></span>
+<span id="annotated-cell-39-2"><a href="#annotated-cell-39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="annotated-cell-39-3"><a href="#annotated-cell-39-3" aria-hidden="true" tabindex="-1"></a>eco_2PL <span class="ot">&lt;-</span>  <span class="fu">mirt</span>(dat_eco_dicho[<span class="dv">12</span><span class="sc">:</span><span class="dv">20</span>], </span>
+<span id="annotated-cell-39-4"><a href="#annotated-cell-39-4" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">1</span>, </span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-39" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-39-5" class="code-annotation-target"><a href="#annotated-cell-39-5" aria-hidden="true" tabindex="-1"></a>                 <span class="at">itemtype =</span> <span class="st">"2PL"</span>,</span>
+<span id="annotated-cell-39-6"><a href="#annotated-cell-39-6" aria-hidden="true" tabindex="-1"></a>                 <span class="at">SE =</span> <span class="cn">TRUE</span>)</span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
-<dt data-target-cell="annotated-cell-37" data-target-annotation="1">1</dt>
+<dt data-target-cell="annotated-cell-39" data-target-annotation="1">1</dt>
 <dd>
-<span data-code-cell="annotated-cell-37" data-code-lines="5" data-code-annotation="1">To estimate the 2PL model we can use the same code as for the Rasch model and just change the value in the <code>itemtype</code> argument from “Rasch” to “2PL”.</span>
+<span data-code-cell="annotated-cell-39" data-code-lines="5" data-code-annotation="1">To estimate the 2PL model we can use the same code as for the Rasch model and just change the value in the <code>itemtype</code> argument from “Rasch” to “2PL”.</span>
 </dd>
 </dl>
 </div>
 </div>
 <p>We can use the <code>print()</code> function again to get a summary and some general informations about our 2PL model with regard to the estimation procedure and the overall model fit.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get general estimation and fit information about our model:</span></span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get general estimation and fit information about our model:</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -1539,7 +1559,7 @@ mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = "2PL",
     SE = TRUE)
 
 Full-information item factor analysis with 1 factor(s).
-Converged within 1e-04 tolerance after 20 EM iterations.
+Converged within 1e-04 tolerance after 25 EM iterations.
 mirt version: 1.46.1 
 M-step optimizer: BFGS 
 EM acceleration: Ramsay 
@@ -1548,49 +1568,49 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  11.08999
+Condition number of information matrix =  11.8101
 
-Log-likelihood = -38976.48
+Log-likelihood = -38884.64
 Estimated parameters: 18 
-AIC = 77988.97
-BIC = 78114.58; SABIC = 78057.38
-G2 (493) = 1446.73, p = 0
+AIC = 77805.28
+BIC = 77930.9; SABIC = 77873.7
+G2 (493) = 1514.93, p = 0
 RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
 <p>A detailed description of how to interpret this output was already covered in the Rasch section of the tutorial and can be found there (<a href="#lst-print-rasch" class="quarto-xref">Listing&nbsp;1</a>).</p>
 <p>Again we can also do a quick check of convergence by using the <code>converged</code> and <code>secondordertest</code> variables from our <code>mirt</code> object:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># is the estimation algorith converged?</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>eco_2PL<span class="sc">@</span>OptimInfo<span class="sc">$</span>converged</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># is the estimation algorith converged?</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>eco_2PL<span class="sc">@</span>OptimInfo<span class="sc">$</span>converged</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># has the estimation algorith found plausible Maximum/Minimum</span></span>
-<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>eco_2PL<span class="sc">@</span>OptimInfo<span class="sc">$</span>secondordertest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># has the estimation algorith found plausible Maximum/Minimum</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>eco_2PL<span class="sc">@</span>OptimInfo<span class="sc">$</span>secondordertest</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] TRUE</code></pre>
 </div>
 </div>
 <p>To inspect the item parameters we use the <code>coef()</code> function, as in the Rasch model</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the itemspecific parameters from our 2PL model</span></span>
-<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>item_par_eco_2PL <span class="ot">&lt;-</span> <span class="fu">coef</span>(eco_2PL, <span class="at">IRTpars=</span><span class="cn">TRUE</span>, <span class="at">simplify=</span><span class="cn">TRUE</span>)</span>
-<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>item_par_eco_2PL</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the itemspecific parameters from our 2PL model</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>item_par_eco_2PL <span class="ot">&lt;-</span> <span class="fu">coef</span>(eco_2PL, <span class="at">IRTpars=</span><span class="cn">TRUE</span>, <span class="at">simplify=</span><span class="cn">TRUE</span>)</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>item_par_eco_2PL</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                     a      b g u
-Eco_aff_1_dicho 1.340 -1.198 0 1
-Eco_aff_2_dicho 1.714 -0.947 0 1
-Eco_aff_3_dicho 1.372 -0.880 0 1
-Eco_cog_4_dicho 0.855 -1.043 0 1
-Eco_cog_5_dicho 1.486 -0.749 0 1
-Eco_cog_6_dicho 1.221 -0.009 0 1
-Eco_con_7_dicho 1.996 -0.423 0 1
-Eco_con_8_dicho 2.072  0.248 0 1
-Eco_con_9_dicho 1.861 -0.854 0 1
+Eco_aff_1_dicho 1.322 -1.230 0 1
+Eco_aff_2_dicho 1.714 -0.946 0 1
+Eco_aff_3_dicho 1.355 -0.909 0 1
+Eco_cog_4_dicho 0.813 -1.121 0 1
+Eco_cog_5_dicho 1.582 -0.712 0 1
+Eco_cog_6_dicho 1.218 -0.001 0 1
+Eco_con_7_dicho 2.048 -0.436 0 1
+Eco_con_8_dicho 2.072  0.259 0 1
+Eco_con_9_dicho 1.782 -0.872 0 1
 
 $means
 F1 
@@ -1604,62 +1624,108 @@ F1  1</code></pre>
 <p>The output consists of the three sections we are already familiar with. Not that in contrast to the output of the Rasch model, her we have now <code>a</code> values, which differ from 1. This is because the <code>a</code> column in the <code>$items</code> section contains our <span class="math inline">\alpha_i</span> parameters.</p>
 <p>To extract the person parameters (<span class="math inline">\theta_n</span>) we can use the <code>fscore()</code> function. Note, that to keep the output short, we are only printing the first 6 person parameters to the console by using <code>head()</code> .</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the personspecific parameters from our Rasch model</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>person_par_eco_2PL <span class="ot">&lt;-</span> <span class="fu">fscores</span>(eco_2PL)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the personspecific parameters from our Rasch model</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>person_par_eco_2PL <span class="ot">&lt;-</span> <span class="fu">fscores</span>(eco_2PL)</span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               F1
-[1,] -0.094289177
-[2,]  0.794098626
-[3,] -0.596354293
-[4,]  0.383636337
-[5,]  0.007100813
-[6,] -1.605567983</code></pre>
+<pre><code>             F1
+[1,] -0.6165072
+[2,]  0.5275670
+[3,] -0.4930261
+[4,]  0.6823664
+[5,] -0.1126378
+[6,] -2.0106789</code></pre>
 </div>
 </div>
+<p>We’ve also learned that IRT models are related to exploratory factor analysis. <mark>Wurde das schon eingeführt oben?</mark> Accordingly we can transform our IRT model parameters into standardized factor loadings. To do this, we use the <code>summary()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get factor loadings of our 2PL</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   F1    h2
+Eco_aff_1_dicho 0.614 0.376
+Eco_aff_2_dicho 0.710 0.504
+Eco_aff_3_dicho 0.623 0.388
+Eco_cog_4_dicho 0.431 0.186
+Eco_cog_5_dicho 0.681 0.464
+Eco_cog_6_dicho 0.582 0.339
+Eco_con_7_dicho 0.769 0.592
+Eco_con_8_dicho 0.773 0.597
+Eco_con_9_dicho 0.723 0.523
+
+                SE.F1
+Eco_aff_1_dicho 0.014
+Eco_aff_2_dicho 0.013
+Eco_aff_3_dicho 0.013
+Eco_cog_4_dicho 0.015
+Eco_cog_5_dicho 0.013
+Eco_cog_6_dicho 0.013
+Eco_con_7_dicho 0.011
+Eco_con_8_dicho 0.011
+Eco_con_9_dicho 0.012
+
+SS loadings:  3.968 
+Proportion Var:  0.441 
+
+Factor correlations: 
+
+   F1
+F1  1</code></pre>
+</div>
+</div>
+<p>The output is a table in which the rows represent the items.</p>
+<ul>
+<li><p>The standardized factor loadings are listed under <code>F1</code> (= Factor 1).</p></li>
+<li><p>The <code>h2</code> column contains the communalities, which indicate how much variance the factor explains in each item.</p></li>
+<li><p>The <code>SE.F1</code> column contains the standard errors.</p></li>
+<li><p><code>SS loadings</code> is the sum of the squared loadings.</p></li>
+<li><p><code>Proportion Var</code> is the proportion of variance explained across all items.</p></li>
+<li><p>Under <code>Factor correlations</code>, we find the correlations between the latent factors. Since our model has only one factor and the correlation of a variable with itself is 1, we logically have a 1 <span class="math inline">\times</span> 1 matrix here whose elements are 1.</p></li>
+</ul>
 <p><strong>Visualizations of the 2PL:</strong></p>
 <p>Also for the ICCs we can use the same functions as with the Rasch model.</p>
 <p>Therefore, to plot the ICC of a single item from our scale, we can use the <code>itemplot()</code> function</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting a ICC of a specific item</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_2PL,</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">item =</span> <span class="dv">6</span>,</span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">type=</span><span class="st">"trace"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plotting a ICC of a specific item</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_2PL,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">item =</span> <span class="dv">6</span>,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">type=</span><span class="st">"trace"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-29-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>To plot the ICCs of all items at the same time, we can use the <code>plot()</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all ICCs of a scale</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL,</span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"trace"</span>,</span>
-<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>),</span>
-<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">facet =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all ICCs of a scale</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL,</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"trace"</span>,</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>),</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">facet =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-30-1.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all ICCs in a grid</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, </span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"trace"</span>, </span>
-<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), </span>
-<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all ICCs in a grid</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, </span>
+<span id="cb45-4"><a href="#cb45-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">type=</span><span class="st">"trace"</span>, </span>
+<span id="cb45-5"><a href="#cb45-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), </span>
+<span id="cb45-6"><a href="#cb45-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-30-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-33-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1755,54 +1821,9 @@ Figure&nbsp;14
 <p>Here, too, we can essentially use the exact same code blocks as we did with the Rasch model. We just need to make sure to pass the 2PL model object to the functions instead of the Rasch model.</p>
 <p>To plot the information curve of a sinfle item we can use the <code>itemplot()</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item</span></span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_2PL, <span class="dv">6</span>, <span class="at">type=</span><span class="st">'info'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-31-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>To plot all item information curves at the same time, we can use the <code>plot()</code> function.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a single plot</span></span>
-<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-32-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a grid</span></span>
-<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-32-2.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>To plot the test information curve we can also use the <code>plot()</code> function.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve</span></span>
-<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"info"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-33-1.png" class="img-fluid figure-img" width="672"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>We can also combine different types of information. To do this, we can look at the various options offered by <code>type</code>. For example, we can use “infoSE” to plot both the information curve and the standard error, or use “infotrace” to plot both the information and the ICC.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve with SE</span></span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"infoSE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_2PL, <span class="dv">6</span>, <span class="at">type=</span><span class="st">'info'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
@@ -1810,12 +1831,57 @@ Figure&nbsp;14
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item together with ICC</span></span>
-<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_2PL,<span class="dv">6</span>, <span class="at">type=</span><span class="st">'infotrace'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>To plot all item information curves at the same time, we can use the <code>plot()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a single plot</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">FALSE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-34-2.png" class="img-fluid figure-img" width="672"></p>
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot all item information curves in a grid</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"infotrace"</span>, <span class="at">theta_lim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">5</span>,<span class="dv">5</span>), <span class="at">facet =</span> <span class="cn">TRUE</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-35-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To plot the test information curve we can also use the <code>plot()</code> function.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve</span></span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"info"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-36-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also combine different types of information. To do this, we can look at the various options offered by <code>type</code>. For example, we can use “infoSE” to plot both the information curve and the standard error, or use “infotrace” to plot both the information and the ICC.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot test information curve with SE</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(eco_2PL, <span class="at">type=</span><span class="st">"infoSE"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-37-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot item information curve of a specific item together with ICC</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="fu">itemplot</span>(eco_2PL,<span class="dv">6</span>, <span class="at">type=</span><span class="st">'infotrace'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="03_irt_dich_files/figure-html/unnamed-chunk-37-2.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
@@ -1879,16 +1945,24 @@ Figure&nbsp;14
 <div class="callout-body-container callout-body">
 <p>We can use the <code>anova()</code> function to calculate all model comparison measures introduced in this tutorial at once:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># model comparison between Rasch and 2PL:</span></span>
-<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(eco_rasch, eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="co"># model comparison between Rasch and 2PL:</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(eco_rasch, eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>               AIC    SABIC       HQ      BIC    logLik      X2 df p
-eco_rasch 78457.78 78495.79 78481.68 78527.57 -39218.89             
-eco_2PL   77988.97 78057.38 78031.98 78114.58 -38976.48 484.816  8 0</code></pre>
+eco_rasch 78306.62 78344.63 78330.52 78376.41 -39143.31             
+eco_2PL   77805.28 77873.70 77848.30 77930.90 -38884.64 517.337  8 0</code></pre>
 </div>
 </div>
-<p>As we can see the 2PL is preferred over the Rasch model based on all comparison criteria. 1. The <span class="math inline">p</span> value of the likelihood ratio test is below 0.05 and therefore significant. This means that the 2PL fits the data significantly better than the Rasch Modell 2. The AIC and BIC are both smaller for the 2PL compared to the Rasch model. Thus, even when we incorporate model complexity additionally to model fit in our comparison, the 2PL model is still preferred over the Rasch model given our data set.</p>
+<p>As we can see the Output provides us with a lot of information. So let’s break it down.</p>
+<p>The two rows refer to the two models we want to campare. On the very left we can see the model names. <code>eco_rasch</code> is the simpler model and <code>eco_2PL</code> is the more complex model.</p>
+<p>In the first and fourth column we can finde the AIC and BIC values for the respective models.</p>
+<p>All informations regarding the likelihood ratio test can be found in the four columns to the right: The column <code>logLik</code> contains the log-likelihood. This is the <span class="math inline">\ln(L)</span> from the formulas aboves. <code>X2</code> gives our test statistic, <span class="math inline">-2\Delta\ln\text{L}</span>. <code>df</code> and <code>p</code> contain the corresponding degrees of freedom and the p-value.</p>
+<p>So how can we interpret these output with regard to the comparison of our two models? As we can see the 2PL is preferred over the Rasch model based on all comparison criteria.</p>
+<ol type="1">
+<li><p>The <span class="math inline">p</span> value of the likelihood ratio test is below 0.05 and therefore significant. This means that the 2PL fits the data significantly better than the Rasch Modell</p></li>
+<li><p>The AIC and BIC are both smaller for the 2PL compared to the Rasch model. Thus, even when we incorporate model complexity additionally to model fit in our comparison, the 2PL model is still preferred over the Rasch model given our data set.</p></li>
+</ol>
 </div>
 </div>
 </section>
@@ -1896,6 +1970,12 @@ eco_2PL   77988.97 78057.38 78031.98 78114.58 -38976.48 484.816  8 0</code></pre
 </section>
 <section id="outlook" class="level2">
 <h2 class="anchored" data-anchor-id="outlook">Outlook</h2>
+<p>In this tutorial, we’ve learned about the Rasch model and the 2PL model and covered the basics of IRT. Of course, IRT is a much broader field, and there are many other IRT models. In the area of unidimensional models for dichotomous response formats—which we’ve been exploring so far—there are, for example, the 3PL and 4PL models. These models are not covered in detail in this tutorial, and readers should be able to familiarize themselves with them independently after completing this tutorial, since the principles introduced here also apply to these models.</p>
+<p>Nevertheless, we’ll briefly touch on the core idea behind these models. As we might already suspect, the higher numbers preceding “PL” indicates additional parameters that are included.</p>
+<p>In the <strong>3PL</strong>, an additional item-specific parameter is introduced that can shift the lower asymptote of the ICC upward. As a result, the minimum possible response probability—the probability of answering “1” for an item—can be significantly greater than 0 for all test-takers. This can be interpreted as a guessing probability, which the 3PL then allows us to model.</p>
+<p>The <strong>4PL</strong> includes an additional item-specific parameter that influences the upper asymptote of the ICC and can thereby shift downward the maximum possible response probability of answering an item with a 1. This can be interpreted, for example, in terms of interfering factors that cause a person who would otherwise have a high probability to answer an item with a 1 to have a significantly lower response probability for a 1.</p>
+<p>In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the multidimensional case. This means that multiple latent constructs simultaneously influence the response process. Furthermore, there are also extensions that allow IRT models to be applied to polytomous response formats such as Likert scales. A prominent example of this is the <em>Partial Credit Model</em>.</p>
+<p><mark>Should we mention here that tutorials on polytome answer formats are also coming?</mark></p>
 </section>
 <section id="additional-ressources" class="level2">
 <h2 class="anchored" data-anchor-id="additional-ressources">Additional ressources</h2>

@@ -500,13 +500,42 @@ This specifies how small the change in the probability of the parameters must be
 The reasoning behind this is that if, under the new parameters, the data is only, say, 0.0001% more likely than under the parameter values from the previous iteration, then it no longer makes sense to continue optimizing the parameters, since the increase in probability is so small that it is practically irrelevant.
 We see that the default tolerance of `mirt` is 0.0001 (1e-04).
 This makes `mirt` more lenient than other software, where the tolerance is often set to 0.00001 (1e-05).
-However, you can also set the algorithm’s tolerance manually by adding the `TOL` argument to the `mirt()` function (e.g., `mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = “Rasch”, SE = TRUE, TOL = 1e-5)`).
+However, you can also set the algorithm’s tolerance manually by adding the `TOL` argument to the `mirt()` function.
+
+```{r}
+#| eval: false
+
+# Example for estimation with smaller tolerance
+
+mirt(data = dat_eco_dicho[12:20], 
+     model = 1, 
+     itemtype = "Rasch", 
+     SE = TRUE, 
+     TOL = 1e-5)
+```
 
 Second, you can define a maximum number of iterations after which the algorithm terminates, regardless of whether a unique solution for the parameters has been found or not.
 By default, `mirt` allows a maximum of 500 iterations.
 In the output, we can see that only 25 iterations were needed for our Rasch model.
 However, more complex models may well require more iterations.
-Therefore, you can set your own maximum number of iterations using the argument `technical = list(NCYCLES = 1000)`, e.g., `mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = “Rasch”, SE = TRUE, TOL = 1e-5, technical = list(NCYCLES = 1000))`.
+Sometimes, the model may reaches the maximum possible number of steps without converging to a unique solution.
+When this happens, the parameter estimators are unstable and should not be interpreted [@debelak2022, p. 148] .
+`mirt` will then display a message stating that `EM cycles terminated after 500 iterations`.
+Therefore, you can set your own maximum number of iterations using the argument `technical = list(NCYCLES = 1000)`[@debelak2022, p. 148].
+
+```{r}
+#| eval: false
+
+# Example for estimation with increased maximum cycles
+
+mirt(data = dat_eco_dicho[12:20], 
+     model = 1, 
+     itemtype = "Rasch", 
+     SE = TRUE, 
+     TOL = 1e-5, 
+     technical = list(NCYCLES = 1000)
+     )
+```
 
 We can also quickly check whether our estimation algorithm has found a solution or put differently whether it was able to successfully estimate the model.
 To do this, we can test whether the variables `converged` and `secondordertest` in our Rasch model have become `TRUE`.
@@ -995,7 +1024,7 @@ Ultimately, we no longer need $\theta$ to predict a person’s response vector.
 It is sufficient to know the total score $t$.
 Therefore, the total score $t$ is a sufficient statistic.
 
-@meiser2025[*-\>darf*]{.mark}[ *ich die zitieren????*]{.mark}
+@meiser2025[*-\>darfichdiezitieren????*]{.mark}
 :::
 
 #### Specific objectivity
@@ -1525,6 +1554,32 @@ person_par_eco_2PL <- fscores(eco_2PL)
 head(person_par_eco_2PL)
 ```
 
+We've also learned that IRT models are related to exploratory factor analysis.
+[Wurde das schon eingeführt oben?]{.mark}
+Accordingly we can transform our IRT model parameters into standardized factor loadings.
+To do this, we use the `summary()` function.
+
+```{r}
+# get factor loadings of our 2PL
+
+summary(eco_2PL)
+```
+
+The output is a table in which the rows represent the items.
+
+- The standardized factor loadings are listed under `F1` (= Factor 1).
+
+- The `h2` column contains the communalities, which indicate how much variance the factor explains in each item.
+
+- The `SE.F1` column contains the standard errors.
+
+- `SS loadings` is the sum of the squared loadings.
+
+- `Proportion Var` is the proportion of variance explained across all items.
+
+- Under `Factor correlations`, we find the correlations between the latent factors.
+  Since our model has only one factor and the correlation of a variable with itself is 1, we logically have a 1 $\times$ 1 matrix here whose elements are 1.
+
 **Visualizations of the 2PL:**
 
 Also for the ICCs we can use the same functions as with the Rasch model.
@@ -1819,12 +1874,53 @@ We can use the `anova()` function to calculate all model comparison measures int
 anova(eco_rasch, eco_2PL)
 ```
 
+As we can see the Output provides us with a lot of information.
+So let's break it down.
+
+The two rows refer to the two models we want to campare.
+On the very left we can see the model names.
+`eco_rasch` is the simpler model and `eco_2PL` is the more complex model.
+
+In the first and fourth column we can finde the AIC and BIC values for the respective models.
+
+All informations regarding the likelihood ratio test can be found in the four columns to the right: The column `logLik` contains the log-likelihood.
+This is the $\ln(L)$ from the formulas aboves.
+`X2` gives our test statistic, $-2\Delta\ln\text{L}$.
+`df` and `p` contain the corresponding degrees of freedom and the p-value.
+
+So how can we interpret these output with regard to the comparison of our two models?
 As we can see the 2PL is preferred over the Rasch model based on all comparison criteria.
-1. The $p$ value of the likelihood ratio test is below 0.05 and therefore significant. This means that the 2PL fits the data significantly better than the Rasch Modell
-2. The AIC and BIC are both smaller for the 2PL compared to the Rasch model. Thus, even when we incorporate model complexity additionally to model fit in our comparison, the 2PL model is still preferred over the Rasch model given our data set.
+
+1.  The $p$ value of the likelihood ratio test is below 0.05 and therefore significant.
+    This means that the 2PL fits the data significantly better than the Rasch Modell
+
+2.  The AIC and BIC are both smaller for the 2PL compared to the Rasch model.
+    Thus, even when we incorporate model complexity additionally to model fit in our comparison, the 2PL model is still preferred over the Rasch model given our data set.
 :::
 
 ## Outlook
+
+In this tutorial, we’ve learned about the Rasch model and the 2PL model and covered the basics of IRT.
+Of course, IRT is a much broader field, and there are many other IRT models.
+In the area of unidimensional models for dichotomous response formats—which we’ve been exploring so far—there are, for example, the 3PL and 4PL models.
+These models are not covered in detail in this tutorial, and readers should be able to familiarize themselves with them independently after completing this tutorial, since the principles introduced here also apply to these models.
+
+Nevertheless, we’ll briefly touch on the core idea behind these models.
+As we might already suspect, the higher numbers preceding “PL” indicates additional parameters that are included.
+
+In the **3PL**, an additional item-specific parameter is introduced that can shift the lower asymptote of the ICC upward.
+As a result, the minimum possible response probability—the probability of answering “1” for an item—can be significantly greater than 0 for all test-takers.
+This can be interpreted as a guessing probability, which the 3PL then allows us to model.
+
+The **4PL** includes an additional item-specific parameter that influences the upper asymptote of the ICC and can thereby shift downward the maximum possible response probability of answering an item with a 1.
+This can be interpreted, for example, in terms of interfering factors that cause a person who would otherwise have a high probability to answer an item with a 1 to have a significantly lower response probability for a 1.
+
+In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the multidimensional case.
+This means that multiple latent constructs simultaneously influence the response process.
+Furthermore, there are also extensions that allow IRT models to be applied to polytomous response formats such as Likert scales.
+A prominent example of this is the *Partial Credit Model*.
+
+[Should we mention here that tutorials on polytome answer formats are also coming?]{.mark}
 
 ## Additional ressources
 
