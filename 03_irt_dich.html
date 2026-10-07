@@ -178,6 +178,7 @@ window.Quarto = {
   <li><a href="#difference-to-the-rasch-model" id="toc-difference-to-the-rasch-model" class="nav-link" data-scroll-target="#difference-to-the-rasch-model">Difference to the Rasch-model</a></li>
   <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model comparison</a></li>
   </ul></li>
+  <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook">Outlook</a></li>
   <li><a href="#additional-ressources" id="toc-additional-ressources" class="nav-link" data-scroll-target="#additional-ressources">Additional ressources</a></li>
   
   </ul>
@@ -229,7 +230,7 @@ window.Quarto = {
          <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">30.09.2026</p>
+        <p class="date">06.10.2026</p>
       </div>
     </div>
       </div>
@@ -621,14 +622,14 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  6.023845
+Condition number of information matrix =  5.980144
 
-Log-likelihood = -39086.15
+Log-likelihood = -39218.89
 Estimated parameters: 10 
-AIC = 78192.3
-BIC = 78262.09; SABIC = 78230.31
-G2 (501) = 2019.59, p = 0
-RMSEA = 0.02, CFI = NaN, TLI = NaN</code></pre>
+AIC = 78457.78
+BIC = 78527.57; SABIC = 78495.79
+G2 (501) = 1931.54, p = 0
+RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
 <p>When we use <code>print()</code> to output our mirt object, we first see a summary with general information about our model. The first block contains information about the estimation method that <code>mirt()</code> used to estimate the model. The lower block contains fit criteria regarding the model fit. The exact estimation algorithm is beyond the scope of this tutorial. To put it simply, however, the model parameters are estimated by first substituting random values for the <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> and then checking how likely it is to observe the data we have collected. In the next step, new values for <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> are substituted, and it is checked whether these values are more likely to produce the data pattern we have collected. This process is repeated many times until the parameter values that most likely fit our observed data are found. Since this process can theoretically take an extremely long time, the algorithm must be given termination rules. There are two options here, which we can also see in the output.</p>
@@ -686,23 +687,23 @@ Listing&nbsp;2: Item parameters of the Rasch model
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                 a      b g u
-Eco_aff_1_dicho 1 -1.684 0 1
-Eco_aff_2_dicho 1 -1.496 0 1
-Eco_aff_3_dicho 1 -1.307 0 1
-Eco_cog_4_dicho 1 -1.104 0 1
-Eco_cog_5_dicho 1 -1.132 0 1
-Eco_cog_6_dicho 1 -0.032 0 1
-Eco_con_7_dicho 1 -0.760 0 1
-Eco_con_8_dicho 1  0.440 0 1
-Eco_con_9_dicho 1 -1.401 0 1
+Eco_aff_1_dicho 1 -1.680 0 1
+Eco_aff_2_dicho 1 -1.513 0 1
+Eco_aff_3_dicho 1 -1.252 0 1
+Eco_cog_4_dicho 1 -1.081 0 1
+Eco_cog_5_dicho 1 -1.114 0 1
+Eco_cog_6_dicho 1 -0.014 0 1
+Eco_con_7_dicho 1 -0.720 0 1
+Eco_con_8_dicho 1  0.431 0 1
+Eco_con_9_dicho 1 -1.417 0 1
 
 $means
 F1 
  0 
 
 $cov
-     F1
-F1 2.22</code></pre>
+      F1
+F1 2.204</code></pre>
 </div>
 </div>
 <p>The output consists of three sections:</p>
@@ -718,13 +719,13 @@ F1 2.22</code></pre>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_rasch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             F1
-[1,] -0.9886383
-[2,]  1.0360938
-[3,] -1.4192406
-[4,]  0.4150602
-[5,] -0.9886383
-[6,] -3.0137530</code></pre>
+<pre><code>              F1
+[1,] -0.08866361
+[2,]  1.04212057
+[3,] -0.97616177
+[4,]  0.42410895
+[5,] -0.08866361
+[6,] -2.37411531</code></pre>
 </div>
 </div>
 
@@ -877,7 +878,8 @@ Figure&nbsp;4
 <p>For Person 3, it’s exactly the opposite. This person has such a high construct score (<span class="math inline">\theta_3 = 2.5</span>) that they score above all items except Item 2. Accordingly, Person 3 also scores above the difficulty level of most items and therefore has a probability of answering correctly greater than 50% for most items. This means that Person 3 is highly likely to answer most items with a 1. Simply put, the scale is too easy for Person 3.</p>
 <p>Person 2 is in the middle between the other two people and has a moderate construct score (<span class="math inline">\theta_2 = 0</span>). Here we see that some items lie below the blue line, meaning Person 1 has a greater than 50% probability of answering the item with a 1 (e.g., Item 3); some items lie above the blue line, meaning Person 1 has a less than 50% probability of answering the item with a 1 (e.g., Item 8); and some items lie very close to the blue line, in which case Person 1 has roughly a 50% probability of answering the item with a 1 (e.g., Item 9). We can therefore see that this person will likely answer some items correctly but will fail to answer others.</p>
 <p>For another illustrative example and intuitive introduction to the Wright Map see also <span class="citation" data-cites="wilson2023">Wilson (<a href="#ref-wilson2023" role="doc-biblioref">2023</a>)</span>.</p>
-<p>To measure a construct accurately for an individual, it is best if the difficulty of an item corresponds to that individual’s level on the construct. We’ll take a closer look at why this is the case later on (<a href="#sec-Information" class="quarto-xref">see Section&nbsp;5.7</a>). It follows, then, that the item difficulties should cover the entire range of the construct we wish to measure <span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022</a>)</span>. We can now check this very easily using the Wright Map <span class="citation" data-cites="debelak2022 chen2026">(e.g., <a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022, fig. 4.1</a>; <a href="#ref-chen2026" role="doc-biblioref">Chen and Lai 2026</a>)</span>. In our example, we see that the items are distributed across the entire length of the histogram. This means we have items that not only measure exactly at the center of the distribution (e.g., Item 9) but also items that can measure exactly at the edges of the distribution (e.g., Item 3 and Item 8); thus, our scale covers the various construct levels <span class="math inline">\theta</span> that also occur in our sample.</p>
+<p>To measure a construct accurately for an individual, it is best if the difficulty of an item corresponds to that individual’s level on the construct. We’ll take a closer look at why this is the case later on (<a href="#sec-Information" class="quarto-xref">see Section&nbsp;5.7</a>). It follows, then, that the item difficulties should cover the entire range of the construct we wish to measure <span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022</a>)</span>. We can now check this very easily using the Wright Map <span class="citation" data-cites="debelak2022 chen2026">(e.g., <a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022, fig. 4.1</a>; <a href="#ref-chen2026" role="doc-biblioref">Chen and Lai 2026</a>)</span>. In our example, we see that the items are distributed across the entire length of the histogram. This means we have items that not only measure exactly at the center of the distribution (e.g., Item 9) but also items that can measure exactly at the edges of the distribution (e.g., Item 3 and Item 8); thus, our scale covers the various construct levels <span class="math inline">\theta</span> that occur in our sample.</p>
+<p>Another very useful application of the Wright map is that it allows us to link the construct map with the Wright map <span class="citation" data-cites="wilson2023">(<a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023</a>)</span>. As a quick reminder, the construct map defines different waypoints that map out the different levels of the construct we want to measure <mark>(haben wir die construct map davor überhaupt schon eingeführt?)</mark>. These can, for example, be used during item construction to create items that target different levels of the construct. For instance, to develop a construct map for the construct of environmental concern, we have to ask ourselves what different levels of environmental concern look like. The nice thing about IRT is that we model our construct as a latent variable. Therefore, our item and person parameters (<span class="math inline">\beta</span> and <span class="math inline">\theta</span>) can be placed on the same continuum as the waypoints of the construct map. This allows us to check whether our newly created items really target the area of the continuum they were designed for (based on the waypoints of the construct map), or whether they are off for some reason. Thus, we can use the Wright map to inspect the match between our theory-based intention (construct map) and the empirical evidence (item and person parameters based on the observed data) <span class="citation" data-cites="wilson2023">(<a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023, 148</a>)</span>. If the theoretical concept and the empirical evidence match, this is, of course, an indication that our measurement instrument is working as intended (though this does not replace a full-scale validation). However, as <span class="citation" data-cites="wilson2023">Wilson (<a href="#ref-wilson2023" role="doc-biblioref">2023</a>)</span> describes, discrepancies can also be very helpful in the process of developing the measurement instrument. For example, if an item that was created to tap into the lower levels of the construct continuum has a much higher item difficulty <span class="math inline">\beta_i</span>, placing it closer to a mid-level waypoint, we become aware that something is off. Either we have to revise the item because it is not working as intended, or our conceptualization of the construct (i.e., the construct map) is wrong and we have to rethink our waypoints. In this way, the Wright map can help us identify friction points early in the development process. For further discussion of this point and some illustrative examples, see <span class="citation" data-cites="wilson2023">Wilson (<a href="#ref-wilson2023" role="doc-biblioref">2023</a>)</span>.</p>
 <div class="callout callout-style-simple callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1045,15 +1047,15 @@ Figure&nbsp;4
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Item 1 Item 2 Item 3 Item 4 Item 5 Item 6 Item 7 Item 8 Item 9
-Item 1  1.000  0.110 -0.157 -0.055 -0.064 -0.133 -0.188 -0.143 -0.144
-Item 2  0.110  1.000 -0.128 -0.064 -0.024 -0.105 -0.181 -0.144 -0.151
-Item 3 -0.157 -0.128  1.000 -0.180 -0.015 -0.070 -0.102 -0.109 -0.117
-Item 4 -0.055 -0.064 -0.180  1.000 -0.174 -0.121 -0.184 -0.170 -0.160
-Item 5 -0.064 -0.024 -0.015 -0.174  1.000 -0.114 -0.154 -0.125 -0.116
-Item 6 -0.133 -0.105 -0.070 -0.121 -0.114  1.000 -0.139 -0.170 -0.101
-Item 7 -0.188 -0.181 -0.102 -0.184 -0.154 -0.139  1.000  0.141  0.056
-Item 8 -0.143 -0.144 -0.109 -0.170 -0.125 -0.170  0.141  1.000 -0.001
-Item 9 -0.144 -0.151 -0.117 -0.160 -0.116 -0.101  0.056 -0.001  1.000</code></pre>
+Item 1  1.000  0.119 -0.152 -0.054 -0.051 -0.144 -0.205 -0.146 -0.143
+Item 2  0.119  1.000 -0.137 -0.090 -0.033 -0.114 -0.163 -0.146 -0.119
+Item 3 -0.152 -0.137  1.000 -0.183 -0.018 -0.071 -0.107 -0.095 -0.103
+Item 4 -0.054 -0.090 -0.183  1.000 -0.172 -0.115 -0.161 -0.159 -0.158
+Item 5 -0.051 -0.033 -0.018 -0.172  1.000 -0.130 -0.169 -0.123 -0.120
+Item 6 -0.144 -0.114 -0.071 -0.115 -0.130  1.000 -0.125 -0.165 -0.103
+Item 7 -0.205 -0.163 -0.107 -0.161 -0.169 -0.125  1.000  0.138  0.033
+Item 8 -0.146 -0.146 -0.095 -0.159 -0.123 -0.165  0.138  1.000 -0.008
+Item 9 -0.143 -0.119 -0.103 -0.158 -0.120 -0.103  0.033 -0.008  1.000</code></pre>
 </div>
 </div>
 <p>We can check whether the cutoff of 0.2 is exceeded in our matrix:</p>
@@ -1135,7 +1137,7 @@ P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta) &amp;= \prod_{i = 1}^I P(X_i = x_
 <p>If the true score <span class="math inline">t</span> is known (we can count in the data how often a person responded with 1), we can rearrange the equation as follows:</p>
 <p><span id="eq-proof_suff_2"><span class="math display">\begin{align} P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &amp;= \frac{(\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}{\sum_{X_t} (\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}\\ &amp;= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\ &amp;= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\ &amp;= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)} \end{align} \tag{6}</span></span></p>
 <p>What we can see from all these rearrangements is that if we include the total score <span class="math inline">t</span> in the equation, we can completely eliminate the parameter <span class="math inline">\theta</span>. Ultimately, we no longer need <span class="math inline">\theta</span> to predict a person’s response vector. It is sufficient to know the total score <span class="math inline">t</span>. Therefore, the total score <span class="math inline">t</span> is a sufficient statistic.</p>
-<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span> <em>-&gt; darf ich die zitieren????</em></p>
+<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span><mark><em>-&gt;darf</em></mark><mark><em>ich die zitieren????</em></mark></p>
 </div>
 </div>
 </section>
@@ -1279,7 +1281,7 @@ Figure&nbsp;8
 </div>
 <p>This is quite usefull because we can visually see where on the <span class="math inline">\theta</span> continuum the item is especially informative or which part on the <span class="math inline">\theta</span> continuum the item measures especially precise. Since we have already determined that the item information is greatest at the point of item difficulty (because that is where the ICC slope is steepest) and we know that the probability of a correct response at the point of item difficulty is 50% (because that is how item difficulty is defined), we can say that the maximum possible information in the Rasch Model is 0.25 (because <span class="math inline">I_i(\theta = \beta_i) = 0.5 \cdot 0.5 = 0.25</span>) and lies at the point of item difficulty. Therefore, the peak of the item information curve always corresponds to the item’s difficulty level</p>
 <p>The concept of item information as a measure of the (in)accuracy with which an item measures differs from CTT, and this is one advantage of IRT over CTT. This is, because in the CTT we have reliability as a measure of precision. However in CTT the reliability of an item is the same across the whole <span class="math inline">\theta</span> continuum. This implies that an item can measure at every <span class="math inline">\theta</span> level equally well. However this is rather unrealistic: for example consider an easy math item. This item is challenging for persons with low math ability and not everyone will solve it, so we can differentiate between people at the lower end of the math ability continuum. However the same item is easy for persons with a high math ability. So every person with high math ability will solve this item. However if we compare only people who are good in math an easy item doesn’t differentiate between those people because every person can solve the item. However, the CTT’s reliability concept would suggest that a simple math item measures people with high math ability just as well as it does for people with low math ability. In IRT, this is viewed more realistically based on item information, since each item can only accurately measure certain areas of a construct. Put differently, in IRT the reliability varies over <span class="math inline">\theta</span> <span class="citation" data-cites="hoffman2024">(<a href="#ref-hoffman2024" role="doc-biblioref">Hoffman 2024</a>)</span>.</p>
-<p><em>Hab hier das Mathe-Beispiel beibehalten, weil ich es intuitiver finde als das mit environmetal concerns zu erklären</em></p>
+<p><mark><em>Hab hier das Mathe-Beispiel beibehalten, weil ich es intuitiver finde als das mit environmetal concerns zu erklären</em></mark></p>
 </section>
 <section id="test-information" class="level4">
 <h4 class="anchored" data-anchor-id="test-information">Test information</h4>
@@ -1537,7 +1539,7 @@ mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = "2PL",
     SE = TRUE)
 
 Full-information item factor analysis with 1 factor(s).
-Converged within 1e-04 tolerance after 18 EM iterations.
+Converged within 1e-04 tolerance after 20 EM iterations.
 mirt version: 1.46.1 
 M-step optimizer: BFGS 
 EM acceleration: Ramsay 
@@ -1546,13 +1548,13 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  11.20239
+Condition number of information matrix =  11.08999
 
-Log-likelihood = -38832.11
+Log-likelihood = -38976.48
 Estimated parameters: 18 
-AIC = 77700.22
-BIC = 77825.84; SABIC = 77768.64
-G2 (493) = 1511.51, p = 0
+AIC = 77988.97
+BIC = 78114.58; SABIC = 78057.38
+G2 (493) = 1446.73, p = 0
 RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
@@ -1580,15 +1582,15 @@ RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                     a      b g u
-Eco_aff_1_dicho 1.364 -1.187 0 1
-Eco_aff_2_dicho 1.717 -0.933 0 1
-Eco_aff_3_dicho 1.334 -0.933 0 1
-Eco_cog_4_dicho 0.823 -1.095 0 1
-Eco_cog_5_dicho 1.590 -0.734 0 1
-Eco_cog_6_dicho 1.258 -0.023 0 1
-Eco_con_7_dicho 2.052 -0.440 0 1
-Eco_con_8_dicho 1.998  0.257 0 1
-Eco_con_9_dicho 1.843 -0.847 0 1
+Eco_aff_1_dicho 1.340 -1.198 0 1
+Eco_aff_2_dicho 1.714 -0.947 0 1
+Eco_aff_3_dicho 1.372 -0.880 0 1
+Eco_cog_4_dicho 0.855 -1.043 0 1
+Eco_cog_5_dicho 1.486 -0.749 0 1
+Eco_cog_6_dicho 1.221 -0.009 0 1
+Eco_con_7_dicho 1.996 -0.423 0 1
+Eco_con_8_dicho 2.072  0.248 0 1
+Eco_con_9_dicho 1.861 -0.854 0 1
 
 $means
 F1 
@@ -1607,13 +1609,13 @@ F1  1</code></pre>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             F1
-[1,] -0.6141225
-[2,]  0.7755521
-[3,] -0.8225528
-[4,]  0.3783583
-[5,] -0.5901915
-[6,] -2.0066162</code></pre>
+<pre><code>               F1
+[1,] -0.094289177
+[2,]  0.794098626
+[3,] -0.596354293
+[4,]  0.383636337
+[5,]  0.007100813
+[6,] -1.605567983</code></pre>
 </div>
 </div>
 <p><strong>Visualizations of the 2PL:</strong></p>
@@ -1709,7 +1711,7 @@ I_i(\theta) &amp;= \alpha_i^2 \cdot p(X_i = 1) \cdot p(X_i = 0)\\
 </section>
 <section id="test-information-1" class="level4">
 <h4 class="anchored" data-anchor-id="test-information-1">Test information</h4>
-<p>As in the Rasch model, the test information is simply the sum of item information over all items</p>
+<p>As in the Rasch model, the test information is simply the sum of item information over all items:</p>
 <p><span class="math display">I(\theta) = \sum_{i = 1}^II_i(\theta)</span></p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
@@ -1723,9 +1725,21 @@ I_i(\theta) &amp;= \alpha_i^2 \cdot p(X_i = 1) \cdot p(X_i = 0)\\
 <div class="callout-body-container callout-body">
 <p>Mathematically, the test information is based on Fisher’s information <span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022, 51</a>)</span>:</p>
 <p><span class="math display">I(\theta_n) = -E\left(\frac{\partial^2 \log P(Y_{ni} = y_{ni}|\theta_n,\beta_i)}{\partial^2\theta_n} \right)</span></p>
-<p>From the <span class="math inline">\partial^2</span>, we can see that this includes the second derivative of the log-likelihood. Perhaps some of you still remember from school that derivatives can have something to do with the slope of a function, and that makes sense in the context of information, since we’ve already seen in our intuitive introduction that the slope of the ICC influences the information.</p>
-<p>Let’s imagine two ICCs with different slopes. If we take the first derivative of both ICCs and plot them, we get an inverted U-shaped distribution. This is because the first derivative corresponds to the slope of the ICC at the corresponding <span class="math inline">\theta</span> point. Since the ICC rises very gradually at first, the values of the first derivative are also close to the x-axis. Then, the ICC rises sharply around the item difficulty <span class="math inline">\beta</span>. Here, we therefore have high positive values in the first derivative. Once the item difficulty has been exceeded, the slope of the ICC decreases again, and accordingly, the values of the first derivative approach the x-axis once more. Since the first ICC has a higher discrimination parameter <span class="math inline">\alpha</span>, it rises more rapidly in the range around the item difficulty than the flatter ICC. In terms of the first derivative values, this means that the curve of the first derivative of the steeper ICC is narrower and has a sharper peak. If we now “zoom in” on the regions around the two peaks of the first derivatives and consider what the second derivative looks like, we see that the second derivative indicates how steeply the curve of the first derivative rises—or, in other words, how steep the acceleration of the slope of our ICC is (how quickly the slope of the ICC changes). For the sharp peak of the first derivative, we see that the second derivative has a significantly steeper negative slope, since the first derivative rises sharply at first and then suddenly drops sharply again (= sharp peak). With a broader peak, we see that the second derivative slopes less steeply. Since we know that steeper ICCs contain more information regarding item difficulty, we can therefore conclude that a more negative second derivative must indicate a more informative item. In summary, this intuitive example is intended to illustrate that the second derivative is related to the slope of our ICC and, therefore, also to the item information.</p>
-<p>FALSCH: Umschreiben auf log likelihood NICHT auf ICC sonder auf log-Likelihood beziehen. Geht ja um die Schätzer der PArameter -&gt; viel Information -&gt; klares Signal -&gt; klarer Gipfel der log-Likelihood</p>
+<p>From the <span class="math inline">\partial^2</span>, we can see that this includes the second derivative of the log-likelihood.</p>
+<p>Simply put, the log-likelihood is the criterion we optimize during parameter estimation. You can think of it something like this: We define a model (e.g., the Rasch model or 2PL). This determines the form or structure, since the model must “adhere to” the formula. However, the formula consists of parameters that are variable. We can plug in different values here. This raises the question of which values we should use for our parameters to best fit the model to our observed data. One possible approach to finding this out is to simply plug in some arbitrary values for the parameters and see how well our model predicts the data with these parameters. Then we try out different parameter values until we find the best “settings” for the parameters to predict the data. Of course, this is a simplification of the actual estimation algorithms, but the exact procedere of parameter estimation is not covered in this tutorial. The point that’s relevant here is that we need some kind of quantifiable measure of “how well the model can predict the data” so that our model knows whether the new parameter values are better or worse than the previous ones. This is exactly what we use the log-likelihood for, because the log-likelihood is, by definition, the logarithm of the probability of the observed data given certain parameter values. This allows us to establish a clearly definable criterion that an algorithm can optimize. Specifically, we can instruct the algorithm to try out different parameters until it finds the ones that maximize the log-likelihood. If this reminds you of the term “maximum likelihood,” you’re absolutely right.</p>
+<p>For simplicity’s sake, let’s imagine that our model has only one parameter that we’re trying to estimate. Then, for each possible parameter value, we could calculate the log-likelihood and create a plot (see <a href="#fig-expl-info-2PL" class="quarto-xref">Figure&nbsp;14</a>). The x-axis would show the parameter values, and the y-axis would show the log-likelihood. We want the parameter value (x-value) that has the highest log-likelihood (y-value). Graphically speaking, we are looking for the peak of the graph. So, once we identify the maximum, we obtain an estimator for our parameter that best fits our data. We now not only know our model structure but also have exact values for our model parameters (<span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span>).</p>
+<div id="fig-expl-info-2PL" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-expl-info-2PL-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="03_irt_dich_files/figure-html/Explanation_Info_2PL.png" id="fig-expl-info-2PL" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig quarto-uncaptioned" id="fig-expl-info-2PL-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;14
+</figcaption>
+</figure>
+</div>
+<p>But how does this all relate to the information and how does the second derivative come into play? Let’s remember, information is a measure of measurement precision. Therefore, we could ask, how certain we are that the parameter values we estimated based on the log-likelihood are the best or true solution of the estimation problem? To answer this question we have two ask a different question: When is it easy to find the maximum value of the log-likelihood (because at the maximum lies our best parameter value for the given data)? It’s easy to find the highest point when we have a distinct or pointed peak. If the peak is relatively broad and flat, there are many parameter values that can produce similarly high log-likelihood values but are not the optimal parameter values. So we want a sharp, clearly recognizable peak. We find this when the slope rises steeply before the maximum and drops steeply again after it. However, if the slope rises rather gently before the maximum and also drops rather gently afterward, then we end up with a broader peak. As we learned in school, we know that the first derivative quantifies the slope of our log-likelihood function. This we can also see in <a href="#fig-expl-info-2PL" class="quarto-xref">Figure&nbsp;14</a> . In the right plot we have a more peaked maximum and accordingly we see that the first derivative (red dashed line) is much steeper than in the plot on the left. Accordingly, the second derivative indicates the slope of the first derivative. This can be interpreted in terms of acceleration or curvature. The faster the slope of our log-likelihood function increases, the greater the differences in the first derivative between the x-values around the maximum, which means that the slope changes rapidly over a small range. This means we have a relatively high rate of change, which is reflected in large values of the second derivative. If the log-likelihood rises slowly around the maximum, the situation is exactly the opposite, and the values of the second derivative are relatively small. Accordingly, we can use the second derivative to estimate how sharp the peak of our function is and, consequently, how confident we can be in our parameter estimate. Now it should also become clear why it makes sense for the formula for information to be based on the second derivative.</p>
+<p><mark>Please note, that this intuitive explanation is based on the lecture of <span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span></mark></p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note callout-titled">
@@ -1821,29 +1835,67 @@ I_i(\theta) &amp;= \alpha_i^2 \cdot p(X_i = 1) \cdot p(X_i = 0)\\
 </section>
 <section id="model-comparison" class="level3">
 <h3 class="anchored" data-anchor-id="model-comparison">Model comparison</h3>
+<p>We’ve now looked at two models: the Rasch model and the 2PL model. But how do I know which model to choose? This is a complex question—one that could probably be the subject of a tutorial all its own—and for which there is no single, clear-cut answer. The “right” model can mean something quite different depending on the researcher’s motivation. If you have a clear theoretical expectation that you want to test, then the model is determined by that alone, and you’re interested in whether this assumption or model can be upheld based on the observed data. However, one might also aim to make the best possible predictions and then select the model accordingly.</p>
+<p>Therefore, we can rephrase and clarify the question somewhat: How do I know which model fits my data better?</p>
+<p>For this we can use model comparison method. There are different methods to choose from and they have all different advantages and assumptions.</p>
+<section id="likelihood-ratio-test" class="level4">
+<h4 class="anchored" data-anchor-id="likelihood-ratio-test">Likelihood Ratio Test</h4>
+<p>This is an inferential statistical test that can be used to compare two models in terms of their fit <span class="citation" data-cites="deayala2022">(see also <a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 198</a>)</span>. However, this test can only be applied to hierarchically related (nested) models. This means that the two models being compared must be convertible into one another—or, in other words, one model must be a special case of the other. Therefore, there is always a more complex model and a simpler model that can be derived from the restriction of the more complex model. We are already familiar with this from our Rasch model and the 2PL. We have already seen that if we fix the <span class="math inline">\alpha_i</span> parameters in the 2PL to 1 for all items, we obtain the Rasch model. In this sense, the Rasch model is a special case of the 2PL model. In other words, the Rasch model is less complex than the 2PL because it has one fewer free parameter than the 2PL, since the <span class="math inline">\alpha_i</span> values cannot change in the Rasch model. So we have nested models here and can therefore apply the likelihood ratio test to compare the Rasch model with the 2PL.</p>
+<p>The likelihood ratio test is based on the likelihood, which is a measure of how well the model can predict the data or how well the model fits the data.</p>
+<p>The test statistic can be calculated using the following formula:</p>
+<p><span class="math display">-2\Delta\ln(\text{L}) = (-2\ln(\text{L}_\text{S})) - (-2 \ln(\text{L}_\text{C}))</span></p>
+<p>Simply put, we are comparing the fit of the simpler model (<span class="math inline">S</span>) to the data with the fit of the more complex model to the data (<span class="math inline">C</span>). Since we are calculating a difference (<span class="math inline">\Delta</span>), we are looking at how much better the more complex model fits the data than the simpler model.</p>
+<p>The convenient thing is that this test statistic, <span class="math inline">-2\Delta\ln\text{L}</span>, follows a chi-squared distribution, so we can use it to perform a significance test. The number of degrees of freedom (<span class="math inline">\Delta \text{df}</span>) is the difference in the number of freely estimated parameters between the more complex model (<span class="math inline">C</span>) and the simpler model (<span class="math inline">S</span>). Formally:</p>
+<p><span class="math display">\begin{align}
+-2\Delta\ln(\text{L}) \sim \chi^2(\Delta \text{df})\quad
+\text{with} \; \Delta \text{df} = \text{df}_C - \text{df}_S
+\end{align}</span></p>
+<p>This test examines the null hypothesis that both models fit the data equally well.</p>
 <ul>
-<li><p>which model is more appropriate?</p></li>
-<li><p><span class="math inline">-2\Delta\text{LL}</span> Test (inference)</p>
-<ul>
-<li><p>only available for nested models</p></li>
-<li><p>statistical test statistic: <span class="math inline">-2\Delta\text{LL} = -2(\text{LL}_\text{fewer} - \text{LL}_\text{more})</span></p></li>
-<li><p>degrees of freedom: <span class="math inline">\Delta\text{df} = \text{df}_\text{more} - \text{df}_\text{less}</span></p>
-<ul>
-<li>Specifies the number of free parameters that were saved</li>
-</ul></li>
-<li><p>Then compare the statistical test statistic with the critical values of the <span class="math inline">\chi^2</span> distribution for the corresponding number of degrees of freedom (<span class="math inline">\Delta\text{df}</span>).</p></li>
-</ul></li>
-<li><p>AIC &amp; BIC (descriptive)</p>
-<ul>
-<li><p>can also be used, when models are not nested</p></li>
-<li><p>AIC and BIC are additionally accounting for parsimony</p>
-<ul>
-<li><p>Therefore, the model that offers the best balance between fit and parsimony is preferred</p></li>
-<li><p>smaller values are better</p></li>
-</ul></li>
-</ul></li>
+<li><p>If the test is significant, it means that the more complex model (<span class="math inline">C</span>) fits the data significantly better than the less complex model (<span class="math inline">S</span>). In our example, we would therefore choose the more complex 2PL model over the Rasch model.</p></li>
+<li><p>If the test is not significant, it means that the more complex model (<span class="math inline">C</span>) <strong>does not</strong> fit the data significantly better than the less complex model (<span class="math inline">S</span>). For reasons of parsimony (see Occam’s Razor), we will then choose the simpler model, since there is no advantage to fitting a more complex model to the data. In our example, we would therefore choose the simpler Rasch model instead of the 2PL model.</p></li>
 </ul>
+<p>As with all significance tests, however, when dealing with large samples, one should bear in mind that the test may be overpowered, which means that practically everything becomes significant, causing the test to lose its interpretive value.</p>
 </section>
+<section id="aic-bic" class="level4">
+<h4 class="anchored" data-anchor-id="aic-bic">AIC &amp; BIC</h4>
+<p>AIC stands for Akaike Information Criterion and BIC for Bayesian Information Criterion. These are descriptive measures of comparison <span class="citation" data-cites="deayala2022">(see also <a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 152</a>)</span>. The advantage here is that these measures allow you to also compare models that are not hierarchically related. The AIC and BIC also take into account the log-likelihood—that is, how well the model fits the data. In addition, however, the AIC and BIC include a penalty term that penalizes models for being more complex. This is done because more complex models tend to fit the data slightly better, since they have more freely estimated parameters and can therefore adapt more effectively to the data. From a research-theoretical perspective, however, we want models that are as parsimonious as possible. The AIC and BIC reflect this by balancing improvements in the fit against model complexity. The AIC and BIC are calculated for each model and are computed as follows.</p>
+<p><span class="math display">\begin{align}
+\text{AIC} &amp;= -2\ln(L) + 2\#param\\
+\text{BIC} &amp;= -2\ln(L) + \ln(N)\#param
+\end{align}</span></p>
+<p>In the part to the left of the + in the equation, we see the log-likelihood, i.e., the “model fit” part. In the part to the right of the + in the equation, we see the penalty term. <span class="math inline">\#param</span> refers to the number of freely estimated parameters. We can see that AIC and BIC calculate the penalty term slightly differently. However, the logic is the same for both measures.</p>
+<p>We can now calculate the AIC and BIC for each model we want to compare, and then always choose the model with the smallest AIC and BIC.</p>
+<p>It is important to note that AIC and BIC are purely descriptive measures. They are therefore not significance tests. Consequently, it is not possible to say that one model is significantly better than the other based on these measures.</p>
+<div class="callout callout-style-simple callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Let’s do it in R
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can use the <code>anova()</code> function to calculate all model comparison measures introduced in this tutorial at once:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># model comparison between Rasch and 2PL:</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(eco_rasch, eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>               AIC    SABIC       HQ      BIC    logLik      X2 df p
+eco_rasch 78457.78 78495.79 78481.68 78527.57 -39218.89             
+eco_2PL   77988.97 78057.38 78031.98 78114.58 -38976.48 484.816  8 0</code></pre>
+</div>
+</div>
+<p>As we can see the 2PL is preferred over the Rasch model based on all comparison criteria. 1. The <span class="math inline">p</span> value of the likelihood ratio test is below 0.05 and therefore significant. This means that the 2PL fits the data significantly better than the Rasch Modell 2. The AIC and BIC are both smaller for the 2PL compared to the Rasch model. Thus, even when we incorporate model complexity additionally to model fit in our comparison, the 2PL model is still preferred over the Rasch model given our data set.</p>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="outlook" class="level2">
+<h2 class="anchored" data-anchor-id="outlook">Outlook</h2>
 </section>
 <section id="additional-ressources" class="level2">
 <h2 class="anchored" data-anchor-id="additional-ressources">Additional ressources</h2>
