@@ -230,7 +230,7 @@ window.Quarto = {
          <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">07.10.2026</p>
+        <p class="date">12.10.2026</p>
       </div>
     </div>
       </div>
@@ -622,14 +622,14 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  5.985957
+Condition number of information matrix =  5.879316
 
-Log-likelihood = -39143.31
+Log-likelihood = -39241.3
 Estimated parameters: 10 
-AIC = 78306.62
-BIC = 78376.41; SABIC = 78344.63
-G2 (501) = 2032.26, p = 0
-RMSEA = 0.02, CFI = NaN, TLI = NaN</code></pre>
+AIC = 78502.6
+BIC = 78572.38; SABIC = 78540.61
+G2 (501) = 1925.86, p = 0
+RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
 <p>When we use <code>print()</code> to output our mirt object, we first see a summary with general information about our model. The first block contains information about the estimation method that <code>mirt()</code> used to estimate the model. The lower block contains fit criteria regarding the model fit. The exact estimation algorithm is beyond the scope of this tutorial. To put it simply, however, the model parameters are estimated by first substituting random values for the <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> and then checking how likely it is to observe the data we have collected. In the next step, new values for <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> are substituted, and it is checked whether these values are more likely to produce the data pattern we have collected. This process is repeated many times until the parameter values that most likely fit our observed data are found. Since this process can theoretically take an extremely long time, the algorithm must be given termination rules. There are two options here, which we can also see in the output.</p>
@@ -707,15 +707,15 @@ Listing&nbsp;2: Item parameters of the Rasch model
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                 a      b g u
-Eco_aff_1_dicho 1 -1.710 0 1
-Eco_aff_2_dicho 1 -1.511 0 1
-Eco_aff_3_dicho 1 -1.283 0 1
-Eco_cog_4_dicho 1 -1.117 0 1
-Eco_cog_5_dicho 1 -1.094 0 1
-Eco_cog_6_dicho 1 -0.004 0 1
-Eco_con_7_dicho 1 -0.752 0 1
-Eco_con_8_dicho 1  0.450 0 1
-Eco_con_9_dicho 1 -1.418 0 1
+Eco_aff_1_dicho 1 -1.676 0 1
+Eco_aff_2_dicho 1 -1.521 0 1
+Eco_aff_3_dicho 1 -1.313 0 1
+Eco_cog_4_dicho 1 -1.105 0 1
+Eco_cog_5_dicho 1 -1.083 0 1
+Eco_cog_6_dicho 1 -0.045 0 1
+Eco_con_7_dicho 1 -0.729 0 1
+Eco_con_8_dicho 1  0.449 0 1
+Eco_con_9_dicho 1 -1.387 0 1
 
 $means
 F1 
@@ -723,7 +723,7 @@ F1
 
 $cov
       F1
-F1 2.195</code></pre>
+F1 2.162</code></pre>
 </div>
 </div>
 <p>The output consists of three sections:</p>
@@ -740,12 +740,12 @@ F1 2.195</code></pre>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_rasch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             F1
-[1,] -0.9832673
-[2,]  0.4191064
-[3,] -0.5516561
-[4,]  1.0376520
-[5,] -0.0944823
-[6,] -3.0025211</code></pre>
+[1,] -0.5478218
+[2,] -0.0931126
+[3,] -1.4054272
+[4,] -0.0931126
+[5,] -0.9772304
+[6,] -2.9826477</code></pre>
 </div>
 </div>
 
@@ -1067,15 +1067,15 @@ Figure&nbsp;4
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Item 1 Item 2 Item 3 Item 4 Item 5 Item 6 Item 7 Item 8 Item 9
-Item 1  1.000  0.094 -0.163 -0.045 -0.060 -0.119 -0.199 -0.145 -0.141
-Item 2  0.094  1.000 -0.128 -0.073 -0.014 -0.096 -0.157 -0.149 -0.158
-Item 3 -0.163 -0.128  1.000 -0.182 -0.009 -0.086 -0.098 -0.116 -0.084
-Item 4 -0.045 -0.073 -0.182  1.000 -0.174 -0.104 -0.197 -0.174 -0.151
-Item 5 -0.060 -0.014 -0.009 -0.174  1.000 -0.122 -0.165 -0.100 -0.142
-Item 6 -0.119 -0.096 -0.086 -0.104 -0.122  1.000 -0.142 -0.172 -0.118
-Item 7 -0.199 -0.157 -0.098 -0.197 -0.165 -0.142  1.000  0.154  0.054
-Item 8 -0.145 -0.149 -0.116 -0.174 -0.100 -0.172  0.154  1.000 -0.003
-Item 9 -0.141 -0.158 -0.084 -0.151 -0.142 -0.118  0.054 -0.003  1.000</code></pre>
+Item 1  1.000  0.097 -0.146 -0.045 -0.068 -0.142 -0.185 -0.149 -0.127
+Item 2  0.097  1.000 -0.134 -0.069 -0.020 -0.105 -0.167 -0.150 -0.133
+Item 3 -0.146 -0.134  1.000 -0.195 -0.021 -0.065 -0.102 -0.111 -0.110
+Item 4 -0.045 -0.069 -0.195  1.000 -0.165 -0.118 -0.158 -0.164 -0.165
+Item 5 -0.068 -0.020 -0.021 -0.165  1.000 -0.119 -0.158 -0.098 -0.128
+Item 6 -0.142 -0.105 -0.065 -0.118 -0.119  1.000 -0.154 -0.163 -0.104
+Item 7 -0.185 -0.167 -0.102 -0.158 -0.158 -0.154  1.000  0.136  0.032
+Item 8 -0.149 -0.150 -0.111 -0.164 -0.098 -0.163  0.136  1.000 -0.004
+Item 9 -0.127 -0.133 -0.110 -0.165 -0.128 -0.104  0.032 -0.004  1.000</code></pre>
 </div>
 </div>
 <p>We can check whether the cutoff of 0.2 is exceeded in our matrix:</p>
@@ -1465,7 +1465,7 @@ Figure&nbsp;10
 <section id="model-formula-1" class="level3">
 <h3 class="anchored" data-anchor-id="model-formula-1">Model formula</h3>
 <p>The formula of the 2PL looks pretty similar to the Rasch-model.</p>
-<p><span class="math display">P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}</span></p>
+<p><span id="eq-2PL"><span class="math display">P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))} \tag{9}</span></span></p>
 <p>Let’s take a look at the individual components to better understand the formula:</p>
 <p>On the left side of the equation is agian the probability that a person <span class="math inline">n</span> will answer item <span class="math inline">i</span> with a 1 (<span class="math inline">P(Y_{ni} = 1)</span>). Thus, <span class="math inline">Y_{ni}</span> denotes the response of person <span class="math inline">n</span> to item <span class="math inline">i</span> . As the Rasch model the 2PL also assumes dichotomouse response data, so <span class="math inline">Y_{ni}</span> can take the values 0 or 1. To predict this probability <span class="math inline">P(Y_{ni} = 1)</span> we again use the person parameter <span class="math inline">\theta_n</span> and the item difficulty <span class="math inline">\beta_i</span>. New is now the additional parameter <span class="math inline">\alpha_i</span>, which represents the item discrimination. Note that the item discrimination parameter is item specific, as we can see by the index <span class="math inline">i</span> of the <span class="math inline">\alpha</span> parameter. This means that each item can have a different <span class="math inline">\alpha_i</span> value.</p>
 <p>Here we can also see that the Rasch model is a special case of the 2PL where the item discrimination of every item is 1. Formally speaking:</p>
@@ -1504,20 +1504,59 @@ Figure&nbsp;12
 </figure>
 </div>
 <p>In <a href="#fig-2PL-expl-discr" class="quarto-xref">Figure&nbsp;12</a> we can see two different items with different <span class="math inline">\alpha_i</span> parameters but the same item difficulty <span class="math inline">\beta_1 = \beta_2 = 0</span>. Now imagin we have two Persons with very similar <span class="math inline">\theta_n</span> values, e.g.&nbsp;two persons with a similar amount of environmental concerns. Lets say Person 1 has a <span class="math inline">\theta_1 = -0.25</span> and Person 2 has a <span class="math inline">\theta_2 = 0.25</span>. Both persons, therefore, fall within a range close to the difficulty levels of the two items—that is, a range in which the two items can best distinguish between persons. So even though the two persons are located in the optimal <span class="math inline">\theta</span> range for both items, we can see that Item 2 is significantly better at distinguishing between the two persons than Item 1. This is because Item 2 has a much steeper slope around the item difficulty than Item 1. This results in lager differences in the model implied probabilities, that the person will answer the item with a 1, between the persons. This we can see on the dashed lines in <a href="#fig-2PL-expl-discr" class="quarto-xref">Figure&nbsp;12</a>. The blue dashed lines are further apart from each other than the red ones. A larger difference in the probabilities of answering the item with a 1 results in a clearer response pattern, in the sense that the respondents’ answers are more likely to differ. The probability that Person 2 will answer with a 1 and Person 1 will answer with a 0 is greater for Item 2 than for Item 1. If the two individuals’ answers differ, we can learn more about the individual or distinguish them more clearly. Therefore, Item 2 has better discriminative power and we learned that “the magnitude of the difference in these predicted probabilities is a direct function of the item’s <span class="math inline">\alpha</span>” <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 20</a>)</span>.</p>
-<div class="callout callout-style-simple callout-tip callout-titled">
+<div id="tip-math-loadings" class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Mathematical background
+Tip&nbsp;1: Mathematical background
 </div>
 </div>
 <div class="callout-body-container callout-body">
+<p><strong>Discrimination and item-total correlation</strong></p>
 <p>Note that the discrimination parameter of the IRT relates also to the item-total correlation from the CTT, which is also sometimes called item discrimination <span class="citation" data-cites="lord1980">(<a href="#ref-lord1980" role="doc-biblioref">Lord 1980, p33</a>)</span>:</p>
 <p><span class="math display">\alpha_i \approx \frac{\rho_{ix}}{\sqrt{1-\rho_{ix}^2}} \quad ; \quad
 \rho_{ix} \approx \frac{\alpha_i}{\sqrt{1+\alpha_i^2}}</span></p>
 <p>However, this mathematical relationship holds only if <span class="math inline">\theta</span> is restricted to a standard normal distribution and there is no guessing involved <span class="citation" data-cites="lord1980">(<a href="#ref-lord1980" role="doc-biblioref">Lord 1980</a>)</span>.</p>
+<p><strong>Discrimination and factor loadings</strong></p>
+<p>As we already learned, IRT models are basically generalized linear mixed models. It is a model where we want to predict a dichotomous dependent variable and we use latent predictors for this. If we have a continuous dependent variable and we predict it with a latent predictor , we call this <em>confirmatory factor analysis</em> (CFA). We also know that we can use link-functions to deal with dichotomous dependent variables as we do for example in logistic regressions. So basically, we can think of IRT models as CFA for categorical responses, where we use a link function to deal with the dichotomous response format <span class="citation" data-cites="hoffman2024">(<a href="#ref-hoffman2024" role="doc-biblioref">Hoffman 2024</a>)</span>.</p>
+<p>Please note that the following part is taken from <span class="citation" data-cites="hoffman2024">Hoffman (<a href="#ref-hoffman2024" role="doc-biblioref">2024</a>)</span>.</p>
+<p>So if we transform our dependent Variable according to our link-function (logit-link), we can use the same formula as in CFA:</p>
+<p><span class="math display">\text{Logit}[p(y_{ni} = 1)] = \mu_i + \lambda_iF_n</span></p>
+<p>This looks very different to our 2PL model equation (see <a href="#eq-2PL" class="quarto-xref">Equation&nbsp;9</a>). However, it’s just a different way of writing it, and all of our components from 2PL are already included here: The intercept <span class="math inline">\mu_i</span> marks the item easiness. To get the item difficulty we can therefore set <span class="math inline">\mu_i = -\tau_i</span>. The <span class="math inline">\lambda_i</span> is the factor loading and relates to the item discrimination.</p>
+<p>If we take a look at the 2PL Formula, we can see that we predict the probability and not the Logit. Therefore, we apply the inverse of the link-function to the right hand side of the equation (see first formula in <a href="#eq-2PL-CFA" class="quarto-xref">Equation&nbsp;10</a>). However, we can also use the 2PL parameterization to predict the Logit. Then we have only our linear term left on the right hand side of the equation (see second formula in <a href="#eq-2PL-CFA" class="quarto-xref">Equation&nbsp;10</a>).</p>
+<p><span id="eq-2PL-CFA"><span class="math display">\begin{align}
+P(Y_{ni} = 1) &amp;= \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}\\
+\text{Logit}[p(y_{ni} = 1)] &amp;= \alpha_i(\theta_n - \beta_i)
+\end{align} \tag{10}</span></span></p>
+<p>Now, if we multiply out the linear term and rearrange a bit, we get:</p>
+<p><span class="math display">\begin{align}
+\alpha_i(\theta_n - \beta_i) &amp;= \alpha_i\theta_n -\alpha_i\beta_i\\
+&amp;= -\alpha_i\beta_i + \alpha_i\theta_n
+\end{align}</span></p>
+<p>As we can see we get a constant <span class="math inline">-\alpha_i\beta_i</span> because this term has only the index <span class="math inline">i</span> and varies only over items but not within item. Next we have a slope parameter <span class="math inline">\alpha_i</span> and a latent predictor <span class="math inline">\theta_n</span>. This looks pretty much like a linear term from a regression. In fact this translates directly in the formula of a CFA:</p>
+<p><span class="math display">-\alpha_i\beta_i + \alpha_i\theta_n = -\tau_i + \lambda_iF_n</span></p>
+<p>As one can see, the model parameters of the 2PL model correspond to those of the CFA (<span class="math inline">\alpha_i = \lambda_i</span> and <span class="math inline">-\alpha_i\beta_i = -\tau_i</span> rearranged we get <span class="math inline">\beta_i = \tau_i/\lambda_i</span>) , and ultimately, the 2PL and CFA formulas are simply two different notations/parameterizations for the same model. However, this holds only if the latent construct (<span class="math inline">\theta</span> or <span class="math inline">F</span>) has the same metric in the 2PL as in the CFA. In IRT <span class="math inline">\theta</span> is often restricted to a standard normal distribution <span class="math inline">N(0,1)</span>. In contrast in CFA often times the loading of one anchor item is fixed at 1 and the variance of the latent trait can be estimated freely. In such a case the variance of the latent trait of the CFA is different from the latent trait in the 2PL model. Furthermore, the mean of the latent trait can be different. In the 2PL it is restricted to 0 but in the CFA it can be estimated freely.</p>
+<p>We can calculate the 2PL parameters from the CFA parameters nonetheless if we account for this. We just have to map the CFA parameter to the scale of the 2PL. This can be done with the following equations:</p>
+<p><span class="math display">\begin{align}
+\alpha_i &amp;= \lambda_i \cdot \sqrt{\sigma_{F}^2}\\
+\beta_i &amp;= \frac{\tau_i - (\lambda_i \cdot \overline{F})}{\lambda_i \cdot \sqrt{\sigma_{F}^2}}
+\end{align}</span></p>
+<p>The equation for the <span class="math inline">\alpha_i</span> relates to the slope. The slope expresses how much the outcome changes, if we increase the predictor by one unit. In the 2PL one unit equals one standard deviation which is 1 under a standard normal distribution. However in the CFA one unit equals the standard deviation of the latent trait <span class="math inline">\sqrt{\sigma_{F}^2}</span>. Therefore, one unit is in the CFA metric <span class="math inline">\sqrt{\sigma_{F}^2}</span> times greater than in the 2PL metric. Consequently we also have to increase the slope <span class="math inline">\lambda_i</span> by this factor to bring it to the 2PL metric.</p>
+<p>When we take a look at the item difficulty <span class="math inline">\beta_i</span>, the right hand side of the formula looks a little bit like the formula for z-standardization and this is basically the idea here. We want to calculate how far the item difficulty lies from the mean of the latent construct (<span class="math inline">\overline{\theta} = 0</span>) on the 2PL scale.</p>
+<p>Note that if the latent trait in the CFA also follows a standard normal distribution the equations simplify to the 1:1 mapping</p>
+<p><span class="math display">\begin{align}
+\alpha_i &amp;= \lambda_i \cdot \sqrt{1} = \lambda_i \cdot 1 = \lambda_i\\
+\beta_i &amp;= \frac{\tau_i - (\lambda_i \cdot \overline{F})}{\lambda_i \cdot \sqrt{\sigma_{F}^2}} = \frac{\tau_i - (\lambda_i \cdot 0)}{\lambda_i \cdot \sqrt{1}} = \frac{\tau_i}{\lambda_i}
+\end{align}</span></p>
+<p>Of course we can do this also the other way around to bring the 2PL parameters to the scale of the CFA by simply rearranging the formulas:</p>
+<p><span class="math display">\begin{align}
+\lambda_i &amp;= \frac{\alpha_i}{\sqrt{\sigma_{F}^2}}\\
+\tau_i &amp;= \alpha_i\beta_i + \frac{\alpha_i \cdot \overline{F}}{\sqrt{\sigma_{F}^2}}
+\end{align}</span></p>
+<p>Note however, that these equations only hold if the latent trait is standardized in the 2PL metric (mean = 0, variance = 1).</p>
+<p>For a more in-depth and formal discussion of this point see <span class="citation" data-cites="kamata2008">Kamata and Bauer (<a href="#ref-kamata2008" role="doc-biblioref">2008</a>)</span>.</p>
 </div>
 </div>
 <div class="callout callout-style-simple callout-note callout-titled">
@@ -1559,7 +1598,7 @@ mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = "2PL",
     SE = TRUE)
 
 Full-information item factor analysis with 1 factor(s).
-Converged within 1e-04 tolerance after 25 EM iterations.
+Converged within 1e-04 tolerance after 18 EM iterations.
 mirt version: 1.46.1 
 M-step optimizer: BFGS 
 EM acceleration: Ramsay 
@@ -1568,13 +1607,13 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  11.8101
+Condition number of information matrix =  11.07532
 
-Log-likelihood = -38884.64
+Log-likelihood = -39003.6
 Estimated parameters: 18 
-AIC = 77805.28
-BIC = 77930.9; SABIC = 77873.7
-G2 (493) = 1514.93, p = 0
+AIC = 78043.19
+BIC = 78168.81; SABIC = 78111.61
+G2 (493) = 1450.46, p = 0
 RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
@@ -1602,15 +1641,15 @@ RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                     a      b g u
-Eco_aff_1_dicho 1.322 -1.230 0 1
-Eco_aff_2_dicho 1.714 -0.946 0 1
-Eco_aff_3_dicho 1.355 -0.909 0 1
-Eco_cog_4_dicho 0.813 -1.121 0 1
-Eco_cog_5_dicho 1.582 -0.712 0 1
-Eco_cog_6_dicho 1.218 -0.001 0 1
-Eco_con_7_dicho 2.048 -0.436 0 1
-Eco_con_8_dicho 2.072  0.259 0 1
-Eco_con_9_dicho 1.782 -0.872 0 1
+Eco_aff_1_dicho 1.353 -1.194 0 1
+Eco_aff_2_dicho 1.691 -0.962 0 1
+Eco_aff_3_dicho 1.280 -0.966 0 1
+Eco_cog_4_dicho 0.857 -1.069 0 1
+Eco_cog_5_dicho 1.601 -0.704 0 1
+Eco_cog_6_dicho 1.189 -0.033 0 1
+Eco_con_7_dicho 1.962 -0.433 0 1
+Eco_con_8_dicho 2.054  0.260 0 1
+Eco_con_9_dicho 1.769 -0.859 0 1
 
 $means
 F1 
@@ -1629,45 +1668,45 @@ F1  1</code></pre>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             F1
-[1,] -0.6165072
-[2,]  0.5275670
-[3,] -0.4930261
-[4,]  0.6823664
-[5,] -0.1126378
-[6,] -2.0106789</code></pre>
+<pre><code>              F1
+[1,] -0.32588055
+[2,] -0.04077925
+[3,] -1.07393440
+[4,]  0.05266189
+[5,] -0.63997592
+[6,] -2.01559900</code></pre>
 </div>
 </div>
-<p>We’ve also learned that IRT models are related to exploratory factor analysis. <mark>Wurde das schon eingeführt oben?</mark> Accordingly we can transform our IRT model parameters into standardized factor loadings. To do this, we use the <code>summary()</code> function.</p>
+<p>We’ve also learned that IRT models are related to exploratory factor analysis. <mark>Wurde das schon eingeführt oben?</mark> Accordingly we can transform our IRT model parameters into standardized factor loadings (see also <a href="#tip-math-loadings" class="quarto-xref">mathematical background&nbsp;1</a>). To do this, we use the <code>summary()</code> function.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get factor loadings of our 2PL</span></span>
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   F1    h2
-Eco_aff_1_dicho 0.614 0.376
-Eco_aff_2_dicho 0.710 0.504
-Eco_aff_3_dicho 0.623 0.388
-Eco_cog_4_dicho 0.431 0.186
-Eco_cog_5_dicho 0.681 0.464
-Eco_cog_6_dicho 0.582 0.339
-Eco_con_7_dicho 0.769 0.592
-Eco_con_8_dicho 0.773 0.597
-Eco_con_9_dicho 0.723 0.523
+Eco_aff_1_dicho 0.622 0.387
+Eco_aff_2_dicho 0.705 0.497
+Eco_aff_3_dicho 0.601 0.361
+Eco_cog_4_dicho 0.450 0.202
+Eco_cog_5_dicho 0.685 0.469
+Eco_cog_6_dicho 0.573 0.328
+Eco_con_7_dicho 0.755 0.571
+Eco_con_8_dicho 0.770 0.593
+Eco_con_9_dicho 0.721 0.519
 
                 SE.F1
 Eco_aff_1_dicho 0.014
 Eco_aff_2_dicho 0.013
-Eco_aff_3_dicho 0.013
+Eco_aff_3_dicho 0.014
 Eco_cog_4_dicho 0.015
-Eco_cog_5_dicho 0.013
+Eco_cog_5_dicho 0.012
 Eco_cog_6_dicho 0.013
 Eco_con_7_dicho 0.011
 Eco_con_8_dicho 0.011
 Eco_con_9_dicho 0.012
 
-SS loadings:  3.968 
-Proportion Var:  0.441 
+SS loadings:  3.928 
+Proportion Var:  0.436 
 
 Factor correlations: 
 
@@ -1949,9 +1988,9 @@ Figure&nbsp;14
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(eco_rasch, eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               AIC    SABIC       HQ      BIC    logLik      X2 df p
-eco_rasch 78306.62 78344.63 78330.52 78376.41 -39143.31             
-eco_2PL   77805.28 77873.70 77848.30 77930.90 -38884.64 517.337  8 0</code></pre>
+<pre><code>               AIC    SABIC       HQ      BIC   logLik      X2 df p
+eco_rasch 78502.60 78540.60 78526.49 78572.38 -39241.3             
+eco_2PL   78043.19 78111.61 78086.21 78168.81 -39003.6 475.405  8 0</code></pre>
 </div>
 </div>
 <p>As we can see the Output provides us with a lot of information. So let’s break it down.</p>
@@ -1974,7 +2013,7 @@ eco_2PL   77805.28 77873.70 77848.30 77930.90 -38884.64 517.337  8 0</code></pre
 <p>Nevertheless, we’ll briefly touch on the core idea behind these models. As we might already suspect, the higher numbers preceding “PL” indicates additional parameters that are included.</p>
 <p>In the <strong>3PL</strong>, an additional item-specific parameter is introduced that can shift the lower asymptote of the ICC upward. As a result, the minimum possible response probability—the probability of answering “1” for an item—can be significantly greater than 0 for all test-takers. This can be interpreted as a guessing probability, which the 3PL then allows us to model.</p>
 <p>The <strong>4PL</strong> includes an additional item-specific parameter that influences the upper asymptote of the ICC and can thereby shift downward the maximum possible response probability of answering an item with a 1. This can be interpreted, for example, in terms of interfering factors that cause a person who would otherwise have a high probability to answer an item with a 1 to have a significantly lower response probability for a 1.</p>
-<p>In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the multidimensional case. This means that multiple latent constructs simultaneously influence the response process. Furthermore, there are also extensions that allow IRT models to be applied to polytomous response formats such as Likert scales. A prominent example of this is the <em>Partial Credit Model</em>.</p>
+<p>In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the <strong>multidimensional</strong> case. This means that multiple latent constructs simultaneously influence the response process. Furthermore, there are also extensions that allow IRT models to be applied to polytomous response formats such as Likert scales. A prominent example of this is the <em>Partial Credit Model</em>.</p>
 <p><mark>Should we mention here that tutorials on polytome answer formats are also coming?</mark></p>
 </section>
 <section id="additional-ressources" class="level2">
@@ -2018,6 +2057,9 @@ Gomm, Sarah, and Franziska Quoß. 2026. <span>“How to Measure Environmental Co
 </div>
 <div id="ref-hoffman2024" class="csl-entry" role="listitem">
 Hoffman, Lisa. 2024. <em>[Lecture Notes on Factor Analysis and Structural Equation Models</em>. <a href="https://www.lesahoffman.com/PSQF6249/index.html">https://www.lesahoffman.com/PSQF6249/index.html</a>.
+</div>
+<div id="ref-kamata2008" class="csl-entry" role="listitem">
+Kamata, Akihito, and Daniel J. Bauer. 2008. <span>“A Note on the Relation Between Factor Analytic and Item Response Theory Models.”</span> <em>Structural Equation Modeling: A Multidisciplinary Journal</em> 15 (1): 136–53. <a href="https://doi.org/10.1080/10705510701758406">https://doi.org/10.1080/10705510701758406</a>.
 </div>
 <div id="ref-lord1980" class="csl-entry" role="listitem">
 Lord, F. M. 1980. <em>Applications of item response theory to practical testing problems</em>. Taylor; Francis.

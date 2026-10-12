@@ -1416,7 +1416,7 @@ Therefore this new extension is called (Birnbaum) two-parameter logistic model (
 
 The formula of the 2PL looks pretty similar to the Rasch-model.
 
-$$P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}$$
+$$P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}$$ {#eq-2PL}
 
 Let’s take a look at the individual components to better understand the formula:
 
@@ -1483,8 +1483,10 @@ The probability that Person 2 will answer with a 1 and Person 1 will answer with
 If the two individuals’ answers differ, we can learn more about the individual or distinguish them more clearly.
 Therefore, Item 2 has better discriminative power and we learned that "the magnitude of the difference in these predicted probabilities is a direct function of the item's $\alpha$" [@deayala2022, p. 20].
 
-::: {.callout-tip appearance="simple"}
+::: {#tip-math-loadings .callout-tip appearance="simple"}
 ## Mathematical background
+
+**Discrimination and item-total correlation**
 
 Note that the discrimination parameter of the IRT relates also to the item-total correlation from the CTT, which is also sometimes called item discrimination [@lord1980, p33]:
 
@@ -1492,6 +1494,94 @@ $$\alpha_i \approx \frac{\rho_{ix}}{\sqrt{1-\rho_{ix}^2}} \quad ; \quad
 \rho_{ix} \approx \frac{\alpha_i}{\sqrt{1+\alpha_i^2}}$$
 
 However, this mathematical relationship holds only if $\theta$ is restricted to a standard normal distribution and there is no guessing involved [@lord1980].
+
+**Discrimination and factor loadings**
+
+As we already learned, IRT models are basically generalized linear mixed models.
+It is a model where we want to predict a dichotomous dependent variable and we use latent predictors for this.
+If we have a continuous dependent variable and we predict it with a latent predictor , we call this *confirmatory factor analysis* (CFA).
+We also know that we can use link-functions to deal with dichotomous dependent variables as we do for example in logistic regressions.
+So basically, we can think of IRT models as CFA for categorical responses, where we use a link function to deal with the dichotomous response format [@hoffman2024].
+
+Please note that the following part is taken from @hoffman2024.
+
+So if we transform our dependent Variable according to our link-function (logit-link), we can use the same formula as in CFA:
+
+$$\text{Logit}[p(y_{ni} = 1)] = \mu_i + \lambda_iF_n$$
+
+This looks very different to our 2PL model equation (see @eq-2PL).
+However, it's just a different way of writing it, and all of our components from 2PL are already included here: The intercept $\mu_i$ marks the item easiness.
+To get the item difficulty we can therefore set $\mu_i = -\tau_i$.
+The $\lambda_i$ is the factor loading and relates to the item discrimination.
+
+If we take a look at the 2PL Formula, we can see that we predict the probability and not the Logit.
+Therefore, we apply the inverse of the link-function to the right hand side of the equation (see first formula in @eq-2PL-CFA).
+However, we can also use the 2PL parameterization to predict the Logit.
+Then we have only our linear term left on the right hand side of the equation (see second formula in @eq-2PL-CFA).
+
+$$\begin{align}
+P(Y_{ni} = 1) &= \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}\\
+\text{Logit}[p(y_{ni} = 1)] &= \alpha_i(\theta_n - \beta_i)
+\end{align}$$ {#eq-2PL-CFA}
+
+Now, if we multiply out the linear term and rearrange a bit, we get:
+
+$$\begin{align}
+\alpha_i(\theta_n - \beta_i) &= \alpha_i\theta_n -\alpha_i\beta_i\\
+&= -\alpha_i\beta_i + \alpha_i\theta_n
+\end{align}$$
+
+As we can see we get a constant $-\alpha_i\beta_i$ because this term has only the index $i$ and varies only over items but not within item.
+Next we have a slope parameter $\alpha_i$ and a latent predictor $\theta_n$.
+This looks pretty much like a linear term from a regression.
+In fact this translates directly in the formula of a CFA:
+
+$$-\alpha_i\beta_i + \alpha_i\theta_n = -\tau_i + \lambda_iF_n$$
+
+As one can see, the model parameters of the 2PL model correspond to those of the CFA ($\alpha_i = \lambda_i$ and $-\alpha_i\beta_i = -\tau_i$ rearranged we get $\beta_i = \tau_i/\lambda_i$) , and ultimately, the 2PL and CFA formulas are simply two different notations/parameterizations for the same model.
+However, this holds only if the latent construct ($\theta$ or $F$) has the same metric in the 2PL as in the CFA.
+In IRT $\theta$ is often restricted to a standard normal distribution $N(0,1)$.
+In contrast in CFA often times the loading of one anchor item is fixed at 1 and the variance of the latent trait can be estimated freely.
+In such a case the variance of the latent trait of the CFA is different from the latent trait in the 2PL model.
+Furthermore, the mean of the latent trait can be different.
+In the 2PL it is restricted to 0 but in the CFA it can be estimated freely.
+
+We can calculate the 2PL parameters from the CFA parameters nonetheless if we account for this.
+We just have to map the CFA parameter to the scale of the 2PL.
+This can be done with the following equations:
+
+$$\begin{align}
+\alpha_i &= \lambda_i \cdot \sqrt{\sigma_{F}^2}\\
+\beta_i &= \frac{\tau_i - (\lambda_i \cdot \overline{F})}{\lambda_i \cdot \sqrt{\sigma_{F}^2}}
+\end{align}$$
+
+The equation for the $\alpha_i$ relates to the slope.
+The slope expresses how much the outcome changes, if we increase the predictor by one unit.
+In the 2PL one unit equals one standard deviation which is 1 under a standard normal distribution.
+However in the CFA one unit equals the standard deviation of the latent trait $\sqrt{\sigma_{F}^2}$.
+Therefore, one unit is in the CFA metric $\sqrt{\sigma_{F}^2}$ times greater than in the 2PL metric.
+Consequently we also have to increase the slope $\lambda_i$ by this factor to bring it to the 2PL metric.
+
+When we take a look at the item difficulty $\beta_i$, the right hand side of the formula looks a little bit like the formula for z-standardization and this is basically the idea here.
+We want to calculate how far the item difficulty lies from the mean of the latent construct ($\overline{\theta} = 0$) on the 2PL scale.
+
+Note that if the latent trait in the CFA also follows a standard normal distribution the equations simplify to the 1:1 mapping
+
+$$\begin{align}
+\alpha_i &= \lambda_i \cdot \sqrt{1} = \lambda_i \cdot 1 = \lambda_i\\
+\beta_i &= \frac{\tau_i - (\lambda_i \cdot \overline{F})}{\lambda_i \cdot \sqrt{\sigma_{F}^2}} = \frac{\tau_i - (\lambda_i \cdot 0)}{\lambda_i \cdot \sqrt{1}} = \frac{\tau_i}{\lambda_i}
+\end{align}$$
+
+Of course we can do this also the other way around to bring the 2PL parameters to the scale of the CFA by simply rearranging the formulas:
+
+$$\begin{align}
+\lambda_i &= \frac{\alpha_i}{\sqrt{\sigma_{F}^2}}\\
+\tau_i &= \alpha_i\beta_i + \frac{\alpha_i \cdot \overline{F}}{\sqrt{\sigma_{F}^2}}
+\end{align}$$
+
+Note however, that these equations only hold if the latent trait is standardized in the 2PL metric (mean = 0, variance = 1).
+
+For a more in-depth and formal discussion of this point see @kamata2008.
 :::
 
 ::: {.callout-note appearance="simple"}
@@ -1556,7 +1646,7 @@ head(person_par_eco_2PL)
 
 We've also learned that IRT models are related to exploratory factor analysis.
 [Wurde das schon eingeführt oben?]{.mark}
-Accordingly we can transform our IRT model parameters into standardized factor loadings.
+Accordingly we can transform our IRT model parameters into standardized factor loadings (see also [mathematical background -@tip-math-loadings]).
 To do this, we use the `summary()` function.
 
 ```{r}
@@ -1915,7 +2005,7 @@ This can be interpreted as a guessing probability, which the 3PL then allows us 
 The **4PL** includes an additional item-specific parameter that influences the upper asymptote of the ICC and can thereby shift downward the maximum possible response probability of answering an item with a 1.
 This can be interpreted, for example, in terms of interfering factors that cause a person who would otherwise have a high probability to answer an item with a 1 to have a significantly lower response probability for a 1.
 
-In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the multidimensional case.
+In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the **multidimensional** case.
 This means that multiple latent constructs simultaneously influence the response process.
 Furthermore, there are also extensions that allow IRT models to be applied to polytomous response formats such as Likert scales.
 A prominent example of this is the *Partial Credit Model*.
