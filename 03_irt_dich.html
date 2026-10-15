@@ -175,11 +175,13 @@ window.Quarto = {
   <li><a href="#model-formula-1" id="toc-model-formula-1" class="nav-link" data-scroll-target="#model-formula-1">Model formula</a></li>
   <li><a href="#interpretation-of-the-item-discrimination-parameter" id="toc-interpretation-of-the-item-discrimination-parameter" class="nav-link" data-scroll-target="#interpretation-of-the-item-discrimination-parameter">Interpretation of the item discrimination parameter</a></li>
   <li><a href="#information-in-the-2pl" id="toc-information-in-the-2pl" class="nav-link" data-scroll-target="#information-in-the-2pl">Information in the 2PL</a></li>
-  <li><a href="#difference-to-the-rasch-model" id="toc-difference-to-the-rasch-model" class="nav-link" data-scroll-target="#difference-to-the-rasch-model">Difference to the Rasch-model</a></li>
   <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model comparison</a></li>
   </ul></li>
   <li><a href="#outlook" id="toc-outlook" class="nav-link" data-scroll-target="#outlook">Outlook</a></li>
-  <li><a href="#additional-ressources" id="toc-additional-ressources" class="nav-link" data-scroll-target="#additional-ressources">Additional ressources</a></li>
+  <li><a href="#sec-appendix" id="toc-sec-appendix" class="nav-link" data-scroll-target="#sec-appendix">Appendix</a>
+  <ul class="collapse">
+  <li><a href="#mathematical-background-of-the-sufficient-statistic-property-of-the-rasch-model" id="toc-mathematical-background-of-the-sufficient-statistic-property-of-the-rasch-model" class="nav-link" data-scroll-target="#mathematical-background-of-the-sufficient-statistic-property-of-the-rasch-model">Mathematical background of the sufficient statistic property of the Rasch model</a></li>
+  </ul></li>
   <li><a href="#ai-statement" id="toc-ai-statement" class="nav-link" data-scroll-target="#ai-statement">AI statement</a></li>
   
   </ul>
@@ -231,7 +233,7 @@ window.Quarto = {
          <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">14.10.2026</p>
+        <p class="date">15.10.2026</p>
       </div>
     </div>
       </div>
@@ -376,7 +378,7 @@ window.Quarto = {
 </tbody>
 </table>
 <p>In the original scale, all items are answered on a five-point Likert scale (Response scale (statements): <em>Does not apply at all</em> (1) to <em>Fully applies</em> (5). Response scale (questions): <em>Very unwilling</em> (1) to <em>Very willing</em> (5)). Item 3 and Item 5 are reverse coded.</p>
-<p>Please note that for this tutorial, the data has been dichotomized. This means that responses from participants who somewhat agreed with an item (responses &gt; 3) were coded as 1. Responses from participants who somewhat disagreed with an item (responses &lt; 3) were coded as 0. The responses of participants who answered an item with a 3 were randomly coded as either a 1 or a 0 with a 50% probability. This dichotomization is necessary because the models covered in this tutorial only work with dichotomous response formats. <mark>However, in a future tutorial, we will also cover IRT models for polytomous response formats.</mark></p>
+<p>Please note that for this tutorial, the data has been dichotomized. This means that responses from participants who somewhat agreed with an item (responses &gt; 3) were coded as 1. Responses from participants who somewhat disagreed with an item (responses &lt; 3) were coded as 0. The responses of participants who answered an item with a 3 were randomly coded as either a 1 or a 0 with a 50% probability. This dichotomization is necessary because the models covered in this tutorial only work with dichotomous response formats.</p>
 <p>So let’s prepare our data:</p>
 <p>First we have to load some packages and the dataset.</p>
 <div class="cell">
@@ -459,7 +461,7 @@ window.Quarto = {
 </div>
 </div>
 </section>
-<section id="the-rasch-model-1pl" class="level2 page-columns page-full">
+<section id="the-rasch-model-1pl" class="level2">
 <h2 class="anchored" data-anchor-id="the-rasch-model-1pl">The Rasch Model (1PL)</h2>
 <p>Following this conceptual introduction, let’s take a closer look at the first IRT model.</p>
 <p>The Rasch model is a statistical model that links the latent level to the manifest level by predicting the probability that a person will choose response 1 for a given item. The Rasch model always assumes dichotomous response formats, in which the responses are typically coded as 0 and 1. Generally speaking, 1 represents an success and 0 a failure. In our example with the ECo-Scale, a success can be interpreted as agreement with the item and a failure as disagreement with the item. In achievement testing, however, 1 could also mean “Correct” and 0 could mean “Incorrect.”</p>
@@ -485,7 +487,7 @@ window.Quarto = {
 <p>Even though this may seem like a minor difference—and 1PL models with different <span class="math inline">\alpha</span> are mathematically equivalent—there are different philosophical perspectives underlying it <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 20</a>)</span>. Compared to the Rasch model, the 1PL model is designed to optimize the fit of the model to the data. This is because the 1PL model is more flexible than the Rasch model; the <span class="math inline">\alpha</span> parameter does not have to be 1, so the model can “try out” different <span class="math inline">\alpha</span> values to determine which <span class="math inline">\alpha</span> yields the best fit to the data. The Rasch model does not allow for this kind of flexibility, since alpha must equal 1 in this model. However, this restriction ensures a consistent scaling that allows for comparability across different Rasch models.</p>
 <p>[Is this to technical for a beginner tutorial? To early in the tutorial? Especially because the discrimination parameter is introduced properly in the 2PL part]{./mark}</p>
 </section>
-<section id="sec-mod_par" class="level3 page-columns page-full">
+<section id="sec-mod_par" class="level3">
 <h3 class="anchored" data-anchor-id="sec-mod_par">Interpretation of model parameters</h3>
 <p>Let’s take a closer look at the two model parameters and how we can interpret them.</p>
 <p><span class="math inline">\theta</span> refers to the <strong>person parameter</strong> - that is, the latent construct we want to measure. Since the latent construct represents a continuum, the <span class="math inline">\theta</span> parameter requires the index <span class="math inline">n</span>, because each person is located at a different point on the continuum. In our example <span class="math inline">\theta</span> would be “environmental concerns,” and <span class="math inline">\theta_n</span> would be the level of environmental concerns of person <span class="math inline">n</span>.</p>
@@ -532,7 +534,6 @@ Figure&nbsp;1
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("mirt") </span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(mirt)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-
 <p>Using the <code>mirt()</code> function from the <code>mirt</code> package, we can now fit a Rasch model to our example data from the ECo-Scale. The <code>mirt()</code> function expects the following arguments:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-5"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-5-1"><a href="#annotated-cell-5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># estimate the Rasch model with the mirt() function</span></span>
@@ -561,7 +562,6 @@ Figure&nbsp;1
 </dl>
 </div>
 </div>
-
 <div class="cell">
 <div id="lst-print-rasch" class="r cell-code listing quarto-float quarto-figure quarto-figure-left anchored">
 <figure class="quarto-float quarto-float-lst figure">
@@ -589,13 +589,13 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  5.869908
+Condition number of information matrix =  5.87095
 
-Log-likelihood = -39264.19
+Log-likelihood = -39272.28
 Estimated parameters: 10 
-AIC = 78548.39
-BIC = 78618.17; SABIC = 78586.4
-G2 (501) = 2008.95, p = 0
+AIC = 78564.57
+BIC = 78634.36; SABIC = 78602.58
+G2 (501) = 1996.22, p = 0
 RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
@@ -675,23 +675,23 @@ Listing&nbsp;2: Item parameters of the Rasch model
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                 a      b g u
-Eco_aff_1_dicho 1 -1.681 0 1
-Eco_aff_2_dicho 1 -1.465 0 1
-Eco_aff_3_dicho 1 -1.300 0 1
-Eco_cog_4_dicho 1 -1.100 0 1
-Eco_cog_5_dicho 1 -1.099 0 1
-Eco_cog_6_dicho 1 -0.043 0 1
-Eco_con_7_dicho 1 -0.731 0 1
-Eco_con_8_dicho 1  0.427 0 1
-Eco_con_9_dicho 1 -1.387 0 1
+Eco_aff_1_dicho 1 -1.687 0 1
+Eco_aff_2_dicho 1 -1.486 0 1
+Eco_aff_3_dicho 1 -1.278 0 1
+Eco_cog_4_dicho 1 -1.097 0 1
+Eco_cog_5_dicho 1 -1.091 0 1
+Eco_cog_6_dicho 1 -0.017 0 1
+Eco_con_7_dicho 1 -0.741 0 1
+Eco_con_8_dicho 1  0.479 0 1
+Eco_con_9_dicho 1 -1.384 0 1
 
 $means
 F1 
  0 
 
 $cov
-      F1
-F1 2.171</code></pre>
+     F1
+F1 2.17</code></pre>
 </div>
 </div>
 <p>The output consists of three sections:</p>
@@ -707,28 +707,24 @@ F1 2.171</code></pre>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_rasch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>              F1
-[1,] -0.54573528
-[2,] -0.09153297
-[3,] -1.40264700
-[4,] -0.54573528
-[5,] -0.54573528
-[6,] -2.36392937</code></pre>
+<pre><code>             F1
+[1,] -0.5388400
+[2,]  1.0425698
+[3,] -1.3979167
+[4,]  0.4278514
+[5,] -0.5388400
+[6,] -1.8506907</code></pre>
 </div>
 </div>
 <p>Note that our dataset consists of 7,932 individuals. Therefore, when we use fscore(), we also get 7,932 different <span class="math inline">\theta_n</span> values (one per person <span class="math inline">n</span>). To keep the output concise, we used head() to display only the first six <span class="math inline">\theta_n</span> values out of the 7,932 <span class="math inline">\theta_n</span> values we have stored in <code>person_par_eco_rasch</code>.</p>
 </div>
-</div><div class="no-row-height column-margin column-container"><div class="callout-margin-content callout-margin-content-simple">
-<p>You only need to run <code>install.packages()</code>only once, if you haven’t already installed the <code>mirt</code> package yet.</p>
-</div><div class="callout-margin-content callout-margin-content-simple">
-<p>Note that we save with <code>&lt;-</code> the results of the <code>mirt</code> function in an object (= <code>eco_rasch</code>). This allows us to save the Rasch model in our environment. It also enables us to retrieve only specific information and parameters from the model and use them in other R commands.</p>
-</div></div>
+</div>
 </section>
 <section id="visualizations-of-the-rasch-model" class="level3">
 <h3 class="anchored" data-anchor-id="visualizations-of-the-rasch-model">Visualizations of the Rasch Model</h3>
 <section id="item-characteristic-curve" class="level4">
 <h4 class="anchored" data-anchor-id="item-characteristic-curve">Item Characteristic Curve</h4>
-<p>We can also visualize these relationships between <span class="math inline">\theta_n</span> and <span class="math inline">ßbeta_i</span>. To do so, we can conduct a small thought experiment: Imagine we select an item for which we know the item difficulty. Now we calculate the probability that a person will answer with a 1—but no longer for a specific person, rather for every possible <span class="math inline">\theta_n</span> value. If we then create a plot where the x-axis represents <span class="math inline">\theta</span> and the y-axis represents the probability that the item will be answered with a 1, we can see for every possible person/person parameter how high their probability is that they will agree with the item. Such a plot is called an <em>item characteristic curve</em> (ICC) or <em>item response function</em> (IRF).</p>
+<p>We can also visualize these relationships between <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span>. To do so, we can conduct a small thought experiment: Imagine we select an item for which we know the item difficulty. Now we calculate the probability that a person will answer with a 1—but no longer for a specific person, rather for every possible <span class="math inline">\theta_n</span> value. If we then create a plot where the x-axis represents <span class="math inline">\theta</span> and the y-axis represents the probability that the item will be answered with a 1, we can see for every possible person/person parameter how high their probability is that they will agree with the item. Such a plot is called an <em>item characteristic curve</em> (ICC) or <em>item response function</em> (IRF).</p>
 <p>As an example, the ICC for Item 6 of the ECo scale is shown in <a href="#fig-ICC6_Rasch" class="quarto-xref">Figure&nbsp;2</a>:</p>
 <div id="fig-ICC6_Rasch" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -1033,15 +1029,15 @@ Figure&nbsp;4
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Item 1 Item 2 Item 3 Item 4 Item 5 Item 6 Item 7 Item 8 Item 9
-Item 1  1.000  0.108 -0.153 -0.063 -0.048 -0.138 -0.169 -0.145 -0.144
-Item 2  0.108  1.000 -0.138 -0.078  0.010 -0.108 -0.193 -0.144 -0.147
-Item 3 -0.153 -0.138  1.000 -0.166 -0.042 -0.076 -0.094 -0.114 -0.086
-Item 4 -0.063 -0.078 -0.166  1.000 -0.169 -0.114 -0.193 -0.188 -0.142
-Item 5 -0.048  0.010 -0.042 -0.169  1.000 -0.136 -0.153 -0.135 -0.123
-Item 6 -0.138 -0.108 -0.076 -0.114 -0.136  1.000 -0.130 -0.153 -0.103
-Item 7 -0.169 -0.193 -0.094 -0.193 -0.153 -0.130  1.000  0.160  0.026
-Item 8 -0.145 -0.144 -0.114 -0.188 -0.135 -0.153  0.160  1.000 -0.001
-Item 9 -0.144 -0.147 -0.086 -0.142 -0.123 -0.103  0.026 -0.001  1.000</code></pre>
+Item 1  1.000  0.079 -0.172 -0.044 -0.065 -0.111 -0.187 -0.144 -0.128
+Item 2  0.079  1.000 -0.110 -0.082 -0.014 -0.108 -0.168 -0.141 -0.159
+Item 3 -0.172 -0.110  1.000 -0.169 -0.004 -0.074 -0.103 -0.130 -0.103
+Item 4 -0.044 -0.082 -0.169  1.000 -0.172 -0.116 -0.187 -0.176 -0.157
+Item 5 -0.065 -0.014 -0.004 -0.172  1.000 -0.132 -0.168 -0.114 -0.109
+Item 6 -0.111 -0.108 -0.074 -0.116 -0.132  1.000 -0.130 -0.160 -0.123
+Item 7 -0.187 -0.168 -0.103 -0.187 -0.168 -0.130  1.000  0.168  0.036
+Item 8 -0.144 -0.141 -0.130 -0.176 -0.114 -0.160  0.168  1.000 -0.004
+Item 9 -0.128 -0.159 -0.103 -0.157 -0.109 -0.123  0.036 -0.004  1.000</code></pre>
 </div>
 </div>
 <p>We can check whether the cutoff of 0.2 is exceeded in our matrix:</p>
@@ -1083,7 +1079,7 @@ Item 9  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE</code></pr
 </section>
 <section id="sufficient-statistic" class="level4">
 <h4 class="anchored" data-anchor-id="sufficient-statistic">Sufficient statistic</h4>
-<p>A distinctive feature of the Rasch model is that the total score—that is, the number of items to which a person answered with a 1—is a sufficient statistic for <span class="math inline">\theta</span>. This means that if you know a person’s total score, you also know <span class="math inline">\theta</span>; in other words, the data does not provide any further information about <span class="math inline">\theta</span> beyond the total score, or, to put it another way, the total score contains all the information about <span class="math inline">\theta</span> that can be derived from the data <span class="citation" data-cites="lord1980">(<a href="#ref-lord1980" role="doc-biblioref">Lord 1980, 57</a>)</span>.</p>
+<p>A distinctive feature of the Rasch model is that the total score—that is, the number of items to which a person answered with a 1—is a sufficient statistic for <span class="math inline">\theta</span>. This means that if you know a person’s total score, you also know <span class="math inline">\theta</span>; in other words, the data does not provide any further information about <span class="math inline">\theta</span> beyond the total score, or, to put it another way, the total score contains all the information about <span class="math inline">\theta</span> that can be derived from the data <span class="citation" data-cites="lord1980">(<a href="#ref-lord1980" role="doc-biblioref">Lord 1980, 57</a>)</span>. In the <a href="#sec-appendix">Appendix</a> you can find a mathematically grounded explanation of this point.</p>
 <p>So, if you want to estimate a person’s <span class="math inline">\theta</span>, it is sufficient to know how many items a person answered with a 1 (= total score), and it is irrelevant which specific items a person answered with a 1. This means that people who answered the same number of items with a 1 are estimated to have the same <span class="math inline">\theta</span>. This can lead to the paradoxical effect that a person who, for example, answered three easy items with a 1 but fails to answer the more difficult items with a 1 is assigned the same <span class="math inline">\theta</span> as a person who failed at answering the easy items with a 1 but answered three difficult items with a 1.</p>
 <p>The same applies to item difficulty. The number of people who answered an item with a 1 is a sufficient statistic for item difficulty. Therefore, it is enough to know how many people answered an item with a 1, rather than which specific people answered it with a 1.</p>
 <div class="callout callout-style-simple callout-important callout-titled">
@@ -1097,31 +1093,6 @@ Item 9  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE  FALSE</code></pr
 </div>
 <div class="callout-body-container callout-body">
 <p>The property of a sufficient statistic holds only as long as the assumptions of the Rasch model hold. For other IRT models, the total score is not a sufficient statistic.</p>
-</div>
-</div>
-<div class="callout callout-style-simple callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>Mathematical background
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>To show that the total score is a sufficient statistic, we can first consider how the Rasch model can predict a person’s response vector. This means that we want to predict which responses a person gave to the various items based on their <span class="math inline">\theta</span> value. As we have learned, if the assumption of local stochastic independence holds, we can multiply the individual probabilities for each item response to obtain the probability of a person’s overall response pattern across all items (see <a href="#eq-local_indi_2" class="quarto-xref">Equation&nbsp;4</a>). You can see this also in the first line of <a href="#eq-proof_suff_1" class="quarto-xref">Equation&nbsp;5</a> (the equations were taken from <span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span>). If we rearrange the equation, we see that the number of items answered with 1 (<span class="math inline">\sum_i x_i</span>), is included in the equation. This corresponds to the true score, so we can also write <span class="math inline">\sum_i x_i</span> as <span class="math inline">t</span>.</p>
-<p><span id="eq-proof_suff_1"><span class="math display">\begin{align}
-P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta) &amp;= \prod_{i = 1}^I P(X_i = x_i |\theta) \\
-&amp;= \prod_{i = 1}^I \frac{\exp(x_i(\theta - \beta_i)}{1 + \exp(\theta - \beta_i)}\\
-&amp;= \frac{\prod_i \exp(x_i(\theta - \beta_i))}{\prod_i (1 + \exp(\theta - \beta_i))}\\
-&amp;= \frac{\exp[\sum_i (x_i(\theta - \beta_i))]}{\prod_i (1 + \exp(\theta - \beta_i))}\\
-&amp;= \frac{\exp[\sum_i x_i\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))}\\
-&amp;= \frac{\exp[t\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))} \quad \text{with} \quad t = \sum_i x_i
-\end{align} \tag{5}</span></span></p>
-<p>If the true score <span class="math inline">t</span> is known (i.e.&nbsp;we can count in the data how often a person responded with 1), we can rearrange the equation as follows:</p>
-<p><span id="eq-proof_suff_2"><span class="math display">\begin{align} P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &amp;= \frac{(\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}{\sum_{X_t} (\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}\\ &amp;= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\ &amp;= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\ &amp;= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)} \end{align} \tag{6}</span></span></p>
-<p>What we can see from all these rearrangements is that if we include the total score <span class="math inline">t</span> in the equation, we can completely eliminate the parameter <span class="math inline">\theta</span>. Ultimately, we no longer need <span class="math inline">\theta</span> to predict a person’s response vector. It is sufficient to know the total score <span class="math inline">t</span>. Therefore, the total score <span class="math inline">t</span> is a sufficient statistic.</p>
-<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span><mark><em>-&gt;darfichdiezitieren????</em></mark></p>
 </div>
 </div>
 </section>
@@ -1244,12 +1215,12 @@ Figure&nbsp;7
 <div class="callout-body-container callout-body">
 <p>Mathematically the Iteminformation for a certain <span class="math inline">\theta</span> value <span class="math inline">I_i(\theta)</span> for the Rasch model can be calculated by the probability to solve the item <span class="math inline">p(X_i = 1)</span> times the probability to not solve the item <span class="math inline">p(X_i = 0)</span> <span class="citation" data-cites="debelak2022 raschmo1995">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022, 51</a>; <a href="#ref-raschmo1995" role="doc-biblioref">Fischer and Molenaar 1995, 55</a>)</span>:</p>
 <p><span id="eq-iteminfo"><span class="math display">\begin{align}
-I_i(\theta) = p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)
-= \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
-\end{align} \tag{7}</span></span></p>
+I_i(\theta) &amp;= p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)\\
+&amp;= \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
+\end{align} \tag{5}</span></span></p>
 </div>
 </div>
-<p>If we theoretically calculate for every possible <span class="math inline">\theta</span> value the Information <span class="math inline">I_i(\theta)</span> (see <a href="#eq-iteminfo" class="quarto-xref">Equation&nbsp;7</a>) and plotting the <span class="math inline">\theta</span>s on the x-axis and the Iteminformation on the y-axis, then we get the <em>Item-Information curve</em> (see <a href="#fig-example_ICC_info" class="quarto-xref">Figure&nbsp;7</a> for an example) .</p>
+<p>If we theoretically calculate for every possible <span class="math inline">\theta</span> value the Information <span class="math inline">I_i(\theta)</span> (see <a href="#eq-iteminfo" class="quarto-xref">Equation&nbsp;5</a>) and plotting the <span class="math inline">\theta</span>s on the x-axis and the Iteminformation on the y-axis, then we get the <em>Item-Information curve</em> (see <a href="#fig-example_ICC_info" class="quarto-xref">Figure&nbsp;7</a> for an example) .</p>
 <div id="fig-example_item_info" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-example_item_info-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1261,15 +1232,14 @@ Figure&nbsp;8
 </figure>
 </div>
 <p>This is quite usefull because we can visually see where on the <span class="math inline">\theta</span> continuum the item is especially informative or which part on the <span class="math inline">\theta</span> continuum the item measures especially precise. Since we have already determined that the item information is greatest at the point of item difficulty (because that is where the ICC slope is steepest) and we know that the probability of a correct response at the point of item difficulty is 50% (because that is how item difficulty is defined), we can say that the maximum possible information in the Rasch Model is 0.25 (because <span class="math inline">I_i(\theta = \beta_i) = 0.5 \cdot 0.5 = 0.25</span>) and lies at the point of item difficulty. Therefore, the peak of the item information curve always corresponds to the item’s difficulty level</p>
-<p>The concept of item information as a measure of the (in)accuracy with which an item measures differs from CTT, and this is one advantage of IRT over CTT. This is, because in the CTT we have reliability as a measure of precision. However in CTT the reliability of an item is the same across the whole <span class="math inline">\theta</span> continuum. This implies that an item can measure at every <span class="math inline">\theta</span> level equally well. However this is rather unrealistic: for example consider an easy math item. This item is challenging for persons with low math ability and not everyone will solve it, so we can differentiate between people at the lower end of the math ability continuum. However the same item is easy for persons with a high math ability. So every person with high math ability will solve this item. However if we compare only people who are good in math an easy item doesn’t differentiate between those people because every person can solve the item. However, the CTT’s reliability concept would suggest that a simple math item measures people with high math ability just as well as it does for people with low math ability. In IRT, this is viewed more realistically based on item information, since each item can only accurately measure certain areas of a construct. Put differently, in IRT the reliability varies over <span class="math inline">\theta</span> <span class="citation" data-cites="hoffman2024">(<a href="#ref-hoffman2024" role="doc-biblioref">Hoffman 2024</a>)</span>.</p>
-<p><mark><em>Hab hier das Mathe-Beispiel beibehalten, weil ich es intuitiver finde als das mit environmetal concerns zu erklären</em></mark></p>
+<p>The concept of item information as a measure of the (in)accuracy with which an item measures differs from CTT, and this is one advantage of IRT over CTT. This is, because in the CTT we have reliability as a measure of precision. However in CTT the reliability of an item is the same across the whole <span class="math inline">\theta</span> continuum. This implies that an item can measure at every <span class="math inline">\theta</span> level equally well. However this is rather unrealistic: for example consider an “easy” environmental concern item from the ECo scale. This item is challenging to agree with for persons with low environmental concerns and not everyone will respond to this item with a 1, so we can differentiate between people at the lower end of the environmental concerns continuum. However the same item is easy to agree with for persons with high environmental concerns. So every person with high environmental concerns will agree with this item. However if we compare only people who have high environmental concerns an easy item doesn’t differentiate between those people because every person agrees with it (i.e.&nbsp;all respond with a 1). However, the CTT’s reliability concept would suggest that a simple environmental concern item measures people with high environmental concerns just as well as it does for people with low environmental concerns. In IRT, this is viewed more realistically based on item information, since each item can only accurately measure certain areas of a construct. Put differently, in IRT the reliability varies over <span class="math inline">\theta</span> <span class="citation" data-cites="hoffman2024">(<a href="#ref-hoffman2024" role="doc-biblioref">Hoffman 2024</a>)</span>.</p>
 </section>
 <section id="test-information" class="level4">
 <h4 class="anchored" data-anchor-id="test-information">Test information</h4>
 <p>Most of the time we don’t have a single item but a whole scale consisting of multiple items. Since we learned that the item information is the largest around the item difficulty and the difficulty may vary from item to item, we could ask our self how the scale as a whole can differentiate between persons across the whole <span class="math inline">\theta</span> continuum. One metric that reflects this is the test information.</p>
 <p>Since each item contributes some information, we can calculate the total test information by summing up the item information of all items <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 31</a>)</span>. Formally, this can be expressed as follows:</p>
-<p><span id="eq-testinfo"><span class="math display">I(\theta) = \sum_{i=0}^I I_i(\theta) \tag{8}</span></span></p>
-<p>If we calculate the test information for every possible <span class="math inline">\theta</span> value with <a href="#eq-iteminfo" class="quarto-xref">Equation&nbsp;7</a> and plotting the <span class="math inline">\theta</span> on the x-axis and the test information on the y-axis, then we get the <em>Test-Information curve</em> (see <a href="#fig-example_ICC_test_info" class="quarto-xref">Figure&nbsp;9</a> for an example) .</p>
+<p><span id="eq-testinfo"><span class="math display">I(\theta) = \sum_{i=0}^I I_i(\theta) \tag{6}</span></span></p>
+<p>If we calculate the test information for every possible <span class="math inline">\theta</span> value with <a href="#eq-iteminfo" class="quarto-xref">Equation&nbsp;5</a> and plotting the <span class="math inline">\theta</span> on the x-axis and the test information on the y-axis, then we get the <em>Test-Information curve</em> (see <a href="#fig-example_ICC_test_info" class="quarto-xref">Figure&nbsp;9</a> for an example) .</p>
 <div id="fig-example_ICC_test_info" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-example_ICC_test_info-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -1389,7 +1359,7 @@ Figure&nbsp;10
 </section>
 </section>
 </section>
-<section id="pl-1" class="level2">
+<section id="pl-1" class="level2 page-columns page-full">
 <h2 class="anchored" data-anchor-id="pl-1">2PL</h2>
 <p>In the Rasch model we basically make the assumption, that all differences between responses can be explained by the discrepancy between the person parameter <span class="math inline">\theta</span> and the item difficulty <span class="math inline">\beta</span>. In a regression logic this discrepancy is our only predictor, to predict the responses of a person on an item.</p>
 <p>But maybe this assumption, that only the person parameter and the item difficulty are influencing the response probability are a little bit harsh. Maybe there are other predictors which also influence the response probabilities. For example a further predictor could be the ability of an item to “differentiate among individuals located a different points on the continuum” <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 137</a>)</span>. This is also called <em>discrimination.</em> From the Rasch model we are already familiar with this idea and know that this has something to do with the slope of the ICC. However, in the Rasch model the slopes of the different items were all fixed at 1, which results in parallel ICCs. This means that all items differentiated to the same degree between persons. The only difference was where on the <span class="math inline">\theta</span> continuum they differentiated but they all differentiated equally “strong”. If we relax this assumption, we can now allow that different items can differentiate to varying degrees. Therefore, we get a new property of the items, which we can use as a predictor to predict the response probability of a person on an item.</p>
@@ -1397,7 +1367,7 @@ Figure&nbsp;10
 <section id="model-formula-1" class="level3">
 <h3 class="anchored" data-anchor-id="model-formula-1">Model formula</h3>
 <p>The model equation of the 2PL looks pretty similar to the Rasch-model.</p>
-<p><span id="eq-2PL"><span class="math display">P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))} \tag{9}</span></span></p>
+<p><span id="eq-2PL"><span class="math display">P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))} \tag{7}</span></span></p>
 <p>Let’s take a look at the individual components to better understand the formula:</p>
 <p>On the left side of the equation is again the probability that a person <span class="math inline">n</span> will answer item <span class="math inline">i</span> with a 1 (<span class="math inline">P(Y_{ni} = 1)</span>). Thus, <span class="math inline">Y_{ni}</span> denotes the response of person <span class="math inline">n</span> to item <span class="math inline">i</span> . As in the Rasch model the 2PL also assumes dichotomous response data, so <span class="math inline">Y_{ni}</span> can take the values 0 or 1. To predict this probability <span class="math inline">P(Y_{ni} = 1)</span> we again use the person parameter <span class="math inline">\theta_n</span> and the item difficulty <span class="math inline">\beta_i</span>. New is now the additional parameter <span class="math inline">\alpha_i</span>, which represents the item discrimination. Note that the item discrimination parameter is item specific, as we can see by the index <span class="math inline">i</span> of the <span class="math inline">\alpha</span> parameter (Note that this is also the difference to the 1PL model as displayed in <a href="#eq-1PL" class="quarto-xref">Equation&nbsp;2</a>. Although this equation also contains an <span class="math inline">\alpha</span>, it does not have the index <span class="math inline">i</span>, since in the 1PL, <span class="math inline">\alpha</span> is the same for all items.) <mark>Check where the 1PL section is located in the final draft</mark>. This means that under the 2PL each item can have a different <span class="math inline">\alpha_i</span> value.</p>
 <p>Here we can also see that the Rasch model is a special case of the 2PL where the item discrimination of every item is 1. Formally speaking:</p>
@@ -1456,12 +1426,12 @@ Tip&nbsp;1: Mathematical background
 <p>Please note that the following part is taken from <span class="citation" data-cites="hoffman2024">Hoffman (<a href="#ref-hoffman2024" role="doc-biblioref">2024</a>)</span>.</p>
 <p>So if we transform our dependent Variable according to our link-function (logit-link), we can use the same formula as in CFA:</p>
 <p><span class="math display">\text{Logit}[p(y_{ni} = 1)] = \mu_i + \lambda_iF_n</span></p>
-<p>This looks very different to our 2PL model equation (see <a href="#eq-2PL" class="quarto-xref">Equation&nbsp;9</a>). However, it’s just a different way of writing it, and all of our components from 2PL are already included here: The intercept <span class="math inline">\mu_i</span> marks the item easiness. To get the item difficulty we can therefore set <span class="math inline">\mu_i = -\tau_i</span>. The <span class="math inline">\lambda_i</span> is the factor loading and relates to the item discrimination.</p>
-<p>If we take a look at the 2PL formula, we can see that we predict the probability and not the Logit. Therefore, we apply the inverse of the link-function to the right hand side of the equation (see first formula in <a href="#eq-2PL-CFA" class="quarto-xref">Equation&nbsp;10</a>). However, we can also use the 2PL parameterization to predict the Logit. Then we have only our linear term left on the right hand side of the equation (see second formula in <a href="#eq-2PL-CFA" class="quarto-xref">Equation&nbsp;10</a>).</p>
+<p>This looks very different to our 2PL model equation (see <a href="#eq-2PL" class="quarto-xref">Equation&nbsp;7</a>). However, it’s just a different way of writing it, and all of our components from 2PL are already included here: The intercept <span class="math inline">\mu_i</span> marks the item easiness. To get the item difficulty we can therefore set <span class="math inline">\mu_i = -\tau_i</span>. The <span class="math inline">\lambda_i</span> is the factor loading and relates to the item discrimination.</p>
+<p>If we take a look at the 2PL formula, we can see that we predict the probability and not the Logit. Therefore, we apply the inverse of the link-function to the right hand side of the equation (see first formula in <a href="#eq-2PL-CFA" class="quarto-xref">Equation&nbsp;8</a>). However, we can also use the 2PL parameterization to predict the Logit. Then we have only our linear term left on the right hand side of the equation (see second formula in <a href="#eq-2PL-CFA" class="quarto-xref">Equation&nbsp;8</a>).</p>
 <p><span id="eq-2PL-CFA"><span class="math display">\begin{align}
 P(Y_{ni} = 1) &amp;= \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}\\
 \text{Logit}[p(y_{ni} = 1)] &amp;= \alpha_i(\theta_n - \beta_i)
-\end{align} \tag{10}</span></span></p>
+\end{align} \tag{8}</span></span></p>
 <p>Now, if we multiply out the linear term and rearrange a bit, we get:</p>
 <p><span class="math display">\begin{align}
 \alpha_i(\theta_n - \beta_i) &amp;= \alpha_i\theta_n -\alpha_i\beta_i\\
@@ -1530,7 +1500,7 @@ mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = "2PL",
     SE = TRUE)
 
 Full-information item factor analysis with 1 factor(s).
-Converged within 1e-04 tolerance after 17 EM iterations.
+Converged within 1e-04 tolerance after 16 EM iterations.
 mirt version: 1.46.1 
 M-step optimizer: BFGS 
 EM acceleration: Ramsay 
@@ -1539,13 +1509,13 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  11.40833
+Condition number of information matrix =  11.96572
 
-Log-likelihood = -38999.2
+Log-likelihood = -39016.81
 Estimated parameters: 18 
-AIC = 78034.39
-BIC = 78160.01; SABIC = 78102.81
-G2 (493) = 1478.95, p = 0
+AIC = 78069.63
+BIC = 78195.24; SABIC = 78138.04
+G2 (493) = 1485.28, p = 0
 RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
@@ -1573,15 +1543,15 @@ RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                     a      b g u
-Eco_aff_1_dicho 1.411 -1.168 0 1
-Eco_aff_2_dicho 1.684 -0.927 0 1
-Eco_aff_3_dicho 1.324 -0.936 0 1
-Eco_cog_4_dicho 0.791 -1.130 0 1
-Eco_cog_5_dicho 1.522 -0.732 0 1
-Eco_cog_6_dicho 1.222 -0.031 0 1
-Eco_con_7_dicho 2.033 -0.427 0 1
-Eco_con_8_dicho 2.006  0.250 0 1
-Eco_con_9_dicho 1.844 -0.842 0 1
+Eco_aff_1_dicho 1.338 -1.209 0 1
+Eco_aff_2_dicho 1.637 -0.954 0 1
+Eco_aff_3_dicho 1.338 -0.915 0 1
+Eco_cog_4_dicho 0.804 -1.112 0 1
+Eco_cog_5_dicho 1.579 -0.713 0 1
+Eco_cog_6_dicho 1.224 -0.011 0 1
+Eco_con_7_dicho 2.075 -0.430 0 1
+Eco_con_8_dicho 2.072  0.277 0 1
+Eco_con_9_dicho 1.754 -0.860 0 1
 
 $means
 F1 
@@ -1601,12 +1571,12 @@ F1  1</code></pre>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>             F1
-[1,] -0.3760927
-[2,] -0.1037172
-[3,] -1.0289844
-[4,] -0.2131210
-[5,] -0.5679649
-[6,] -1.6170346</code></pre>
+[1,] -0.3292873
+[2,]  0.7626375
+[3,] -1.0313466
+[4,]  0.4245376
+[5,] -0.4341106
+[6,] -1.2879073</code></pre>
 </div>
 </div>
 <p>We’ve also learned that IRT models are related to confirmatory factor analysis. <mark>Wurde das schon eingeführt oben?</mark> Accordingly we can transform our IRT model parameters into standardized factor loadings (see also <a href="#tip-math-loadings" class="quarto-xref">mathematical background&nbsp;1</a>). To do this, we use the <code>summary()</code> function.</p>
@@ -1616,15 +1586,15 @@ F1  1</code></pre>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   F1    h2
-Eco_aff_1_dicho 0.638 0.407
-Eco_aff_2_dicho 0.703 0.495
-Eco_aff_3_dicho 0.614 0.377
-Eco_cog_4_dicho 0.422 0.178
-Eco_cog_5_dicho 0.667 0.444
-Eco_cog_6_dicho 0.583 0.340
-Eco_con_7_dicho 0.767 0.588
-Eco_con_8_dicho 0.763 0.581
-Eco_con_9_dicho 0.735 0.540
+Eco_aff_1_dicho 0.618 0.382
+Eco_aff_2_dicho 0.693 0.481
+Eco_aff_3_dicho 0.618 0.382
+Eco_cog_4_dicho 0.427 0.183
+Eco_cog_5_dicho 0.680 0.463
+Eco_cog_6_dicho 0.584 0.341
+Eco_con_7_dicho 0.773 0.598
+Eco_con_8_dicho 0.773 0.597
+Eco_con_9_dicho 0.718 0.515
 
                 SE.F1
 Eco_aff_1_dicho 0.014
@@ -1637,8 +1607,8 @@ Eco_con_7_dicho 0.011
 Eco_con_8_dicho 0.011
 Eco_con_9_dicho 0.012
 
-SS loadings:  3.951 
-Proportion Var:  0.439 
+SS loadings:  3.94 
+Proportion Var:  0.438 
 
 Factor correlations: 
 
@@ -1720,6 +1690,7 @@ Figure&nbsp;13
 </figcaption>
 </figure>
 </div>
+<p>Note also, that now the ICCs of the different items are no longer parallel to each other. This means that the ICCs of different items can cross each other, illustrating that the assumption of specific objectivity does not hold anymore in the 2PL. We have already discussed this scenario in <a href="#fig-ICC_spec_obj_2PL" class="quarto-xref">Figure&nbsp;6</a>.</p>
 <div class="callout callout-style-simple callout-tip callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1861,21 +1832,12 @@ Figure&nbsp;14
 </div>
 </section>
 </section>
-<section id="difference-to-the-rasch-model" class="level3">
-<h3 class="anchored" data-anchor-id="difference-to-the-rasch-model">Difference to the Rasch-model</h3>
-<ul>
-<li><p>ICCs can cross now, because different slopes are possible since <span class="math inline">\alpha</span> is itemspecific</p>
-<ul>
-<li>violation of the specific objectivity assumption of the Rasch-Model</li>
-</ul></li>
-</ul>
-</section>
-<section id="model-comparison" class="level3">
+<section id="model-comparison" class="level3 page-columns page-full">
 <h3 class="anchored" data-anchor-id="model-comparison">Model comparison</h3>
 <p>We’ve now looked at two models: the Rasch model and the 2PL model. But how do I know which model to choose? This is a complex question—one that could probably be the subject of a tutorial all its own—and for which there is no single, clear-cut answer. The “right” model can mean something quite different depending on the researcher’s motivation. If you have a clear theoretical expectation that you want to test, then the model is determined by that alone, and you’re interested in whether this assumption or model can be upheld based on the observed data. However, one might also aim to make the best possible predictions and then select the model accordingly.</p>
 <p>Therefore, we can rephrase and clarify the question somewhat: How do I know which model fits my data better?</p>
 <p>For this we can use model comparison methods. There are different methods to choose from and they have all different advantages and assumptions.</p>
-<section id="likelihood-ratio-test" class="level4">
+<section id="likelihood-ratio-test" class="level4 page-columns page-full">
 <h4 class="anchored" data-anchor-id="likelihood-ratio-test">Likelihood Ratio Test</h4>
 <p>This is an inferential statistical test that can be used to compare two models in terms of their fit <span class="citation" data-cites="deayala2022">(see also <a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 198</a>)</span>. However, this test can only be applied to hierarchically related (nested) models. This means that the two models being compared must be convertible into one another—or, in other words, one model must be a special case of the other. Therefore, there is always a more complex model and a simpler model that can be derived from the restriction of the more complex model. We are already familiar with this from our Rasch model and the 2PL. We have already seen that if we fix the <span class="math inline">\alpha_i</span> parameters in the 2PL to 1 for all items, we obtain the Rasch model. In this sense, the Rasch model is a special case of the 2PL model. In other words, the Rasch model is less complex than the 2PL because it has fewer free parameters than the 2PL, since the <span class="math inline">\alpha_i</span> values cannot change in the Rasch model. So we have nested models here and can therefore apply the likelihood ratio test to compare the Rasch model with the 2PL.</p>
 <p>The likelihood ratio test is based on the likelihood, which is a measure of how well the model can predict the data or how well the model fits the data.</p>
@@ -1893,7 +1855,10 @@ Figure&nbsp;14
 <li><p>If the test is not significant, it means that the more complex model (<span class="math inline">C</span>) <strong>does not</strong> fit the data significantly better than the less complex model (<span class="math inline">S</span>). For reasons of parsimony (see Occam’s Razor), we will then choose the simpler model, since there is no advantage to fitting a more complex model to the data. In our example, we would therefore choose the simpler Rasch model instead of the 2PL model. Note however, that this does NOT mean that the simpler model fits the data better than the more complex model.</p></li>
 </ul>
 <p>As with all significance tests, however, when dealing with large samples, one should bear in mind that the test may be overpowered, which means that practically everything becomes significant, causing the test to lose its interpretive value.</p>
-</section>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<p>Note, that there is also a parametric bootstrap likelihood-ratio test which is based solely on the response data from the sample and therefore makes no distributional assumptions. This can be advantageous, for example, when the <span class="math inline">\chi^2</span> distributional assumption of the likelihood ratio test is violated. This can happen for example if you have a rather small sample size. In the corresponding R section you can find an example of the <code>mirt</code> function <code>boot.LR()</code> to calculate a bootstrap based likelihood-ratio test.</p>
+</div></div></section>
 <section id="aic-bic" class="level4">
 <h4 class="anchored" data-anchor-id="aic-bic">AIC &amp; BIC</h4>
 <p>AIC stands for Akaike Information Criterion and BIC for Bayesian Information Criterion. These are descriptive measures of comparison <span class="citation" data-cites="deayala2022">(see also <a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 152</a>)</span>. The advantage here is that these measures allow you to also compare models that are not hierarchically related. The AIC and BIC also take into account the log-likelihood—that is, how well the model fits the data. In addition, however, the AIC and BIC include a penalty term that penalizes models for being more complex. This is done because more complex models tend to fit the data always better, since they have more freely estimated parameters and can therefore adapt more effectively to the data. From a research-theoretical perspective, however, we want models that are as parsimonious as possible. The AIC and BIC reflect this by balancing improvements in the fit against model complexity. The AIC and BIC are calculated for each model and are computed as follows <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022</a>)</span>.</p>
@@ -1920,9 +1885,9 @@ Figure&nbsp;14
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(eco_rasch, eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               AIC    SABIC       HQ      BIC    logLik      X2 df p
-eco_rasch 78548.39 78586.40 78572.28 78618.17 -39264.19             
-eco_2PL   78034.39 78102.81 78077.40 78160.01 -38999.19 529.997  8 0</code></pre>
+<pre><code>               AIC    SABIC       HQ      BIC    logLik     X2 df p
+eco_rasch 78564.57 78602.58 78588.46 78634.35 -39272.28            
+eco_2PL   78069.63 78138.04 78112.64 78195.24 -39016.81 510.94  8 0</code></pre>
 </div>
 </div>
 <p>As we can see the output provides us with a lot of information. So let’s break it down.</p>
@@ -1934,6 +1899,31 @@ eco_2PL   78034.39 78102.81 78077.40 78160.01 -38999.19 529.997  8 0</code></pre
 <li><p>The <span class="math inline">p</span> value of the likelihood ratio test is below 0.05 and therefore significant. This means that the 2PL fits the data significantly better than the Rasch Modell</p></li>
 <li><p>The AIC and BIC are both smaller for the 2PL compared to the Rasch model. Thus, even when we incorporate model complexity additionally to model fit in our comparison, the 2PL model is still preferred over the Rasch model given our data set.</p></li>
 </ol>
+<p>To conduct parametric bootstrap likelihood-ratio test we can use the <code>boot.LR()</code> function from the <code>mirt</code> package. As with the other likelihood-ratio test, it tests whether the more complex model fits the data significantly better. Therefore, the <code>boot.LR()</code> function returns the p-value as output.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="annotated-cell-62"><pre class="sourceCode r code-annotation-code code-with-copy code-annotated"><code class="sourceCode r"><span id="annotated-cell-62-1"><a href="#annotated-cell-62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Parametric bootstrap likelihood-ratio test</span></span>
+<span id="annotated-cell-62-2"><a href="#annotated-cell-62-2" aria-hidden="true" tabindex="-1"></a></span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-62" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-62-3" class="code-annotation-target"><a href="#annotated-cell-62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boot.LR</span>(eco_rasch,</span>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-62" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-62-4" class="code-annotation-target"><a href="#annotated-cell-62-4" aria-hidden="true" tabindex="-1"></a>        eco_2PL,</span>
+<span id="annotated-cell-62-5"><a href="#annotated-cell-62-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">R =</span> <span class="dv">20</span>)    <span class="co"># &lt;3&gt; # can take a while depending on R</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-annotation">
+<dl class="code-annotation-container-grid">
+<dt data-target-cell="annotated-cell-62" data-target-annotation="1">1</dt>
+<dd>
+<span data-code-cell="annotated-cell-62" data-code-lines="3" data-code-annotation="1">The first argument is a <code>mirt</code> model object containing the simpler model (here our Rasch model)</span>
+</dd>
+<dt data-target-cell="annotated-cell-62" data-target-annotation="2">2</dt>
+<dd>
+<span data-code-cell="annotated-cell-62" data-code-lines="4" data-code-annotation="2">The second argument expects also a <code>mirt</code>model object but containing the more complex model (here our 2PL model)</span>
+</dd>
+</dl>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.04761905</code></pre>
+</div>
+</div>
+<p>As we can see in the output and consistent with the other model comparison criteria, the 2PL model is preferred over the Rasch model. We can tell this because the p-value returned from <code>boot.LR</code> is smaler than 0.05.</p>
+<p><mark>for final version set R to default -&gt; R = 20 just for quicker rendering for now</mark></p>
 </div>
 </div>
 </section>
@@ -1945,17 +1935,26 @@ eco_2PL   78034.39 78102.81 78077.40 78160.01 -38999.19 529.997  8 0</code></pre
 <p>Nevertheless, we’ll briefly touch on the core idea behind these models. As one might already suspect, the higher numbers preceding “PL” indicate additional parameters that are included.</p>
 <p>In the <strong>3PL</strong>, an additional item-specific parameter is introduced that can shift the lower asymptote of the ICC upward. As a result, the minimum possible response probability—the probability of answering “1” for an item—can be significantly greater than 0 for all test-takers. This can be interpreted as a guessing probability, which the 3PL then allows us to model.</p>
 <p>The <strong>4PL</strong> includes an additional item-specific parameter that influences the upper asymptote of the ICC and can thereby shift downward the maximum possible response probability of answering an item with a 1. This can be interpreted, for example, in terms of interfering factors that cause a person who would otherwise have a high probability to answer an item with a 1 to have a significantly lower response probability for a 1.</p>
-<p>In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the <strong>multidimensional</strong> case. This means that multiple latent constructs simultaneously influence the response process. Furthermore, there are also extensions that allow IRT models to be applied to <strong>polytomous response formats</strong> such as Likert scales. A prominent example of this is the <em>Partial Credit Model</em>.</p>
-<p><mark>Should we mention here that tutorials on polytome answer formats are also coming?</mark></p>
+<p>In addition to unidimensional models for dichotomous data, the models presented here can also be extended to the <strong>multidimensional</strong> case. This means that multiple latent constructs simultaneously influence the response process. Furthermore, there are also extensions that allow IRT models to be applied to <strong>polytomous response formats</strong> such as Likert scales. Prominent example of this are the <em>Partial Credit Model</em> or the <em>Graded Response Model</em>.</p>
 </section>
-<section id="additional-ressources" class="level2">
-<h2 class="anchored" data-anchor-id="additional-ressources">Additional ressources</h2>
-<ul>
-<li><em>give some usefull links for further information at the end</em></li>
-<li><a href="https://philippmasur.de/2022/05/13/how-to-run-irt-analyses-in-r/">How to run IRT analyses in R</a> by Philipp Mansur -&gt; is doing somthing similar as we are aiming for</li>
-<li>Choi &amp; Asilkalkan (2019). R packages for item response theory analysis: Descriptions and features. <a href="https://doi.org/10.1080/15366367.2019.1586404" class="uri">https://doi.org/10.1080/15366367.2019.1586404</a></li>
-<li><a href="https://www.lesahoffman.com/PSQF6249/index.html">PSQF Lecture from Lesa Hoffman</a>: Week 7 and 8</li>
-</ul>
+<section id="sec-appendix" class="level2">
+<h2 class="anchored" data-anchor-id="sec-appendix">Appendix</h2>
+<section id="mathematical-background-of-the-sufficient-statistic-property-of-the-rasch-model" class="level3">
+<h3 class="anchored" data-anchor-id="mathematical-background-of-the-sufficient-statistic-property-of-the-rasch-model">Mathematical background of the sufficient statistic property of the Rasch model</h3>
+<p>To show that the total score is a sufficient statistic, we can first consider how the Rasch model can predict a person’s response vector. This means that we want to predict which responses a person gave to the various items based on their <span class="math inline">\theta</span> value. As we have learned, if the assumption of local stochastic independence holds, we can multiply the individual probabilities for each item response to obtain the probability of a person’s overall response pattern across all items (see <a href="#eq-local_indi_2" class="quarto-xref">Equation&nbsp;4</a>). You can see this also in the first line of <a href="#eq-proof_suff_1" class="quarto-xref">Equation&nbsp;9</a> (the equations were taken from <span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span>). If we rearrange the equation, we see that the number of items answered with 1 (<span class="math inline">\sum_i x_i</span>), is included in the equation. This corresponds to the true score, so we can also write <span class="math inline">\sum_i x_i</span> as <span class="math inline">t</span>.</p>
+<p><span id="eq-proof_suff_1"><span class="math display">\begin{align}
+P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta) &amp;= \prod_{i = 1}^I P(X_i = x_i |\theta) \\
+&amp;= \prod_{i = 1}^I \frac{\exp(x_i(\theta - \beta_i)}{1 + \exp(\theta - \beta_i)}\\
+&amp;= \frac{\prod_i \exp(x_i(\theta - \beta_i))}{\prod_i (1 + \exp(\theta - \beta_i))}\\
+&amp;= \frac{\exp[\sum_i (x_i(\theta - \beta_i))]}{\prod_i (1 + \exp(\theta - \beta_i))}\\
+&amp;= \frac{\exp[\sum_i x_i\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))}\\
+&amp;= \frac{\exp[t\theta - \sum_i x_i \beta_i]}{\prod_i (1 + \exp(\theta - \beta_i))} \quad \text{with} \quad t = \sum_i x_i
+\end{align} \tag{9}</span></span></p>
+<p>If the true score <span class="math inline">t</span> is known (i.e.&nbsp;we can count in the data how often a person responded with 1), we can rearrange the equation as follows:</p>
+<p><span id="eq-proof_suff_2"><span class="math display">\begin{align} P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &amp;= \frac{(\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}{\sum_{X_t} (\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}\\ &amp;= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\ &amp;= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\ &amp;= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)} \end{align} \tag{10}</span></span></p>
+<p>What we can see from all these rearrangements is that if we include the total score <span class="math inline">t</span> in the equation, we can completely eliminate the parameter <span class="math inline">\theta</span>. Ultimately, we no longer need <span class="math inline">\theta</span> to predict a person’s response vector. It is sufficient to know the total score <span class="math inline">t</span>. Therefore, the total score <span class="math inline">t</span> is a sufficient statistic.</p>
+<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span><mark><em>-&gt;darf</em></mark><mark><em>ich die zitieren????</em></mark></p>
+</section>
 </section>
 <section id="ai-statement" class="level2">
 <h2 class="anchored" data-anchor-id="ai-statement">AI statement</h2>
@@ -2033,16 +2032,16 @@ Yen, Wendy M. 1984. <span>“Effects of Local Item Dependence on the Fit and Equ
 <div id="ref-yen1993" class="csl-entry" role="listitem">
 Yen, Wendy M. 1993. <span>“Scaling Performance Assessments: Strategies for Managing Local Item Dependence.”</span> <em>Journal of Educational Measurement</em> 30 (3): 187–213. <a href="https://doi.org/10.1111/j.1745-3984.1993.tb00423.x">https://doi.org/10.1111/j.1745-3984.1993.tb00423.x</a>.
 </div>
-</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by-nc/4.0/">CC BY-NC 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{koc2026,
-  author = {Koc, Piotr and Martinez, Leon},
+</div></section><section class="quarto-appendix-contents" id="quarto-reuse"><h2 class="anchored quarto-appendix-heading">Reuse</h2><div class="quarto-appendix-contents"><div><a rel="license" href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a></div></div></section><section class="quarto-appendix-contents" id="quarto-citation"><h2 class="anchored quarto-appendix-heading">Citation</h2><div><div class="quarto-appendix-secondary-label">BibTeX citation:</div><pre class="sourceCode code-with-copy quarto-appendix-bibtex"><code class="sourceCode bibtex">@misc{martinez2026,
+  author = {Martinez, Leon and Koc, Piotr},
   publisher = {GESIS – Leibniz Institute for the Social Sciences},
   title = {A {Practical} {Introduction} to {Item} {Response} {Theory}},
   date = {2026-07-28},
   url = {https://zis.gesis.org/infotexte/GuidelineMaterials.html},
   langid = {en}
 }
-</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-koc2026" class="csl-entry quarto-appendix-citeas" role="listitem">
-Koc, Piotr, and Leon Martinez. 2026. <span>“A Practical Introduction to
+</code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre><div class="quarto-appendix-secondary-label">For attribution, please cite this work as:</div><div id="ref-martinez2026" class="csl-entry quarto-appendix-citeas" role="listitem">
+Martinez, Leon, and Piotr Koc. 2026. <span>“A Practical Introduction to
 Item Response Theory .”</span> In <em>R-Tutorials in Psychometrics</em>.
 GESIS – Leibniz Institute for the Social Sciences, July 28. <a href="https://zis.gesis.org/infotexte/GuidelineMaterials.html">https://zis.gesis.org/infotexte/GuidelineMaterials.html</a>.
 </div></div></section></div></main>
