@@ -158,7 +158,7 @@ The [data](https://doi.org/10.7910/DVN/ZMQRIH) from this paper has been made pub
 Instruction: *What do you think about the following statements and questions?*
 
 | Item | Item text |
-|------------------------------------|------------------------------------|
+|----|----|
 | 1 | I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live. |
 | 2 | If we continue in the same way, we are heading towards an environmental disaster. |
 | 3 | We worry too much about the future of the environment and not enough about prices and jobs today. |
@@ -1045,20 +1045,59 @@ Ultimately, specific objectivity is related to a form of fairness, since it requ
 With regard to test development, it is also important that the comparison of different items not depend on who answers them.
 This, too, ensures a specific level of objectivity [see @rasch1961, p. 332; @wilson2023, p. 248].
 
-### Identifiability
+### Identifiability {#sec-identi-Rasch}
 
 Although the exact estimation procedures for fitting a Rasch model to the data are not covered in detail in this tutorial, it is important to note at this point the Rasch model has an identifiability problem.
 This is due to the fact that the scale on which we locate $\theta$ and $\beta$ is a latent scale.
-Since latent constructs are abstract and cannot be directly observed, they do not have a natural unit or metric.
-And second, it is solely the difference/distance between $\theta_n$ and $\beta_i$ that determines the probability that the item will be answered with a 1.
-However, this also means that, in theory, there are an infinite number of $\theta$ and $\beta$ combinations that can produce the same response probability.
+Since latent constructs are abstract and cannot be directly observed, they do not have a natural origin and metric [see also @debelak2022 for an illustration of this point] .
+
+This has consequences for the estimation of our model parameters.
+This is, because the choice of the origin of a latent scale is arbitrary as long as we use the same origin for the $\theta$ scale and $\beta$ scale [@lord1980].
+This is because, as we already saw, only the discrepancy between $\theta_n$ and $\beta_i$ is relevant for the probability that a person will respond to an item with a 1.
+This means that as long as we keep the relative distance between the person and the item constant, we can shift the $\theta$ and $\beta$ parameters arbitrarily along the continuum without changing the probability that a person will answer an item with a 1.
+To make it more concrete an intuitive: In theory, there are an infinite number of $\theta$ and $\beta$ combinations that can produce the same response probability $P(Y_{ni} =1|\theta_n, \beta_i)$.
 For example, the probability that a person will answer an item with a 1 is the same for a person with $\theta = 4$ and $\beta = 2$ ($\theta - \beta = 4 - 2 = 2$) as for a person with $\theta = 6$ and $\beta = 4$ ($\theta - \beta = 6 - 4 = 2$) or for any other $\theta$ and $\beta$ combination, which produces a difference of two.
 If the Rasch model now attempts to estimate $\theta$ and $\beta$ based on the data, the model cannot find a unique solution, since there are theoretically an infinite number of combinations that are equally likely for the data.
 This is also referred to as the identifiability problem; in other words, the model is said to be unidentifiable [see also @deayala2022, p. 44].
 
+::: {.callout-tip appearance="simple"}
+## Mathematical background
+
+**Additive indeterminacy** [@debelak2022; @lord1980]
+
+Let's say we add a constant $c$ on to our $\theta_n$ and $\beta_i$ so we get the new parameters $\theta_n'$ and $\beta_i'$.
+
+$$\begin{aligned}
+\theta_n' &= \theta_n + c\\
+\beta_i' &= \beta_i + c \\
+\end{aligned}$$
+
+So now we can calculate the probability that a person will choose a 1 to respond to the item based on these two parameter sets.
+Note that for a clearer notation we don't calculate the probability but the log odds, so that we have just a linear term on the right hand side of the equation:
+
+$$\begin{aligned}
+\ln\left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i)}{P(Y_{ni} = 0|\theta_n, \beta_i)}\right) &= \theta_n - \beta_i\\
+\ln\left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i')}{P(Y_{ni} = 0|\theta_n', \beta_i')}\right) &= \theta_n' - \beta_i'
+\end{aligned}$$
+
+We have already said that the model is unidentifiable if we apply an additive constant to both $\theta_n$ and $\beta_i$.
+If this is true, then we should get the same log-odds for both sets of parameters.
+If we write out the formula and rearrange it a bit, we can see this very clearly.
+The additive constants cancel each other out, so that in the end we are left with $\theta_n - \beta_i$ again.
+The model is therefore unidentifiable.
+
+$$\begin{aligned}
+\ln\left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i)}{P(Y_{ni} = 0|\theta_n, \beta_i)}\right) &= \ln\left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i')}{P(Y_{ni} = 0|\theta_n', \beta_i')}\right)\\
+\theta_n - \beta_i &= \theta_n' - \beta_i'\\
+&= (\theta_n + c) - (\beta_i + c)\\
+&= \theta_n + c - \beta_i - c\\
+&= \theta_n - \beta_i + c - c\\&= \theta_n - \beta_i
+\end{aligned}$$
+:::
+
 To solve this problem, we must ensure that our latent continuum has a unique origin and metric.
-The unit of measurement in the Rasch model is set to 1, so we only need to specify the origin of the metric [@deayala2022*, p. 44*].
-There are various ways to do this, known as restrictions (since the possible solutions for the model are restricted in order to ensure a unique solution).
+The unit of measurement in the Rasch model is already set to 1, since the $\alpha$ parameter is fixed at 1 in the Rasch model ([crossreference here to 1PL section]{.mark}), so we only need to specify the origin of the metric [@deayala2022*, p. 44*].
+There are various ways to do this [@deayala2022; @lord1980] , known as restrictions (since the possible solutions for the model are restricted in order to ensure a unique solution).
 
 - **sum norm restriction (item centering):** The idea here is that we give the model an additional “rule”: it should estimate the item difficulties $\beta$ such that the sum of the item difficulties equals 0 ($\sum_{i = 1}^I \beta_i = 0$).
   Simply put: Because the model now not only seeks the parameters most likely to predict the data but must also satisfy the new rule, there are no longer an infinite number of possible solutions, and the model becomes identifiable.
@@ -1602,6 +1641,58 @@ plot(eco_2PL,
 ```
 :::
 
+### Identifiability in the 2PL
+
+We already learned of the identifiability problem in the Rasch model (see @sec-identi-Rasch).
+This issue of an additive indeterminacy applies also to the 2PL model.
+Therefore, we also have to restrict the model to a specific origin to make the model identifiable.
+
+However, in the case of the 2PL model, this is not enough because besides an additive indeterminacy we have also a multiplicative indeterminacy.
+This means, even if we restrict the model to a certain origin, the model is still not identifiable.
+This is, because latent traits also don't have a inherent metric/unit and therefore, the choice of metric is also arbitrary [@lord1980].
+This aspect comes into play because, in the 2PL model, we now also have the $\alpha$ parameter.
+As a result, it can compensate for the effect of a multiplicative constant (as we can see in the math section).
+
+::: {.callout-tip appearance="simple"}
+## Mathematical background
+
+**Multiplicative indeterminacy** [@debelak2022; @lord1980]
+
+If we multiply the $\theta_n$ and $\beta_i$ parameters by a constant $c$ and simultaneously divide the discrimination parameter $\alpha_i$ by the same constant $c$, the resulting probabilities that a person will respond to an item with a 1 are the same as for the untransformed parameters $\theta_n$, $\beta_i$ and $\alpha_i$.
+
+$$\begin{aligned}
+\theta_n' &= \theta_n \cdot c\\
+\beta_i' &= \beta_i \cdot c\\
+\alpha_i' &= \frac{\alpha_i}{c}
+\end{aligned}$$
+
+We can again predict the log odds instead of the probability to make the equation clearer:
+
+$$\begin{aligned}
+\ln \left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i, \alpha_i}{P(Y_{ni} = 0|\theta_n, \beta_i, \alpha_i} \right) = \alpha_i(\theta_n - \beta_i)\\
+\ln \left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i', \alpha_i'}{P(Y_{ni} = 0|\theta_n', \beta_i', \alpha_i'} \right) = \alpha_i'(\theta_n' - \beta_i')
+\end{aligned}$$
+
+So let's see if the multiplication of $\theta_n$ and $\beta_i$ can be compensated if we divide the discrimination parameter by the same multiplicative constant, so that the log odds are the same as for the original parameter set.
+
+$$\begin{aligned}
+\ln \left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i, \alpha_i}{P(Y_{ni} = 0|\theta_n, \beta_i, \alpha_i} \right) &= \ln \left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i', \alpha_i'}{P(Y_{ni} = 0|\theta_n', \beta_i', \alpha_i'} \right)\\
+\alpha_i(\theta_n - \beta_i) &= \alpha_i'(\theta_n' - \beta_i')\\
+&= \frac{\alpha_i}{c}(\theta_n \cdot c - \beta_i \cdot c)\\
+&= \frac{\alpha_i}{c} \cdot c \cdot (\theta_n - \beta_i)\\
+&= \alpha_i \cdot \frac{1}{k} \cdot k \cdot (\theta_n - \beta_i)\\
+&= \alpha_i \cdot \frac{1}{k} \cdot \frac{k}{1} \cdot (\theta_n - \beta_i)\\
+&= \alpha_i \cdot \frac{k}{k} \cdot (\theta_n - \beta_i)\\
+&= \alpha_i \cdot 1 \cdot (\theta_n - \beta_i)\\
+&= \alpha_i (\theta_n - \beta_i)\\
+\end{aligned}$$
+:::
+
+We can use the same restrictions as discussed in the Rasch model to make our model identifiable (see @sec-identi-Rasch).
+Note that in the Rasch model the item discrimination $\alpha_i$ of every item is by definition 1, so in the Rasch model the multiplicative indeterminacy is already solved [@debelak2022].
+
+[Did it even make sense to demonstrate rotation ambiguity for one-dimensional models? Maybe we should cover this in a tutorial on multidimensional models instead?]{.mark}
+
 ### Information in the 2PL
 
 #### Item information
@@ -1892,14 +1983,16 @@ As we can see the 2PL is preferred over the Rasch model based on all comparison 
 2.  The AIC and BIC are both smaller for the 2PL compared to the Rasch model.
     Thus, even when we incorporate model complexity additionally to model fit in our comparison, the 2PL model is still preferred over the Rasch model given our data set.
 
-To conduct parametric bootstrap likelihood-ratio test we can use the `boot.LR()` function from the `mirt` package. As with the other likelihood-ratio test, it tests whether the more complex model fits the data significantly better. Therefore, the `boot.LR()` function returns the p-value as output.
+To conduct parametric bootstrap likelihood-ratio test we can use the `boot.LR()` function from the `mirt` package.
+As with the other likelihood-ratio test, it tests whether the more complex model fits the data significantly better.
+Therefore, the `boot.LR()` function returns the p-value as output.
 
 ```{r}
 # Parametric bootstrap likelihood-ratio test
 
 boot.LR(eco_rasch, # <1>
         eco_2PL,   # <2>
-        R = 20)    # <3> # can take a while depending on R
+        R = 20)    # can take a while depending on R  # <3> 
 
 ```
 
@@ -1907,10 +2000,10 @@ boot.LR(eco_rasch, # <1>
 2.  The second argument expects also a `mirt`model object but containing the more complex model (here our 2PL model)
 3.  This argument sets the number of parametric bootstraps. The default is 1000 and should be fine for many use cases. Note also that the higher R the longer the runtime of this function.
 
-As we can see in the output and consistent with the other model comparison criteria, the 2PL model is preferred over the Rasch model. We can tell this because the p-value returned from `boot.LR` is smaler than 0.05.
+As we can see in the output and consistent with the other model comparison criteria, the 2PL model is preferred over the Rasch model.
+We can tell this because the p-value returned from `boot.LR` is smaler than 0.05.
 
-[for final version set R to default -> R = 20 just for quicker rendering for now]{.mark}
-
+[for final version set R to default -\> R = 20 just for quicker rendering for now]{.mark}
 :::
 
 ## Outlook
@@ -1964,7 +2057,7 @@ Ultimately, we no longer need $\theta$ to predict a person’s response vector.
 It is sufficient to know the total score $t$.
 Therefore, the total score $t$ is a sufficient statistic.
 
-@meiser2025[*-\>darf*]{.mark}[ *ich die zitieren????*]{.mark}
+@meiser2025[*-\>darfichdiezitieren????*]{.mark}
 
 ## AI statement
 

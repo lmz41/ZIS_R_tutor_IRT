@@ -167,13 +167,14 @@ window.Quarto = {
   <li><a href="#sec-mod_par" id="toc-sec-mod_par" class="nav-link" data-scroll-target="#sec-mod_par">Interpretation of model parameters</a></li>
   <li><a href="#visualizations-of-the-rasch-model" id="toc-visualizations-of-the-rasch-model" class="nav-link" data-scroll-target="#visualizations-of-the-rasch-model">Visualizations of the Rasch Model</a></li>
   <li><a href="#assumptions-and-properties-of-the-rasch-model" id="toc-assumptions-and-properties-of-the-rasch-model" class="nav-link" data-scroll-target="#assumptions-and-properties-of-the-rasch-model">Assumptions and Properties of the Rasch Model</a></li>
-  <li><a href="#identifiability" id="toc-identifiability" class="nav-link" data-scroll-target="#identifiability">Identifiability</a></li>
+  <li><a href="#sec-identi-Rasch" id="toc-sec-identi-Rasch" class="nav-link" data-scroll-target="#sec-identi-Rasch">Identifiability</a></li>
   <li><a href="#sec-Information" id="toc-sec-Information" class="nav-link" data-scroll-target="#sec-Information">Information</a></li>
   </ul></li>
   <li><a href="#pl-1" id="toc-pl-1" class="nav-link" data-scroll-target="#pl-1">2PL</a>
   <ul class="collapse">
   <li><a href="#model-formula-1" id="toc-model-formula-1" class="nav-link" data-scroll-target="#model-formula-1">Model formula</a></li>
   <li><a href="#interpretation-of-the-item-discrimination-parameter" id="toc-interpretation-of-the-item-discrimination-parameter" class="nav-link" data-scroll-target="#interpretation-of-the-item-discrimination-parameter">Interpretation of the item discrimination parameter</a></li>
+  <li><a href="#identifiability-in-the-2pl" id="toc-identifiability-in-the-2pl" class="nav-link" data-scroll-target="#identifiability-in-the-2pl">Identifiability in the 2PL</a></li>
   <li><a href="#information-in-the-2pl" id="toc-information-in-the-2pl" class="nav-link" data-scroll-target="#information-in-the-2pl">Information in the 2PL</a></li>
   <li><a href="#model-comparison" id="toc-model-comparison" class="nav-link" data-scroll-target="#model-comparison">Model comparison</a></li>
   </ul></li>
@@ -233,7 +234,7 @@ window.Quarto = {
          <div>
       <div class="quarto-title-meta-heading">Modified</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">15.10.2026</p>
+        <p class="date">19.10.2026</p>
       </div>
     </div>
       </div>
@@ -589,13 +590,13 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  5.87095
+Condition number of information matrix =  5.906557
 
-Log-likelihood = -39272.28
+Log-likelihood = -39248.6
 Estimated parameters: 10 
-AIC = 78564.57
-BIC = 78634.36; SABIC = 78602.58
-G2 (501) = 1996.22, p = 0
+AIC = 78517.2
+BIC = 78586.98; SABIC = 78555.21
+G2 (501) = 2005.57, p = 0
 RMSEA = 0.019, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
@@ -675,23 +676,23 @@ Listing&nbsp;2: Item parameters of the Rasch model
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                 a      b g u
-Eco_aff_1_dicho 1 -1.687 0 1
-Eco_aff_2_dicho 1 -1.486 0 1
-Eco_aff_3_dicho 1 -1.278 0 1
-Eco_cog_4_dicho 1 -1.097 0 1
-Eco_cog_5_dicho 1 -1.091 0 1
-Eco_cog_6_dicho 1 -0.017 0 1
-Eco_con_7_dicho 1 -0.741 0 1
-Eco_con_8_dicho 1  0.479 0 1
-Eco_con_9_dicho 1 -1.384 0 1
+Eco_aff_1_dicho 1 -1.704 0 1
+Eco_aff_2_dicho 1 -1.494 0 1
+Eco_aff_3_dicho 1 -1.260 0 1
+Eco_cog_4_dicho 1 -1.112 0 1
+Eco_cog_5_dicho 1 -1.110 0 1
+Eco_cog_6_dicho 1  0.004 0 1
+Eco_con_7_dicho 1 -0.724 0 1
+Eco_con_8_dicho 1  0.443 0 1
+Eco_con_9_dicho 1 -1.401 0 1
 
 $means
 F1 
  0 
 
 $cov
-     F1
-F1 2.17</code></pre>
+      F1
+F1 2.172</code></pre>
 </div>
 </div>
 <p>The output consists of three sections:</p>
@@ -707,13 +708,13 @@ F1 2.17</code></pre>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_rasch)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             F1
-[1,] -0.5388400
-[2,]  1.0425698
-[3,] -1.3979167
-[4,]  0.4278514
-[5,] -0.5388400
-[6,] -1.8506907</code></pre>
+<pre><code>              F1
+[1,] -0.08774802
+[2,] -0.08774802
+[3,] -0.97366163
+[4,]  0.42362210
+[5,] -0.08774802
+[6,] -1.85585682</code></pre>
 </div>
 </div>
 <p>Note that our dataset consists of 7,932 individuals. Therefore, when we use fscore(), we also get 7,932 different <span class="math inline">\theta_n</span> values (one per person <span class="math inline">n</span>). To keep the output concise, we used head() to display only the first six <span class="math inline">\theta_n</span> values out of the 7,932 <span class="math inline">\theta_n</span> values we have stored in <code>person_par_eco_rasch</code>.</p>
@@ -1029,15 +1030,15 @@ Figure&nbsp;4
 <span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>eco_rasch_Q3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       Item 1 Item 2 Item 3 Item 4 Item 5 Item 6 Item 7 Item 8 Item 9
-Item 1  1.000  0.079 -0.172 -0.044 -0.065 -0.111 -0.187 -0.144 -0.128
-Item 2  0.079  1.000 -0.110 -0.082 -0.014 -0.108 -0.168 -0.141 -0.159
-Item 3 -0.172 -0.110  1.000 -0.169 -0.004 -0.074 -0.103 -0.130 -0.103
-Item 4 -0.044 -0.082 -0.169  1.000 -0.172 -0.116 -0.187 -0.176 -0.157
-Item 5 -0.065 -0.014 -0.004 -0.172  1.000 -0.132 -0.168 -0.114 -0.109
-Item 6 -0.111 -0.108 -0.074 -0.116 -0.132  1.000 -0.130 -0.160 -0.123
-Item 7 -0.187 -0.168 -0.103 -0.187 -0.168 -0.130  1.000  0.168  0.036
-Item 8 -0.144 -0.141 -0.130 -0.176 -0.114 -0.160  0.168  1.000 -0.004
-Item 9 -0.128 -0.159 -0.103 -0.157 -0.109 -0.123  0.036 -0.004  1.000</code></pre>
+Item 1  1.000  0.099 -0.151 -0.043 -0.090 -0.131 -0.184 -0.137 -0.122
+Item 2  0.099  1.000 -0.140 -0.081 -0.010 -0.113 -0.156 -0.144 -0.147
+Item 3 -0.151 -0.140  1.000 -0.172 -0.007 -0.065 -0.109 -0.123 -0.111
+Item 4 -0.043 -0.081 -0.172  1.000 -0.175 -0.123 -0.175 -0.184 -0.166
+Item 5 -0.090 -0.010 -0.007 -0.175  1.000 -0.116 -0.154 -0.113 -0.117
+Item 6 -0.131 -0.113 -0.065 -0.123 -0.116  1.000 -0.135 -0.156 -0.113
+Item 7 -0.184 -0.156 -0.109 -0.175 -0.154 -0.135  1.000  0.145  0.031
+Item 8 -0.137 -0.144 -0.123 -0.184 -0.113 -0.156  0.145  1.000  0.014
+Item 9 -0.122 -0.147 -0.111 -0.166 -0.117 -0.113  0.031  0.014  1.000</code></pre>
 </div>
 </div>
 <p>We can check whether the cutoff of 0.2 is exceeded in our matrix:</p>
@@ -1172,10 +1173,42 @@ Figure&nbsp;6: The illustration is similar to Figure 2.4 in @debelak2022
 <p>Ultimately, specific objectivity is related to a form of fairness, since it requires that a comparison is based solely on the the latent construct (<span class="math inline">\theta</span>) and does not depend on the items used to measure the construct <span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022, 28</a>)</span>. With regard to test development, it is also important that the comparison of different items not depend on who answers them. This, too, ensures a specific level of objectivity <span class="citation" data-cites="rasch1961 wilson2023">(see <a href="#ref-rasch1961" role="doc-biblioref">Rasch 1961, 332</a>; <a href="#ref-wilson2023" role="doc-biblioref">Wilson 2023, 248</a>)</span>.</p>
 </section>
 </section>
-<section id="identifiability" class="level3">
-<h3 class="anchored" data-anchor-id="identifiability">Identifiability</h3>
-<p>Although the exact estimation procedures for fitting a Rasch model to the data are not covered in detail in this tutorial, it is important to note at this point the Rasch model has an identifiability problem. This is due to the fact that the scale on which we locate <span class="math inline">\theta</span> and <span class="math inline">\beta</span> is a latent scale. Since latent constructs are abstract and cannot be directly observed, they do not have a natural unit or metric. And second, it is solely the difference/distance between <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> that determines the probability that the item will be answered with a 1. However, this also means that, in theory, there are an infinite number of <span class="math inline">\theta</span> and <span class="math inline">\beta</span> combinations that can produce the same response probability. For example, the probability that a person will answer an item with a 1 is the same for a person with <span class="math inline">\theta = 4</span> and <span class="math inline">\beta = 2</span> (<span class="math inline">\theta - \beta = 4 - 2 = 2</span>) as for a person with <span class="math inline">\theta = 6</span> and <span class="math inline">\beta = 4</span> (<span class="math inline">\theta - \beta = 6 - 4 = 2</span>) or for any other <span class="math inline">\theta</span> and <span class="math inline">\beta</span> combination, which produces a difference of two. If the Rasch model now attempts to estimate <span class="math inline">\theta</span> and <span class="math inline">\beta</span> based on the data, the model cannot find a unique solution, since there are theoretically an infinite number of combinations that are equally likely for the data. This is also referred to as the identifiability problem; in other words, the model is said to be unidentifiable <span class="citation" data-cites="deayala2022">(see also <a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 44</a>)</span>.</p>
-<p>To solve this problem, we must ensure that our latent continuum has a unique origin and metric. The unit of measurement in the Rasch model is set to 1, so we only need to specify the origin of the metric <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, p.&nbsp;44</a>)</span>. There are various ways to do this, known as restrictions (since the possible solutions for the model are restricted in order to ensure a unique solution).</p>
+<section id="sec-identi-Rasch" class="level3">
+<h3 class="anchored" data-anchor-id="sec-identi-Rasch">Identifiability</h3>
+<p>Although the exact estimation procedures for fitting a Rasch model to the data are not covered in detail in this tutorial, it is important to note at this point the Rasch model has an identifiability problem. This is due to the fact that the scale on which we locate <span class="math inline">\theta</span> and <span class="math inline">\beta</span> is a latent scale. Since latent constructs are abstract and cannot be directly observed, they do not have a natural origin and metric <span class="citation" data-cites="debelak2022">(see also <a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022</a> for an illustration of this point)</span> .</p>
+<p>This has consequences for the estimation of our model parameters. This is, because the choice of the origin of a latent scale is arbitrary as long as we use the same origin for the <span class="math inline">\theta</span> scale and <span class="math inline">\beta</span> scale <span class="citation" data-cites="lord1980">(<a href="#ref-lord1980" role="doc-biblioref">Lord 1980</a>)</span>. This is because, as we already saw, only the discrepancy between <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> is relevant for the probability that a person will respond to an item with a 1. This means that as long as we keep the relative distance between the person and the item constant, we can shift the <span class="math inline">\theta</span> and <span class="math inline">\beta</span> parameters arbitrarily along the continuum without changing the probability that a person will answer an item with a 1. To make it more concrete an intuitive: In theory, there are an infinite number of <span class="math inline">\theta</span> and <span class="math inline">\beta</span> combinations that can produce the same response probability <span class="math inline">P(Y_{ni} =1|\theta_n, \beta_i)</span>. For example, the probability that a person will answer an item with a 1 is the same for a person with <span class="math inline">\theta = 4</span> and <span class="math inline">\beta = 2</span> (<span class="math inline">\theta - \beta = 4 - 2 = 2</span>) as for a person with <span class="math inline">\theta = 6</span> and <span class="math inline">\beta = 4</span> (<span class="math inline">\theta - \beta = 6 - 4 = 2</span>) or for any other <span class="math inline">\theta</span> and <span class="math inline">\beta</span> combination, which produces a difference of two. If the Rasch model now attempts to estimate <span class="math inline">\theta</span> and <span class="math inline">\beta</span> based on the data, the model cannot find a unique solution, since there are theoretically an infinite number of combinations that are equally likely for the data. This is also referred to as the identifiability problem; in other words, the model is said to be unidentifiable <span class="citation" data-cites="deayala2022">(see also <a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, 44</a>)</span>.</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Mathematical background
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Additive indeterminacy</strong> <span class="citation" data-cites="debelak2022 lord1980">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022</a>; <a href="#ref-lord1980" role="doc-biblioref">Lord 1980</a>)</span></p>
+<p>Let’s say we add a constant <span class="math inline">c</span> on to our <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> so we get the new parameters <span class="math inline">\theta_n'</span> and <span class="math inline">\beta_i'</span>.</p>
+<p><span class="math display">\begin{aligned}
+\theta_n' &amp;= \theta_n + c\\
+\beta_i' &amp;= \beta_i + c \\
+\end{aligned}</span></p>
+<p>So now we can calculate the probability that a person will choose a 1 to respond to the item based on these two parameter sets. Note that for a clearer notation we don’t calculate the probability but the log odds, so that we have just a linear term on the right hand side of the equation:</p>
+<p><span class="math display">\begin{aligned}
+\ln\left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i)}{P(Y_{ni} = 0|\theta_n, \beta_i)}\right) &amp;= \theta_n - \beta_i\\
+\ln\left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i')}{P(Y_{ni} = 0|\theta_n', \beta_i')}\right) &amp;= \theta_n' - \beta_i'
+\end{aligned}</span></p>
+<p>We have already said that the model is unidentifiable if we apply an additive constant to both <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span>. If this is true, then we should get the same log-odds for both sets of parameters. If we write out the formula and rearrange it a bit, we can see this very clearly. The additive constants cancel each other out, so that in the end we are left with <span class="math inline">\theta_n - \beta_i</span> again. The model is therefore unidentifiable.</p>
+<p><span class="math display">\begin{aligned}
+\ln\left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i)}{P(Y_{ni} = 0|\theta_n, \beta_i)}\right) &amp;= \ln\left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i')}{P(Y_{ni} = 0|\theta_n', \beta_i')}\right)\\
+\theta_n - \beta_i &amp;= \theta_n' - \beta_i'\\
+&amp;= (\theta_n + c) - (\beta_i + c)\\
+&amp;= \theta_n + c - \beta_i - c\\
+&amp;= \theta_n - \beta_i + c - c\\&amp;= \theta_n - \beta_i
+\end{aligned}</span></p>
+</div>
+</div>
+<p>To solve this problem, we must ensure that our latent continuum has a unique origin and metric. The unit of measurement in the Rasch model is already set to 1, since the <span class="math inline">\alpha</span> parameter is fixed at 1 in the Rasch model (<mark>crossreference here to 1PL section</mark>), so we only need to specify the origin of the metric <span class="citation" data-cites="deayala2022">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022, p.&nbsp;44</a>)</span>. There are various ways to do this <span class="citation" data-cites="deayala2022 lord1980">(<a href="#ref-deayala2022" role="doc-biblioref">De Ayala 2022</a>; <a href="#ref-lord1980" role="doc-biblioref">Lord 1980</a>)</span> , known as restrictions (since the possible solutions for the model are restricted in order to ensure a unique solution).</p>
 <ul>
 <li><p><strong>sum norm restriction (item centering):</strong> The idea here is that we give the model an additional “rule”: it should estimate the item difficulties <span class="math inline">\beta</span> such that the sum of the item difficulties equals 0 (<span class="math inline">\sum_{i = 1}^I \beta_i = 0</span>). Simply put: Because the model now not only seeks the parameters most likely to predict the data but must also satisfy the new rule, there are no longer an infinite number of possible solutions, and the model becomes identifiable.</p></li>
 <li><p><strong>fix the difficulty of one item (anchor item):</strong> The idea here is that we set the item difficulty <span class="math inline">\beta_i</span> of a given item to a specific value (usually <span class="math inline">\beta_i = 0</span>). The logic here is that the items differ in their <span class="math inline">\beta</span> relative to one another. By fixing a <span class="math inline">\beta_i</span> (also known as “setting it”) and requiring the remaining items to maintain a certain distance from that item in order to reflect the relative distances, we obtain unique solutions. To put it simply, you can think of it this way: We know that Item 2 is two units more difficult than Item 1, and Item 3 is one unit easier than Item 1. Without any restrictions, there would now be an infinite number of possible <span class="math inline">\beta</span> values for these items, e.g., <span class="math inline">\beta_1 = 2</span>, <span class="math inline">\beta_2 = 4</span>, and <span class="math inline">\beta_3 = 1</span>, or <span class="math inline">\beta_1 = 10</span>, <span class="math inline">\beta_2 = 12</span>, and <span class="math inline">\beta_3 = 9</span>. However, if we now introduce a restriction and define that <span class="math inline">\beta_1 = 0</span> (fixing it), then there is only one solution for the other <span class="math inline">\beta</span> values that correctly represents the relative distances between the items, namely <span class="math inline">\beta_2 = 2</span> and <span class="math inline">\beta_3 = -1</span>.</p></li>
@@ -1500,7 +1533,7 @@ mirt(data = dat_eco_dicho[12:20], model = 1, itemtype = "2PL",
     SE = TRUE)
 
 Full-information item factor analysis with 1 factor(s).
-Converged within 1e-04 tolerance after 16 EM iterations.
+Converged within 1e-04 tolerance after 18 EM iterations.
 mirt version: 1.46.1 
 M-step optimizer: BFGS 
 EM acceleration: Ramsay 
@@ -1509,13 +1542,13 @@ Latent density type: Gaussian
 
 Information matrix estimated with method: Oakes
 Second-order test: model is a possible local maximum
-Condition number of information matrix =  11.96572
+Condition number of information matrix =  11.60444
 
-Log-likelihood = -39016.81
+Log-likelihood = -38968.36
 Estimated parameters: 18 
-AIC = 78069.63
-BIC = 78195.24; SABIC = 78138.04
-G2 (493) = 1485.28, p = 0
+AIC = 77972.72
+BIC = 78098.34; SABIC = 78041.14
+G2 (493) = 1445.09, p = 0
 RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 </div>
 </div>
@@ -1543,15 +1576,15 @@ RMSEA = 0.016, CFI = NaN, TLI = NaN</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>$items
                     a      b g u
-Eco_aff_1_dicho 1.338 -1.209 0 1
-Eco_aff_2_dicho 1.637 -0.954 0 1
-Eco_aff_3_dicho 1.338 -0.915 0 1
-Eco_cog_4_dicho 0.804 -1.112 0 1
-Eco_cog_5_dicho 1.579 -0.713 0 1
-Eco_cog_6_dicho 1.224 -0.011 0 1
-Eco_con_7_dicho 2.075 -0.430 0 1
-Eco_con_8_dicho 2.072  0.277 0 1
-Eco_con_9_dicho 1.754 -0.860 0 1
+Eco_aff_1_dicho 1.360 -1.209 0 1
+Eco_aff_2_dicho 1.662 -0.951 0 1
+Eco_aff_3_dicho 1.314 -0.911 0 1
+Eco_cog_4_dicho 0.772 -1.165 0 1
+Eco_cog_5_dicho 1.575 -0.726 0 1
+Eco_cog_6_dicho 1.237  0.004 0 1
+Eco_con_7_dicho 2.065 -0.421 0 1
+Eco_con_8_dicho 2.081  0.255 0 1
+Eco_con_9_dicho 1.803 -0.859 0 1
 
 $means
 F1 
@@ -1570,13 +1603,13 @@ F1  1</code></pre>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(person_par_eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>             F1
-[1,] -0.3292873
-[2,]  0.7626375
-[3,] -1.0313466
-[4,]  0.4245376
-[5,] -0.4341106
-[6,] -1.2879073</code></pre>
+<pre><code>              F1
+[1,] -0.09137005
+[2,] -0.12721367
+[3,] -0.76259631
+[4,]  0.33055255
+[5,] -0.10137901
+[6,] -1.29064344</code></pre>
 </div>
 </div>
 <p>We’ve also learned that IRT models are related to confirmatory factor analysis. <mark>Wurde das schon eingeführt oben?</mark> Accordingly we can transform our IRT model parameters into standardized factor loadings (see also <a href="#tip-math-loadings" class="quarto-xref">mathematical background&nbsp;1</a>). To do this, we use the <code>summary()</code> function.</p>
@@ -1586,15 +1619,15 @@ F1  1</code></pre>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                   F1    h2
-Eco_aff_1_dicho 0.618 0.382
-Eco_aff_2_dicho 0.693 0.481
-Eco_aff_3_dicho 0.618 0.382
-Eco_cog_4_dicho 0.427 0.183
-Eco_cog_5_dicho 0.680 0.463
-Eco_cog_6_dicho 0.584 0.341
-Eco_con_7_dicho 0.773 0.598
-Eco_con_8_dicho 0.773 0.597
-Eco_con_9_dicho 0.718 0.515
+Eco_aff_1_dicho 0.624 0.390
+Eco_aff_2_dicho 0.699 0.488
+Eco_aff_3_dicho 0.611 0.373
+Eco_cog_4_dicho 0.413 0.171
+Eco_cog_5_dicho 0.679 0.461
+Eco_cog_6_dicho 0.588 0.346
+Eco_con_7_dicho 0.772 0.596
+Eco_con_8_dicho 0.774 0.599
+Eco_con_9_dicho 0.727 0.529
 
                 SE.F1
 Eco_aff_1_dicho 0.014
@@ -1607,8 +1640,8 @@ Eco_con_7_dicho 0.011
 Eco_con_8_dicho 0.011
 Eco_con_9_dicho 0.012
 
-SS loadings:  3.94 
-Proportion Var:  0.438 
+SS loadings:  3.952 
+Proportion Var:  0.439 
 
 Factor correlations: 
 
@@ -1673,6 +1706,49 @@ F1  1</code></pre>
 </div>
 </div>
 </div>
+</section>
+<section id="identifiability-in-the-2pl" class="level3">
+<h3 class="anchored" data-anchor-id="identifiability-in-the-2pl">Identifiability in the 2PL</h3>
+<p>We already learned of the identifiability problem in the Rasch model (see <a href="#sec-identi-Rasch" class="quarto-xref">Section&nbsp;5.6</a>). This issue of an additive indeterminacy applies also to the 2PL model. Therefore, we also have to restrict the model to a specific origin to make the model identifiable.</p>
+<p>However, in the case of the 2PL model, this is not enough because besides an additive indeterminacy we have also a multiplicative indeterminacy. This means, even if we restrict the model to a certain origin, the model is still not identifiable. This is, because latent traits also don’t have a inherent metric/unit and therefore, the choice of metric is also arbitrary <span class="citation" data-cites="lord1980">(<a href="#ref-lord1980" role="doc-biblioref">Lord 1980</a>)</span>. This aspect comes into play because, in the 2PL model, we now also have the <span class="math inline">\alpha</span> parameter. As a result, it can compensate for the effect of a multiplicative constant (as we can see in the math section).</p>
+<div class="callout callout-style-simple callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Mathematical background
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p><strong>Multiplicative indeterminacy</strong> <span class="citation" data-cites="debelak2022 lord1980">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022</a>; <a href="#ref-lord1980" role="doc-biblioref">Lord 1980</a>)</span></p>
+<p>If we multiply the <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> parameters by a constant <span class="math inline">c</span> and simultaneously divide the discrimination parameter <span class="math inline">\alpha_i</span> by the same constant <span class="math inline">c</span>, the resulting probabilities that a person will respond to an item with a 1 are the same as for the untransformed parameters <span class="math inline">\theta_n</span>, <span class="math inline">\beta_i</span> and <span class="math inline">\alpha_i</span>.</p>
+<p><span class="math display">\begin{aligned}
+\theta_n' &amp;= \theta_n \cdot c\\
+\beta_i' &amp;= \beta_i \cdot c\\
+\alpha_i' &amp;= \frac{\alpha_i}{c}
+\end{aligned}</span></p>
+<p>We can again predict the log odds instead of the probability to make the equation clearer:</p>
+<p><span class="math display">\begin{aligned}
+\ln \left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i, \alpha_i}{P(Y_{ni} = 0|\theta_n, \beta_i, \alpha_i} \right) = \alpha_i(\theta_n - \beta_i)\\
+\ln \left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i', \alpha_i'}{P(Y_{ni} = 0|\theta_n', \beta_i', \alpha_i'} \right) = \alpha_i'(\theta_n' - \beta_i')
+\end{aligned}</span></p>
+<p>So let’s see if the multiplication of <span class="math inline">\theta_n</span> and <span class="math inline">\beta_i</span> can be compensated if we divide the discrimination parameter by the same multiplicative constant, so that the log odds are the same as for the original parameter set.</p>
+<p><span class="math display">\begin{aligned}
+\ln \left(\frac{P(Y_{ni} = 1|\theta_n, \beta_i, \alpha_i}{P(Y_{ni} = 0|\theta_n, \beta_i, \alpha_i} \right) &amp;= \ln \left(\frac{P(Y_{ni} = 1|\theta_n', \beta_i', \alpha_i'}{P(Y_{ni} = 0|\theta_n', \beta_i', \alpha_i'} \right)\\
+\alpha_i(\theta_n - \beta_i) &amp;= \alpha_i'(\theta_n' - \beta_i')\\
+&amp;= \frac{\alpha_i}{c}(\theta_n \cdot c - \beta_i \cdot c)\\
+&amp;= \frac{\alpha_i}{c} \cdot c \cdot (\theta_n - \beta_i)\\
+&amp;= \alpha_i \cdot \frac{1}{k} \cdot k \cdot (\theta_n - \beta_i)\\
+&amp;= \alpha_i \cdot \frac{1}{k} \cdot \frac{k}{1} \cdot (\theta_n - \beta_i)\\
+&amp;= \alpha_i \cdot \frac{k}{k} \cdot (\theta_n - \beta_i)\\
+&amp;= \alpha_i \cdot 1 \cdot (\theta_n - \beta_i)\\
+&amp;= \alpha_i (\theta_n - \beta_i)\\
+\end{aligned}</span></p>
+</div>
+</div>
+<p>We can use the same restrictions as discussed in the Rasch model to make our model identifiable (see <a href="#sec-identi-Rasch" class="quarto-xref">Section&nbsp;5.6</a>). Note that in the Rasch model the item discrimination <span class="math inline">\alpha_i</span> of every item is by definition 1, so in the Rasch model the multiplicative indeterminacy is already solved <span class="citation" data-cites="debelak2022">(<a href="#ref-debelak2022" role="doc-biblioref">Debelak et al. 2022</a>)</span>.</p>
+<p><mark>Did it even make sense to demonstrate rotation ambiguity for one-dimensional models? Maybe we should cover this in a tutorial on multidimensional models instead?</mark></p>
 </section>
 <section id="information-in-the-2pl" class="level3">
 <h3 class="anchored" data-anchor-id="information-in-the-2pl">Information in the 2PL</h3>
@@ -1885,9 +1961,9 @@ Figure&nbsp;14
 <span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(eco_rasch, eco_2PL)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>               AIC    SABIC       HQ      BIC    logLik     X2 df p
-eco_rasch 78564.57 78602.58 78588.46 78634.35 -39272.28            
-eco_2PL   78069.63 78138.04 78112.64 78195.24 -39016.81 510.94  8 0</code></pre>
+<pre><code>               AIC    SABIC       HQ      BIC    logLik      X2 df p
+eco_rasch 78517.20 78555.21 78541.09 78586.98 -39248.60             
+eco_2PL   77972.72 78041.14 78015.74 78098.34 -38968.36 560.477  8 0</code></pre>
 </div>
 </div>
 <p>As we can see the output provides us with a lot of information. So let’s break it down.</p>
@@ -1905,7 +1981,7 @@ eco_2PL   78069.63 78138.04 78112.64 78195.24 -39016.81 510.94  8 0</code></pre>
 <span id="annotated-cell-62-2"><a href="#annotated-cell-62-2" aria-hidden="true" tabindex="-1"></a></span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-62" data-target-annotation="1" onclick="event.preventDefault();" href="">1</a><span id="annotated-cell-62-3" class="code-annotation-target"><a href="#annotated-cell-62-3" aria-hidden="true" tabindex="-1"></a><span class="fu">boot.LR</span>(eco_rasch,</span>
 <a class="code-annotation-anchor" data-target-cell="annotated-cell-62" data-target-annotation="2" onclick="event.preventDefault();" href="">2</a><span id="annotated-cell-62-4" class="code-annotation-target"><a href="#annotated-cell-62-4" aria-hidden="true" tabindex="-1"></a>        eco_2PL,</span>
-<span id="annotated-cell-62-5"><a href="#annotated-cell-62-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">R =</span> <span class="dv">20</span>)    <span class="co"># &lt;3&gt; # can take a while depending on R</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<a class="code-annotation-anchor" data-target-cell="annotated-cell-62" data-target-annotation="3" onclick="event.preventDefault();" href="">3</a><span id="annotated-cell-62-5" class="code-annotation-target"><a href="#annotated-cell-62-5" aria-hidden="true" tabindex="-1"></a>        <span class="at">R =</span> <span class="dv">20</span>)    <span class="co"># can take a while depending on R</span></span><div class="code-annotation-gutter-bg"></div><div class="code-annotation-gutter"></div></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-annotation">
 <dl class="code-annotation-container-grid">
 <dt data-target-cell="annotated-cell-62" data-target-annotation="1">1</dt>
@@ -1915,6 +1991,10 @@ eco_2PL   78069.63 78138.04 78112.64 78195.24 -39016.81 510.94  8 0</code></pre>
 <dt data-target-cell="annotated-cell-62" data-target-annotation="2">2</dt>
 <dd>
 <span data-code-cell="annotated-cell-62" data-code-lines="4" data-code-annotation="2">The second argument expects also a <code>mirt</code>model object but containing the more complex model (here our 2PL model)</span>
+</dd>
+<dt data-target-cell="annotated-cell-62" data-target-annotation="3">3</dt>
+<dd>
+<span data-code-cell="annotated-cell-62" data-code-lines="5" data-code-annotation="3">This argument sets the number of parametric bootstraps. The default is 1000 and should be fine for many use cases. Note also that the higher R the longer the runtime of this function.</span>
 </dd>
 </dl>
 </div>
@@ -1953,7 +2033,7 @@ P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta) &amp;= \prod_{i = 1}^I P(X_i = x_
 <p>If the true score <span class="math inline">t</span> is known (i.e.&nbsp;we can count in the data how often a person responded with 1), we can rearrange the equation as follows:</p>
 <p><span id="eq-proof_suff_2"><span class="math display">\begin{align} P(X_1 = x_1, X_2 = x_2, ..., X_I = x_I|\theta, t) &amp;= \frac{(\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}{\sum_{X_t} (\exp[t\theta - \sum_i x_i \beta_i])/(\prod_i (1 + \exp(\theta - \beta_i)))}\\ &amp;= \frac{\exp[t\theta - \sum_i x_i\beta_i]}{\sum_{X_t} \exp[t\theta - \sum_i x_i\beta_i]}\\ &amp;= \frac{\exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(t\theta) \cdot \exp(-\sum_i x_i\beta_i)}\\ &amp;= \frac{\exp(-\sum_i x_i\beta_i)}{\sum_{X_t} \exp(-\sum_i x_i\beta_i)} \end{align} \tag{10}</span></span></p>
 <p>What we can see from all these rearrangements is that if we include the total score <span class="math inline">t</span> in the equation, we can completely eliminate the parameter <span class="math inline">\theta</span>. Ultimately, we no longer need <span class="math inline">\theta</span> to predict a person’s response vector. It is sufficient to know the total score <span class="math inline">t</span>. Therefore, the total score <span class="math inline">t</span> is a sufficient statistic.</p>
-<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span><mark><em>-&gt;darf</em></mark><mark><em>ich die zitieren????</em></mark></p>
+<p><span class="citation" data-cites="meiser2025">Meiser (<a href="#ref-meiser2025" role="doc-biblioref">2025</a>)</span><mark><em>-&gt;darfichdiezitieren????</em></mark></p>
 </section>
 </section>
 <section id="ai-statement" class="level2">
