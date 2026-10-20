@@ -158,7 +158,7 @@ The [data](https://doi.org/10.7910/DVN/ZMQRIH) from this paper has been made pub
 Instruction: *What do you think about the following statements and questions?*
 
 | Item | Item text |
-|----|----|
+|------------------------------------|------------------------------------|
 | 1 | I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live. |
 | 2 | If we continue in the same way, we are heading towards an environmental disaster. |
 | 3 | We worry too much about the future of the environment and not enough about prices and jobs today. |
@@ -1590,7 +1590,8 @@ To do this, we use the `summary()` function.
 ```{r}
 # get factor loadings of our 2PL
 
-summary(eco_2PL)
+loadings_2PL <- summary(eco_2PL)
+loadings_2PL
 ```
 
 The output is a table in which the rows represent the items.
@@ -2058,6 +2059,155 @@ It is sufficient to know the total score $t$.
 Therefore, the total score $t$ is a sufficient statistic.
 
 @meiser2025[*-\>darfichdiezitieren????*]{.mark}
+
+### Equivalence of loadings from mirt and lavaan
+
+In the main text the formulas for the transformation of IRT model parameter in to CFA model parameter was a little bit simplified.
+Often times, we also have to account for different link functions, when we want to transform CFA parameters into IRT parameters and the other way around.
+So let's take a closer look at this.
+
+For this, we can say, that although the observed responses are dichotomous, the latent response tendency behind the observed response is continuous [@kamata2008].
+Let's call this latent response tendency $y_i^*$ and let's say, that we observe a 1 as an response $X_i$ when $y_i^*$ crosses a certain threshold $\tau_i$ and we observe a 0 as a response when $y_i^*$ is equal or below the threshold $\tau$.
+So formally:
+
+$$X_i = \begin{cases} 
+1 \quad \text{if } y_i^* > \tau_i\\
+0 \quad \text{if } y_i^* \leq \tau_i
+\end{cases}$$
+
+We can predict this latent response tendency $y_i^*$ with the formula of a CFA:
+
+$$y_i^* = \lambda_i\theta_n + \epsilon$$
+
+Let's say further that $y_i^*$ is normally distributed and standardized, this means that the variance of $y_i^*$ is set to 1.
+This is called the *delta parameterization* and is for example the default in the `lavaan` package, which is a popular package to conduct structural equation modelling which also applies to CFA.
+Under the delta *parameterization* we can say, that the squared factor loading $\lambda_i^2$ is the explained variance that our latent factor $\theta$ explains in $y_i^*$.
+Consequently, $1 - \lambda_i^2$ is the variance we can not explain in $y_i^*$ with our latent factor so this is the residual variance.
+
+So let's say we want to predict the probability that a Person answers a item $i$ with a 1, based on our idea of a latent response tendency:
+
+$$P(X_i = 1| \theta_n) = P(y_i^* > \tau)$$
+
+Next we can replace $y_i^*$ with our model equation:
+
+$$P(y_i^* > \tau) = P(\lambda_i\theta_n + \epsilon > \tau)$$
+
+Since for a certain person $\theta_n$ is fix (it does not vary over items but is person-specific), only $\epsilon$ is random.
+So let's solve the compaison for $\epsilon$:
+
+$$P(\epsilon > \tau - \lambda_i\theta)$$
+
+Next we can standardize this by dividing by the standard deviation.
+We already know, that the residual variance is $\sigma_{\epsilon} = 1 - \lambda^2$, so the standard deviation is $\sqrt{1 - \lambda^2}$:
+
+$$P\left(\frac{\epsilon}{\sqrt{1 - \lambda^2}} > \frac{\tau - \lambda\theta}{\sqrt{1 - \lambda^2}}\right) = P\left(z > \frac{\tau - \lambda\theta}{\sqrt{1 - \lambda^2}}\right)$$
+
+Before we get lost in equations let's take a step back for a moment and summarize what we have so far and what we want.
+We want to predict a probability ($P(X_i = 1| \theta_n)$) and we have a variable $y_i^*$ which follows a standard normal distribution.
+Furthermore, we know that if a value of the variable $y_i^*$ exceeds a certain threshold, the person will respond with a one.
+So to calculate the probability $P(X_i = 1| \theta_n)$, we could ask ourselfs how large the area under the distribution of $y_i^*$ is, which exceeds the threshold value (so the area under the curve, which results in a response with a 1).
+Hmmmmm area under the curve and thresholds values - sounds a lot like a z-test or Gauß-test.
+And in fact, the logic is pretty similar.
+See for example the right side of the inequality ($(\tau - \lambda\theta)/\sigma$).
+This is basically a z-standardization expressing how far the expected value for $y_i^*$ ($= \lambda_i\theta$) lies above the threshold $\tau$ expressed in $\sigma$ units.
+
+To calculate the area under the curve we can use the cumulative distribution function of a standard normal distribution (because $y_i^*$ follows a standard normal distribution) which is called $\Phi$:
+
+$$P\left(z > \frac{\tau - \lambda\theta}{\sqrt{1 - \lambda^2}}\right) = 1- \Phi\left(\frac{\tau - \lambda\theta}{\sqrt{1 - \lambda^2}}\right) = \Phi\left(\frac{\lambda\theta - \tau}{\sqrt{1 - \lambda^2}}\right)$$
+
+Note that $\Phi(\cdot)$ calculates the area under curve to the left of a certain value.
+We want the area to the right since we want $y_i^* > \tau$.
+Therefore we have this 1 minus term in the equation.
+
+Basically we want to compare the $\theta$ with the threshold $\tau$, so we can rearrange the term in the $\Phi$ function accordingly, to separate both parameters.
+
+$$\frac{\lambda\theta - \tau}{\sqrt{1-\lambda^2}} = \frac{\lambda}{\sqrt{1-\lambda^2}}\cdot \theta_n + \frac{-\tau}{\sqrt{1-\lambda^2}}$$
+
+If we give some parts of this equation a new name, we see that we end up in IRT and get a 2PL model:
+
+$$\begin{align}
+&\alpha = \frac{\lambda}{\sqrt{1-\lambda^2}}\\
+&d = \frac{-\tau}{\sqrt{1-\lambda^2}}\\
+\\
+\text{then} \quad &\Phi( \alpha \cdot \theta_n + d)
+\end{align}$$
+ {#eq-appendix-IRTtoCFA}
+
+Note that $d$ is here the item easiness.
+If we say $\beta = -(d/\alpha)$, then $\Phi( \alpha \cdot \theta_n - \beta)$ follows.
+
+As we can see this is the parameterization of the 2PL model with the exception, that instead of the logistic function, here the cumulative distribution function of the standard normal distribution ($\Phi(\cdot)$) is used as a link function, to ensure an metric compatible with probabilities.
+This is called a 2PL normal-ogive model or 2PL-Probit model.
+
+The 2PL logistic model and the 2PL Probit model therefore differ only in their respective link functions.
+Both link functions have the same goal: to transform the values passed to the function so that they lie between 0 and 1.
+However, the two functions differ slightly in their shapes.
+The logistic curve is slightly flatter than the cumulative distribution function of the standard normal distribution.
+However, the values can be approximately converted from one to the other by using the factor $D = 1.701$:
+
+$$\Phi(x) \approx \text{logistic}(1.702\cdot x$$
+
+To sum up, we saw that the 2PL and the CFA formulas are basically just transformation of each other.
+However, to show this we used the cumulative distribution function of the standard normal distribution ($\Phi(\cdot)$) as a link function.
+If we do this, the IRT parameter correspond directly to the CFA parameters, as displayed in @eq-appendix-IRTtoCFA.
+Nowadays in IRT the logistic function is the more common used linked function and also implemented by default in popular R packages like `mirt` [@chalmers2012].
+On the other hand in CFA and related packages like `lavaan` [@rosseel2012] the cumulative distribution function of the standard normal distribution is more common.
+So if we want to transform the CFA and IRT parameter we also have to account for the different link functions.
+This we can do by incorporating the factor D in our equations:
+
+*Transform CFA in IRT:*
+
+$$\begin{align}
+\alpha &= D \cdot \frac{\lambda}{\sqrt{1-\lambda^2}}\\
+d &= D \cdot \frac{-\tau}{\sqrt{1-\lambda^2}}\\
+\beta &= \frac{\tau}{\lambda}
+\end{align}$$
+
+*Transform IRT in CFA:*
+
+We can easily derive this formulas by rearranging the equation according to the relevant parameters.
+
+$$\begin{align}
+\lambda &= \frac{\alpha/ D}{\sqrt{1 + (\alpha/D)}}\\
+\tau &= - \frac{d/D}{\sqrt{1 + (\alpha/D)^2}}\\
+\tau &= \beta \cdot \lambda
+\end{align}$$
+
+So let's check if the factor loadings of our 2PL model prided by `mirt` [@chalmers2012] with the `summary()`function, really corresponds to the factor loadings of a CFA.
+
+To do this we have to calculate our 2PL model as a CFA.
+For this we use the `lavaan` package [@rosseel2012].
+In `lavaan` we first have to specify a model structure.
+This is simply a string we save in the object called `SEM_2PL_model` (you can choose any name) With the `=~` operator we define on the left side a latent factor and on the right side are all items listed, that load on to this factor.
+With the `~~` parameter we can express correlations between latent factors.
+Here we use this to set the correlation of our $\theta$ factor to 1, which basically means that we restrict the variance of $\theta$ to 1.
+
+Once we defined our model structure, we can estimate the model by using the `cfa()` function.
+
+```{r}
+library(lavaan)
+
+#model <- paste("F =~", paste(names(dat), collapse = " + "))
+
+SEM_2PL_model <- '
+    theta =~ NA*Eco_aff_1_dicho + Eco_aff_2_dicho + Eco_aff_3_dicho + Eco_cog_4_dicho +
+             Eco_cog_5_dicho + Eco_cog_6_dicho + Eco_con_7_dicho + Eco_con_8_dicho + Eco_con_9_dicho
+    theta ~~ 1*theta
+'
+
+
+fit_lav <- cfa(SEM_2PL_model, data = dat_eco_dicho[12:20],
+               ordered = names(dat_eco_dicho[12:20]),   # Items als kategorial
+               std.lv = TRUE,          # Faktorvarianz = 1 (wie in IRT)
+               estimator = "WLSMV")
+
+standardizedSolution(fit_lav)          # Ladungen (=~) und Schwellen (|)
+# oder kompakt:
+lambda_sem <- inspect(fit_lav, "std")$lambda
+
+test <- as.data.frame(cbind(lambda_sem, loadings_2PL$rotF))
+names(test) <- c("CFA", "IRT")
+```
 
 ## AI statement
 
