@@ -1,5 +1,5 @@
 ---
-title: "A Practical Introduction to Item Response Theory"
+title: "A Practical Introduction to Item Response Theory Through the Rasch and 2PL Models"
 subtitle: "*R-Tutorials in Psychometrics*"
 logo: technical/pics/zis_logo.svg
 picture: technical/pics/kodaqs_icon.png 
@@ -158,7 +158,7 @@ The [data](https://doi.org/10.7910/DVN/ZMQRIH) from this paper has been made pub
 Instruction: *What do you think about the following statements and questions?*
 
 | Item | Item text |
-|------------------------------------|------------------------------------|
+|----|----|
 | 1 | I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live. |
 | 2 | If we continue in the same way, we are heading towards an environmental disaster. |
 | 3 | We worry too much about the future of the environment and not enough about prices and jobs today. |
@@ -299,7 +299,9 @@ In achievement testing, however, 1 could also mean “Correct” and 0 could mea
 
 The Rasch model is described by the following formula:
 
-$$P(Y_{ni} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)}$$ {#eq-rasch}
+$$\begin{align}
+P(Y_{ni} = 1) = \frac{\exp(\theta_n - \beta_i)}{1 + \exp(\theta_n - \beta_i)}
+\end{align}$$ {#eq-rasch}
 
 Let's take a look at the individual components to better understand the formula:
 
@@ -430,6 +432,7 @@ The `mirt()` function expects the following arguments:
 
 ```{r}
 # estimate the Rasch model with the mirt() function
+
 eco_rasch <- mirt(data = dat_eco_dicho[12:20], # <1>
                   model = 1,                   # <2>
                   itemtype = "Rasch",          # <3>
@@ -533,6 +536,7 @@ The `coef()` function expects the following arguments, among others:
 ```{r}
 
 # extract the itemspecific parameters from our Rasch model
+
 item_par_eco_rasch <- coef(eco_rasch,       # <1>
                            IRTpars=TRUE,    # <2>
                            simplify=TRUE)   # <3>
@@ -827,14 +831,18 @@ However, if you account for this source of commonality among a person’s item r
 
 Mathematically, this can be expressed as follows [@lord1980, p. 19]:
 
-$$P(Y_{ni} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n, Y_{nj}, Y_{nk}, ...) \quad (i \neq j, k. ...)$$ {#eq-local_indi_1}
+$$\begin{align}
+P(Y_{ni} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n, Y_{nj}, Y_{nk}, ...) \quad (i \neq j, k. ...)
+\end{align}$$ {#eq-local_indi_1}
 
 This means that the probability that person $n$ answers item $i$ with a 1, given $\theta_n$, is the same as the probability that person $n$ answers item $i$ with a 1, given $\theta_n$ and given person $n$’s answers to items $j$, $k$, and all other items that are not $i$.
 Put simply, this means that the information about what the person said on the other items does not influence the answer to item $i$.
 
 Another possible way to write this is [@lord1980, p. 19]:
 
-$$P(Y_{ni} = 1, Y_{nj} = 1, Y_{nk} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n) \cdot P(Y_{nj} = 1|\theta_n) \cdot P(Y_{nk} = 1|\theta_n)$$ {#eq-local_indi_2}
+$$\begin{align}
+P(Y_{ni} = 1, Y_{nj} = 1, Y_{nk} = 1| \theta_n) = P(Y_{ni} = 1|\theta_n) \cdot P(Y_{nj} = 1|\theta_n) \cdot P(Y_{nk} = 1|\theta_n)
+\end{align}$$ {#eq-local_indi_2}
 
 This expression states that the probability that a person answers all three items $i$, $j$, and $k$ with a 1, given $\theta_n$, is equal to the product of the individual probabilities of answering an item with a 1.
 :::
@@ -947,7 +955,7 @@ eco_rasch_Q3 > 0.2 & eco_rasch_Q3 != 1
 
 A distinctive feature of the Rasch model is that the total score—that is, the number of items to which a person answered with a 1—is a sufficient statistic for $\theta$.
 This means that if you know a person's total score, you also know $\theta$; in other words, the data does not provide any further information about $\theta$ beyond the total score, or, to put it another way, the total score contains all the information about $\theta$ that can be derived from the data [@lord1980, p.57].
-In the [Appendix](#sec-appendix) you can find a mathematically grounded explanation of this point.
+In the [Appendix](#sec-appendix1) you can find a mathematically grounded explanation of this point.
 
 So, if you want to estimate a person’s $\theta$, it is sufficient to know how many items a person answered with a 1 (= total score), and it is irrelevant which specific items a person answered with a 1.
 This means that people who answered the same number of items with a 1 are estimated to have the same $\theta$.
@@ -1161,7 +1169,8 @@ Mathematically the Iteminformation for a certain $\theta$ value $I_i(\theta)$ fo
 $$\begin{align}
 I_i(\theta) &= p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)\\
 &= \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
-\end{align}$$ {#eq-iteminfo}
+\end{align}$$
+ {#eq-iteminfo}
 :::
 
 If we theoretically calculate for every possible $\theta$ value the Information $I_i(\theta)$ (see @eq-iteminfo) and plotting the $\theta$s on the x-axis and the Iteminformation on the y-axis, then we get the *Item-Information curve* (see @fig-example_ICC_info for an example) .
@@ -1355,7 +1364,9 @@ Therefore this new extension is called (Birnbaum) *two-parameter logistic model*
 
 The model equation of the 2PL looks pretty similar to the Rasch-model.
 
-$$P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}$$ {#eq-2PL}
+$$\begin{align}
+P(Y_{ni} = 1) = \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}
+\end{align}$$ {#eq-2PL}
 
 Let’s take a look at the individual components to better understand the formula:
 
@@ -1452,31 +1463,28 @@ However, it's just a different way of writing it, and all of our components from
 To get the item difficulty we can therefore set $\mu_i = -\tau_i$.
 The $\lambda_i$ is the factor loading and relates to the item discrimination.
 
-If we take a look at the 2PL formula, we can see that we predict the probability and not the Logit.
-Therefore, we apply the inverse of the link-function to the right hand side of the equation (see first formula in @eq-2PL-CFA).
-However, we can also use the 2PL parameterization to predict the Logit.
-Then we have only our linear term left on the right hand side of the equation (see second formula in @eq-2PL-CFA).
+We can show this by rearraging the 2PL formula:
 
 $$\begin{align}
 P(Y_{ni} = 1) &= \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}\\
-\text{Logit}[p(y_{ni} = 1)] &= \alpha_i(\theta_n - \beta_i)
+P(Y_{ni} = 1) &= \text{Logit}^{-1}[\alpha_i(\theta_n - \beta_i)]
 \end{align}$$ {#eq-2PL-CFA}
 
 Now, if we multiply out the linear term and rearrange a bit, we get:
 
-$$\begin{align}
-\alpha_i(\theta_n - \beta_i) &= \alpha_i\theta_n -\alpha_i\beta_i\\
-&= -\alpha_i\beta_i + \alpha_i\theta_n
-\end{align}$$
+$$\begin{aligned}
+\text{Logit}^{-1}[\alpha_i(\theta_n - \beta_i)] &= \text{Logit}^{-1}[\alpha_i\theta_n -\alpha_i\beta_i]\\
+&= \text{Logit}^{-1}[-\alpha_i\beta_i + \alpha_i\theta_n]
+\end{aligned}$$
 
-As we can see we get a constant $-\alpha_i\beta_i$ because this term has only the index $i$ and varies only over items but not within item.
+If we focus only on the expression inside the parentheses, we can see we get a constant $-\alpha_i\beta_i$ because this term has only the index $i$ and varies only over items but not within item.
 Next we have a slope parameter $\alpha_i$ and a latent predictor $\theta_n$.
 This looks pretty much like a linear term from a regression.
 In fact this translates directly in the formula of a CFA:
 
 $$-\alpha_i\beta_i + \alpha_i\theta_n = -\tau_i + \lambda_iF_n$$
 
-As one can see, the model parameters of the 2PL model correspond to those of the CFA ($\alpha_i = \lambda_i$ and $-\alpha_i\beta_i = -\tau_i$ rearranged we get $\beta_i = \tau_i/\lambda_i$) , and ultimately, the 2PL and CFA formulas are simply two different notations/parameterizations for the same model.
+As one can see, the model parameters of the 2PL model correspond to those of the CFA ($\alpha_i = \lambda_i$ and $-\alpha_i\beta_i = -\tau_i$; rearranged we get $\beta_i = \tau_i/\lambda_i$) , and ultimately, the 2PL and CFA formulas are simply two different notations/parameterizations for the same model.
 However, this holds only if the latent construct ($\theta$ or $F$) has the same metric in the 2PL as in the CFA.
 In IRT $\theta$ is often restricted to a standard normal distribution $N(0,1)$.
 In contrast in CFA often times the loading of one anchor item is fixed at 1 and the variance of the latent trait can be estimated freely.
@@ -1484,14 +1492,16 @@ In such a case the variance of the latent trait of the CFA is different from the
 Furthermore, the mean of the latent trait can be different.
 In the 2PL it is restricted to 0 but in the CFA it can be estimated freely.
 
+[I changed it to the inverse logit notation. However, I personally find it more intuitive if on the right side are the logg odds and on the left side is the linear term. Because I think for beginner the Inverse Logit is intimidating and distracting and the main point here is to show the equivalence of the linear terms of CFA and 2PL. Maybe this is a good point to ask Florian, which notation he finds more intuitive]{.mark}
+
 We can calculate the 2PL parameters from the CFA parameters nonetheless if we account for this.
 We just have to map the CFA parameter to the scale of the 2PL.
 This can be done with the following equations:
 
-$$\begin{align}
+$$\begin{aligned}
 \alpha_i &= \lambda_i \cdot \sqrt{\sigma_{F}^2}\\
 \beta_i &= \frac{\tau_i - (\lambda_i \cdot \overline{F})}{\lambda_i \cdot \sqrt{\sigma_{F}^2}}
-\end{align}$$
+\end{aligned}$$
 
 The equation for the $\alpha_i$ relates to the slope.
 The slope expresses how much the outcome changes, if we increase the predictor by one unit.
@@ -1505,22 +1515,48 @@ We want to calculate how far the item difficulty lies from the mean of the laten
 
 Note that if the latent trait in the CFA also follows a standard normal distribution the equations simplify to the 1:1 mapping
 
-$$\begin{align}
+$$\begin{aligned}
 \alpha_i &= \lambda_i \cdot \sqrt{1} = \lambda_i \cdot 1 = \lambda_i\\
 \beta_i &= \frac{\tau_i - (\lambda_i \cdot \overline{F})}{\lambda_i \cdot \sqrt{\sigma_{F}^2}} = \frac{\tau_i - (\lambda_i \cdot 0)}{\lambda_i \cdot \sqrt{1}} = \frac{\tau_i}{\lambda_i}
-\end{align}$$
+\end{aligned}$$
 
 Of course we can do this also the other way around to bring the 2PL parameters to the scale of the CFA by simply rearranging the formulas:
 
-$$\begin{align}
+$$\begin{aligned}
 \lambda_i &= \frac{\alpha_i}{\sqrt{\sigma_{F}^2}}\\
 \tau_i &= \alpha_i\beta_i + \frac{\alpha_i \cdot \overline{F}}{\sqrt{\sigma_{F}^2}}
-\end{align}$$
+\end{aligned}$$
 
 Note however, that these equations only hold if the latent trait is standardized in the 2PL metric (mean = 0, variance = 1).
 
-For a more in-depth and formal discussion of this point see @kamata2008.
+For a more in-depth and formal discussion of this point see @kamata2008 and the [Appendix](#sec-appendix2).
 :::
+
+```{r}
+#| eval: false
+#| include: false
+# If we take a look at the 2PL formula, we can see that we predict the probability and not the Logit. Therefore, we apply the inverse of the link-function to the right hand side of the equation (see first formula in @eq-2PL-CFA). However, we can also use the 2PL parameterization to predict the Logit. Then we have only our linear term left on the right hand side of the equation (see second formula in @eq-2PL-CFA).
+# 
+# $$\begin{align}
+# P(Y_{ni} = 1) &= \frac{\exp(\alpha_i(\theta_n - \beta_i))}{1 + \exp(\alpha_i(\theta_n - \beta_i))}\\
+# \text{Logit}[p(y_{ni} = 1)] &= \alpha_i(\theta_n - \beta_i)
+# \end{align}$$
+#   
+#   $$
+#   P(Y_{ni} = 1) = \text{Logit}^{-1}[\alpha_i(\theta_n - \beta_i)]
+# $$
+#   
+#   Now, if we multiply out the linear term and rearrange a bit, we get:
+#   
+#   $$\begin{align}
+# \alpha_i(\theta_n - \beta_i) &= \alpha_i\theta_n -\alpha_i\beta_i\\
+# &= -\alpha_i\beta_i + \alpha_i\theta_n
+# \end{align}$$
+#   
+#   As we can see we get a constant $-\alpha_i\beta_i$ because this term has only the index $i$ and varies only over items but not within item. Next we have a slope parameter $\alpha_i$ and a latent predictor $\theta_n$. This looks pretty much like a linear term from a regression. In fact this translates directly in the formula of a CFA:
+#   
+#   $$-\alpha_i\beta_i + \alpha_i\theta_n = -\tau_i + \lambda_iF_n$$
+```
 
 ::: {.callout-note appearance="simple"}
 ## Let's do it in R
@@ -1591,7 +1627,6 @@ To do this, we use the `summary()` function.
 # get factor loadings of our 2PL
 
 loadings_2PL <- summary(eco_2PL)
-loadings_2PL
 ```
 
 The output is a table in which the rows represent the items.
@@ -1608,6 +1643,8 @@ The output is a table in which the rows represent the items.
 
 - Under `Factor correlations`, we find the correlations between the latent factors.
   Since our model has only one factor and the correlation of a variable with itself is 1, we logically have a 1 $\times$ 1 matrix here whose elements are 1.
+
+As a proof that these loadings actually correspond to the loadings of a CFA see also the [Appendix](#sec-appendix2).
 
 **Visualizations of the 2PL:**
 
@@ -1896,10 +1933,10 @@ The convenient thing is that this test statistic, $-2\Delta\ln\text{L}$, follows
 The number of degrees of freedom ($\Delta \text{df}$) is the difference in the number of freely estimated parameters between the more complex model ($C$) and the simpler model ($S$).
 Formally:
 
-$$\begin{align}
+$$\begin{aligned}
 -2\Delta\ln(\text{L}) \sim \chi^2(\Delta \text{df})\quad 
 \text{with} \; \Delta \text{df} = \text{df}_C - \text{df}_S
-\end{align}$$
+\end{aligned}$$
 
 This test examines the null hypothesis that both models fit the data equally well.
 
@@ -1932,10 +1969,10 @@ From a research-theoretical perspective, however, we want models that are as par
 The AIC and BIC reflect this by balancing improvements in the fit against model complexity.
 The AIC and BIC are calculated for each model and are computed as follows [@deayala2022].
 
-$$\begin{align}
+$$\begin{aligned}
 \text{AIC} &= -2\ln(L) + 2\#param\\
 \text{BIC} &= -2\ln(L) + \ln(N)\#param
-\end{align}$$
+\end{aligned}$$
 
 In the part to the left of the + in the equation, we see the log-likelihood, i.e., the “model fit” part.
 In the part to the right of the + in the equation, we see the penalty term.
@@ -2031,7 +2068,7 @@ Prominent example of this are the *Partial Credit Model* or the *Graded Response
 
 ## Appendix {#sec-appendix}
 
-### Mathematical background of the sufficient statistic property of the Rasch model
+### Mathematical background of the sufficient statistic property of the Rasch model {#sec-appendix1}
 
 To show that the total score is a sufficient statistic, we can first consider how the Rasch model can predict a person’s response vector.
 This means that we want to predict which responses a person gave to the various items based on their $\theta$ value.
@@ -2060,7 +2097,7 @@ Therefore, the total score $t$ is a sufficient statistic.
 
 @meiser2025[*-\>darfichdiezitieren????*]{.mark}
 
-### Equivalence of loadings from mirt and lavaan
+### Equivalence of loadings from mirt and lavaan {#sec-appendix2}
 
 In the main text the formulas for the transformation of IRT model parameter in to CFA model parameter was a little bit simplified.
 Often times, we also have to account for different link functions, when we want to transform CFA parameters into IRT parameters and the other way around.
@@ -2130,8 +2167,7 @@ $$\begin{align}
 &d = \frac{-\tau}{\sqrt{1-\lambda^2}}\\
 \\
 \text{then} \quad &\Phi( \alpha \cdot \theta_n + d)
-\end{align}$$
- {#eq-appendix-IRTtoCFA}
+\end{align}$$ {#eq-appendix-IRTtoCFA}
 
 Note that $d$ is here the item easiness.
 If we say $\beta = -(d/\alpha)$, then $\Phi( \alpha \cdot \theta_n - \beta)$ follows.
@@ -2157,21 +2193,21 @@ This we can do by incorporating the factor D in our equations:
 
 *Transform CFA in IRT:*
 
-$$\begin{align}
+$$\begin{aligned}
 \alpha &= D \cdot \frac{\lambda}{\sqrt{1-\lambda^2}}\\
 d &= D \cdot \frac{-\tau}{\sqrt{1-\lambda^2}}\\
 \beta &= \frac{\tau}{\lambda}
-\end{align}$$
+\end{aligned}$$
 
 *Transform IRT in CFA:*
 
 We can easily derive this formulas by rearranging the equation according to the relevant parameters.
 
-$$\begin{align}
+$$\begin{aligned}
 \lambda &= \frac{\alpha/ D}{\sqrt{1 + (\alpha/D)}}\\
 \tau &= - \frac{d/D}{\sqrt{1 + (\alpha/D)^2}}\\
 \tau &= \beta \cdot \lambda
-\end{align}$$
+\end{aligned}$$
 
 So let's check if the factor loadings of our 2PL model prided by `mirt` [@chalmers2012] with the `summary()`function, really corresponds to the factor loadings of a CFA.
 
@@ -2183,31 +2219,97 @@ With the `~~` parameter we can express correlations between latent factors.
 Here we use this to set the correlation of our $\theta$ factor to 1, which basically means that we restrict the variance of $\theta$ to 1.
 
 Once we defined our model structure, we can estimate the model by using the `cfa()` function.
+This function first expects a model structure, which we have defined in `SEM_2PL_model`.
+Next we have to provide the data the model should be fitted on.
+Since we deal with dichotomous responses (0 or 1) we don't have a metric response format but a ordered categorical one.
+We have to tell `lavaan` this, which we can do by using the `ordered` argument, which contains a vector with the names of all items which should be treated as categorical/dichotomous.
+With `std.lvl = TRUE` we tell `lavaan` that we want standardized factor loadings.
+Finally, since we want to conduct a CFA for dichotomouse data and CFAs normally assume continuous responses, we need a special estimation algorithm.
+Therefore, we set `estimator = "WLSMV"`.
+
+With the `standardizedSolution()` function, we get an extensive output which contains our model parameters.
+In our current case, we are interested in the rows where the `op` column takes the value `=~` and `|`.
+So let's first consider the rows with `op = =~`.
+The `=~` operator marks factor loadings.
+In the `rhs` column we find the name of the item under consideration and in the `est.std` we find the corresponding factor loading.
+The `|` operator on the otherhand marks the thresholds.
+Therefore, in rows with `op = |`we find the thresholds in the `est.std` column.
 
 ```{r}
+#| message: false
+#| 
 library(lavaan)
 
-#model <- paste("F =~", paste(names(dat), collapse = " + "))
+# shorten item names for more compact output
+dat_eco_sem <- dat_eco_dicho[12:20]
+names(dat_eco_sem) <- c("Eco_aff_1", "Eco_aff_2", "Eco_aff_3",
+                        "Eco_cog_4", "Eco_cog_5", "Eco_cog_6", 
+                        "Eco_con_7", "Eco_con_8", "Eco_con_9")
+
+# define model structure of CFA model:
 
 SEM_2PL_model <- '
-    theta =~ NA*Eco_aff_1_dicho + Eco_aff_2_dicho + Eco_aff_3_dicho + Eco_cog_4_dicho +
-             Eco_cog_5_dicho + Eco_cog_6_dicho + Eco_con_7_dicho + Eco_con_8_dicho + Eco_con_9_dicho
+    theta =~ NA*Eco_aff_1 + Eco_aff_2 + Eco_aff_3 + Eco_cog_4 +
+             Eco_cog_5 + Eco_cog_6 + Eco_con_7 + Eco_con_8 + Eco_con_9
     theta ~~ 1*theta
 '
 
+# estimate CFA model
 
-fit_lav <- cfa(SEM_2PL_model, data = dat_eco_dicho[12:20],
-               ordered = names(dat_eco_dicho[12:20]),   # Items als kategorial
+cfa_2PL <- cfa(SEM_2PL_model, data = dat_eco_sem,
+               ordered = names(dat_eco_sem),   # Items als kategorial
                std.lv = TRUE,          # Faktorvarianz = 1 (wie in IRT)
                estimator = "WLSMV")
 
-standardizedSolution(fit_lav)          # Ladungen (=~) und Schwellen (|)
-# oder kompakt:
-lambda_sem <- inspect(fit_lav, "std")$lambda
+# extract model parameters
 
-test <- as.data.frame(cbind(lambda_sem, loadings_2PL$rotF))
-names(test) <- c("CFA", "IRT")
+standardizedSolution(cfa_2PL)          # loaings (=~) and thresholds (|)
+
 ```
+
+If we want a more compact summary of the factor loadings, we can inspect only the factor loadings with the following code:
+
+```{r}
+# oder kompakt:
+lambda_sem <- inspect(cfa_2PL, "std")$lambda
+lambda_sem
+```
+
+So let's check, if the factor loadings of our CFA are really the same as the factor loadings we get for our 2PL IRT model from `mirt`.
+
+```{r}
+# compare loading estimates from CFA model (lavaan) with IRT (mirt)
+
+compare_loadings <- as.data.frame(cbind(lambda_sem, loadings_2PL$rotF))
+names(compare_loadings) <- c("lambdas_CFA", "lambdas_IRT")
+
+compare_loadings
+```
+
+As we can see the values are pretty close to each other but not exactly the same.
+These small discrepancies are due to the differences between probit and logit since the $D$ factor is just an approximation factor.
+Furthermore `lavaan` and `mirt` used different estimation algorithms to fit the models to the data, which also produces these small differences.
+
+We can also use our new formulas to transform the factor loadings from `lavaan` in discrimination parameters $\alpha$:
+
+```{r}
+# discrimination parameters from mirt
+alphas_irt <- coef(eco_2PL, IRTpars=TRUE, simplify=TRUE)$items[,1]
+
+# factor loadings from the CFA
+lambdas <- compare_loadings$lambdas_CFA
+
+# transform loadings in discrimination parameters
+alpha_CFA <- 1.702 * lambdas / sqrt(1 - lambdas^2)
+
+# compare the parameters with each other
+compare_loadings <- cbind(compare_loadings, alpha_CFA, alphas_irt)
+names(compare_loadings) <- c("lambdas_CFA", "lambdas_IRT", "alphas_CFA", "alphas_IRT")
+
+compare_loadings
+```
+
+As we see, when we calculate the discrimination parameter (`alphas_CFA`) from the factor loadings (`lambdas_CFA`) with the equation introduced above, we get again values that are pretty close to the $\alpha$ parameters from our 2PL model estimated with `mirt` (`alphas_IRT`).
 
 ## AI statement
 
