@@ -146,6 +146,80 @@ So let's take a closer look at that next
 
 *After this we have established the formula for the 1PL/Rasch model (Note item difficulty instead of easiness to get* $\theta_p - \beta_i$)
 
+### IRT as pairwise comparison
+
+This section is based on @betancourt2024.
+([Betancourt is licensed under CC BY-NC 4.0 -\> Does that mean we have to use this license as well?]{.mark}) @betancourt2024 shows that we can think of IRT also in terms of pairwise comparison where we have a collection of comparable entities from which we can select pairs and compare them with one another.
+More specifically, we can only do bipartite comparisons of our entities pool.
+This means that we cannot compare just any two objects from our pool with each other; instead, we can divide our pool into two groups and make comparisons only between an object from one group and an object from the other group, but we cannot compare objects from the same group with each other.
+In the case of IRT our pool of comparable entities consists of items and persons and we have bipartite comparisons because we always compare items with persons.
+
+Next, to be able two model a pairwise comparison between an item and a person, we need to give each entity of the comparison a quantitative value, to be able to compare the two entities against each other.
+So let's say entities belonging to the groupe of items are denoted with $\beta$ and the index $i$ identifies a specific item of this group.
+Let's say further that we call entities belonging to the group of persons $\theta$ whereby the index $n$ identifies a single person of this group.
+Since the two elements of our comparison are now quantifiable, we can investigate if the value of one element is larger than the value of the other.
+
+To ensure a consistent direction of comparison between different pairs and to be able to interpret the values from the comparison consistently, we can specify that the outcome of the comparison, $y_{\theta_n, \beta_i}$, should take on higher values the larger $\theta_n$ is compared to $\beta_i$.
+Conversely, $y_{\theta_n, \beta_i}$ should become smaller the larger $\beta_i$ is compared to $\theta_n$.
+To ensure this, we can say that the outcome of the comparison $y_{\theta_n, \beta_i}$ follows some probability density function.
+For now let's say that $y_{\theta_n, \beta_i}$ follows a normal distribution.
+Formally we can express this like this:
+
+$$p(y_{\theta_n, \beta_i}|\mu_{\theta_n, \beta_i}, \phi)$$
+
+Basically, this only means that the outcome value of our comparison can theoretically take any value between $-\infty$ and $+\infty$ (because a normal distribution has support over the whole continuum) but will most probably take the value of $\mu_{\theta_n, \beta_i}$ (because this is the mean/peak of the distribution and therefore the point of highest probability).
+We can now connect the values of our elements of comparison with the location of the mean of this normal distribution.
+This is, because we assume, that the comparison between the elements should influence where the outcome vaule of the comparison should most probably is most likely located.
+Mathematically, we can therefore define $\mu_{\theta_n, \beta_i}$ as the output of a monotonically increasing function that takes the values of our comparison objects as input.
+Formally:
+
+$$\mu_{\theta_n, \beta_i} = f(\theta_n - \beta_i)$$
+
+Put simply, the higher $\theta_n$ compared to $\beta_i$ the greater the discrepancy $\theta_n - \beta_i$.
+Consequently, the greater this discrepancy the greater is the output of the function $f(\cdot)$ and correspondingly $\mu_{\theta_n, \beta_i}$.
+The greater $\mu_{\theta_n, \beta_i}$ the more probably the outcome variable $y_{\theta_n, \beta_i}$ will also take higher values, because the probability distribution concentrates around $\mu_{\theta_n, \beta_i}$.
+
+But there is one problem.
+In IRT we want to compare a person with an item to predict which response this person will give to an item.
+In this tutorial we only consider cases where we have dichotomous response formats.
+Therefore, our outcome variable can only take two values, namly 0 or 1.
+However, currently our outcome of comparison can take any value between $-\infty$ and $+\infty$.
+To be able to adapt the outcome of comparison to our problem (which response option will a person choose for a certain item), we have to restrict the possible values $y_{\theta_n, \beta_i}$ can take $\{0;1\}$.
+Earlier we assumed that $y_{\theta_n, \beta_i}$ follows a normal distribution, which allows any real value.
+So we can change our distributional assumption to a distribution which only support the values 0 and 1.
+One such distribution is for example the Bernoulli distribution.
+So we can define our comparison outcome distribution as follows:
+
+$$\text{Bernoulli}(y_{\theta_n, \beta_i}|p_{\theta_n, \beta_i})$$
+
+The parameter $p_{\theta_n, \beta_i}$ defines the probability with which a 1 is sampled from the Bernoulli distribution.
+Like with the $\mu_{\theta_n, \beta_i}$ parameter under the normal distribution, we can link the values of the elements of comparison with this probability.
+However, we have a similar problem as with the outcome metric, if we just use the discrepancy between $\theta_n$ and $\beta_i$ as we did it earlier.
+This is because the discrepancy can theoretically take any value between $-\infty$ and $+\infty$.
+But now we want to predict a probability ($p_{\theta_n, \beta_i}$), which can only take values between 0 and 1.
+Therefore we need again a function which returns values only in the interval of $[0;1]$.
+A function which satisfies this requirement is for example the logistic function.
+Therefore we can define the probability $p_{\theta_n, \beta_i}$:
+
+$$p_{\theta_n, \beta_i} = \text{logistic}(\theta_n-\beta_i)$$
+
+Put simply, we use again the discrepancy between $\theta_n$ and $\beta_i$ but the transformation through the logistic function ensures that the possible values lie between 0 and 1.
+Therefore, the greater $\theta_n$ compared to $\beta_i$, the closer to 1 the output of the logistic function and consequently $p_{\theta_n, \beta_i}$ gets.
+The other way around, the greater $\beta_i$ compared to $\theta_i$, the closer to 0 the output of the logistic function and consequently $p_{\theta_n, \beta_i}$ gets.
+
+To go one step further, we can influence how strongly the discrepancy between $\theta_n$ and $\beta_i$ can influence the outcome of the comparison.
+This can be achieved by adding a new parameter $\alpha$:
+
+$$p_{\theta_n, \beta_i} = \text{logistic}(\alpha \cdot (\theta_n-\beta_i))$$
+
+Note that $\alpha$ influences $p_{\theta_n, \beta_i}$ and $p_{\theta_n, \beta_i}$ influences $\text{Bernoulli}(y_{\theta_n, \beta_i}|p{\theta_n, \beta_i})$, therefore, the greater $\alpha$ gets, the greater the comparison outcome is influenced by the discrepancy between $\theta_n$ and $\beta_i$.
+The other way around, as $\alpha$ approaches 0, the lesser the comparison outcome is influenced by the discrepancy between $\theta_n$ and $\beta_i$.
+If $\alpha = 0$ the values of $\theta_n$ and $\beta_i$ have no influence on the outcome of the comparison at all.
+
+What does all this show us?
+Even though the formula looks a little different, what has just been described is ultimately the same IRT model that we’ll be examining in the rest of the tutorial.
+Accordingly, @betancourt2024 makes it clear that IRT can also be viewed from the perspective of pairwise comparisons.
+
 ## A working example: Environmental concern
 
 To illustrate the usefulness of IRT, we will apply what we’ve learned to a real-world example throughout this tutorial.
@@ -158,7 +232,7 @@ The [data](https://doi.org/10.7910/DVN/ZMQRIH) from this paper has been made pub
 Instruction: *What do you think about the following statements and questions?*
 
 | Item | Item text |
-|----|----|
+|------------------------------------|------------------------------------|
 | 1 | I am worried when thinking about the environmental conditions in which our children and grandchildren are likely to live. |
 | 2 | If we continue in the same way, we are heading towards an environmental disaster. |
 | 3 | We worry too much about the future of the environment and not enough about prices and jobs today. |
@@ -1169,8 +1243,7 @@ Mathematically the Iteminformation for a certain $\theta$ value $I_i(\theta)$ fo
 $$\begin{align}
 I_i(\theta) &= p(X_i = 1|\theta_n,\beta_i) \cdot p(X_i = 0| \theta_n,\beta_i)\\
 &= \frac{exp(\theta - \beta_i)}{1 + exp(\theta - \beta_i)} \cdot \frac{1}{1 + exp(\theta - \beta_i)}
-\end{align}$$
- {#eq-iteminfo}
+\end{align}$$ {#eq-iteminfo}
 :::
 
 If we theoretically calculate for every possible $\theta$ value the Information $I_i(\theta)$ (see @eq-iteminfo) and plotting the $\theta$s on the x-axis and the Iteminformation on the y-axis, then we get the *Item-Information curve* (see @fig-example_ICC_info for an example) .
